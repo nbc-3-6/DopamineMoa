@@ -17,6 +17,7 @@ interface RemoteDataSource {
     suspend fun getSearchList(
         @Query("part") part: String = "snippet",
         @Query("q") query: String,
+        @Query("type") type: String = "video",
     ): SearchListResponse
 
     //videos

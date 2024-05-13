@@ -35,7 +35,7 @@ data class SearchSnippet(
     @SerializedName("channelId") val channelId : String,
     @SerializedName("title") val title : String, // 제목
     @SerializedName("description") val description: String, // 내용
-    @SerializedName("thumbnails") val thumbnails : SearchThumbnails,
+    @SerializedName("thumbnails") val thumbnails : SearchThumbnails, // 썸네일
 
     @SerializedName("channelTitle") val channelTitle: String,
     @SerializedName("liveBroadcastContent") val liveBroadcastContent: String,
