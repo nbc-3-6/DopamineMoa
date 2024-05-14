@@ -72,6 +72,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/rec_category_btn"
+                android:onClick="onCategoryClick"
                 android:text="키즈"
                 android:textSize="16sp" />
 
@@ -81,6 +82,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/rec_category_btn"
+                android:onClick="onCategoryClick"
                 android:text="영어교육"
                 android:textSize="16sp" />
 
@@ -90,6 +92,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/rec_category_btn"
+                android:onClick="onCategoryClick"
                 android:text="수면음악"
                 android:textSize="16sp" />
 
@@ -99,6 +102,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/rec_category_btn"
+                android:onClick="onCategoryClick"
                 android:text="영화"
                 android:textSize="16sp" />
         </LinearLayout>
