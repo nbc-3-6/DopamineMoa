@@ -12,7 +12,7 @@ import com.example.dopaminemoa.databinding.MyvideoItemBinding
 import com.example.dopaminemoa.mapper.VideoItemModel
 import de.hdodenhof.circleimageview.CircleImageView
 
-class MyVideoAdapter(): RecyclerView.Adapter<MyVideoAdapter.ItemViewHolder>() {
+class MyVideoAdapter(private val mContext: Context): RecyclerView.Adapter<MyVideoAdapter.ItemViewHolder>() {
 
     var items = ArrayList<VideoItemModel>()
     override fun getItemCount() = items.size
