@@ -1,7 +1,6 @@
 package com.example.dopaminemoa.presentation.search
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +8,6 @@ import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.dopaminemoa.R
-import com.example.dopaminemoa.databinding.FragmentSearchBinding
 import com.example.dopaminemoa.databinding.FragmentSearchResultBinding
 import com.example.dopaminemoa.mapper.VideoItemModel
 import com.example.dopaminemoa.viewmodel.VideoViewModel
@@ -45,6 +42,60 @@ class SearchResultFragment : Fragment() {
 
         observeData()
         makeRecyclerView()
+
+        setClickListener()
+    }
+
+    private fun setClickListener() = with(binding) {
+        btnSearch.setOnClickListener {
+            searchItem()
+        }
+        btnKeyword1.setOnClickListener {
+            searchOnlyKeyword(it)
+        }
+        btnKeyword2.setOnClickListener {
+            searchOnlyKeyword(it)
+        }
+        btnKeyword3.setOnClickListener {
+            searchOnlyKeyword(it)
+        }
+        btnKeyword4.setOnClickListener {
+            searchOnlyKeyword(it)
+        }
+    }
+
+    private fun searchItem() = with(binding) {
+        if (etSearch.text.toString().isNotEmpty()) {
+            val text = etSearch.text.toString()
+            reSearch(text)
+        }
+    }
+
+    private fun searchOnlyKeyword(view: View) = with(binding) {
+        val searchText = etSearch.text.toString()
+        when (view.id) {
+            btnKeyword1.id -> {
+                val text = searchText + btnKeyword1.text.removePrefix("#").toString()
+                reSearch(text)
+            }
+            btnKeyword2.id -> {
+                val text = searchText + btnKeyword2.text.removePrefix("#").toString()
+                reSearch(text)
+            }
+            btnKeyword3.id -> {
+                val text = searchText + btnKeyword3.text.removePrefix("#").toString()
+                reSearch(text)
+            }
+            btnKeyword4.id -> {
+                val text = searchText + btnKeyword4.text.removePrefix("#").toString()
+                reSearch(text)
+            }
+            else -> throw IllegalArgumentException("Unknown button ID")
+        }
+    }
+
+    private fun reSearch(text: String) {
+        viewModel.searchVideoByText(text)
     }
 
     private fun makeRecyclerView() = with(binding) {
