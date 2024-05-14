@@ -1,6 +1,7 @@
 package com.example.dopaminemoa.presentation.search
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -37,26 +38,33 @@ class SearchResultFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        observeData()
         backBtnPressed()
         backToAction()
+        getText()
+
+        observeData()
     }
 
-    private fun observeData() {
-        viewModel.searchResults.observe(viewLifecycleOwner) {
-            adapter.updateList(it)
-        }
+    private fun getText() = with(binding) {
+        val text = arguments?.getString(BUNDLE_KEY_FOR_RESULT_FRAGMENT) ?: ""
+        etSearch.setText(text)
     }
 
     private fun backBtnPressed() = with(binding) {
         ivBackBtn.setOnClickListener {
-            backToAction()
+            parentFragment?.childFragmentManager?.popBackStack()
         }
     }
 
     private fun backToAction() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             parentFragment?.childFragmentManager?.popBackStack()
+        }
+    }
+
+    private fun observeData() {
+        viewModel.searchResults.observe(viewLifecycleOwner) {
+            adapter.updateList(it)
         }
     }
 
@@ -79,6 +87,10 @@ class SearchResultFragment : Fragment() {
         const val BUNDLE_KEY_FOR_DETAIL_FRAGMENT = "BUNDLE_KEY_FOR_DETAIL_FRAGMENT"
         const val BUNDLE_KEY_FOR_RESULT_FRAGMENT = "BUNDLE_KEY_FOR_RESULT_FRAGMENT"
 
-        fun newInstanceForFragment() = SearchResultFragment()
+        fun newInstanceForFragment(bundle: Bundle): SearchResultFragment {
+            return SearchResultFragment().apply {
+                arguments = bundle
+            }
+        }
     }
 }

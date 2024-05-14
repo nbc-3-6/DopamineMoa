@@ -30,7 +30,6 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         loadFragment(SearchActionFragment())
     }
 
@@ -42,11 +41,10 @@ class SearchFragment : Fragment() {
             .commit()
     }
 
-    fun showSearchResultFragment() {
-        val searchResultFragment = SearchResultFragment.newInstanceForFragment()
+    fun showSearchResultFragment(bundle: Bundle) {
+        val searchResultFragment = SearchResultFragment.newInstanceForFragment(bundle)
         loadFragment(searchResultFragment)
     }
-
 
     companion object {
         fun newInstance() = SearchFragment()

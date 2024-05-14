@@ -1,6 +1,7 @@
 package com.example.dopaminemoa.presentation.search
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -91,7 +92,7 @@ class SearchActionFragment : Fragment() {
         val fragmentResult = SearchResultFragment()
         fragmentResult.arguments = bundle
 
-        (parentFragment as? SearchFragment)?.showSearchResultFragment()
+        (parentFragment as? SearchFragment)?.showSearchResultFragment(bundle)
     }
 
     override fun onDestroyView() {
