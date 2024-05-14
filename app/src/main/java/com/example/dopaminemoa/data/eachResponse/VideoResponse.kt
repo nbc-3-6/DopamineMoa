@@ -8,7 +8,8 @@ data class VideoListResponse(
 
 data class VideoItems(
     @SerializedName("id") val id: String,
-    @SerializedName("snippet") val snippet: VideoSnippet
+    @SerializedName("snippet") val snippet: VideoSnippet,
+    @SerializedName("contentDetails") val contentDetails: VideoContentDetails,
 )
 
 data class VideoSnippet(
@@ -25,4 +26,8 @@ data class VideoThumbnail( //썸네일 하위
     @SerializedName("url") val url: String, //이미지 url
     @SerializedName("width") val width: Int, //크기
     @SerializedName("height") val height: Int, //크기
+)
+
+data class VideoContentDetails(
+    @SerializedName("duration") val duration: String //영상 시간 PT*M*S
 )

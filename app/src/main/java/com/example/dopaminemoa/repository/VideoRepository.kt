@@ -1,8 +1,8 @@
 package com.example.dopaminemoa.repository
 
 import com.example.dopaminemoa.data.remote.RemoteDataSource
-import com.example.dopaminemoa.home.video.mapper.toEntity
-import com.example.dopaminemoa.home.video.model.MostPopularItemEntity
+import com.example.dopaminemoa.presentation.home.video.mapper.toEntity
+import com.example.dopaminemoa.presentation.home.video.model.MostPopularItemEntity
 import com.example.dopaminemoa.mapper.VideoItemModel
 
 interface VideoRepository {

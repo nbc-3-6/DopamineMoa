@@ -6,4 +6,11 @@
     </style>
 
     <style name="Theme.DopamineMoa" parent="Base.Theme.DopamineMoa" />
+
+    <style name="tabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabBackground">@color/mainRed</item>
+        <item name="tabTextColor">@color/darkRed</item>
+        <item name="tabIconTint">@color/darkRed</item>
+    </style>
+
 </resources>

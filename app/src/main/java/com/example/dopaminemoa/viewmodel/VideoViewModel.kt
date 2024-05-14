@@ -5,16 +5,20 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
+import com.example.dopaminemoa.data.remote.RemoteDataSource
+import com.example.dopaminemoa.presentation.home.video.model.MostPopularItemEntity
 import com.example.dopaminemoa.mapper.VideoItemModel
-import com.example.dopaminemoa.home.video.repository.VideoRepositoryImpl
+import com.example.dopaminemoa.network.RetrofitClient
+//import com.example.dopaminemoa.home.video.repository.VideoRepositoryImpl
 import com.example.dopaminemoa.repository.VideoRepositoryImpl
 import kotlinx.coroutines.launch
 
 
 class VideoViewModel(private val videoRepositoryImpl: VideoRepositoryImpl) : ViewModel() {
 
-    private val _popularResults: MutableLiveData<List<VideoItemModel>> = MutableLiveData()
-    val popularResults: LiveData<List<VideoItemModel>> get() = _popularResults
+    private val _popularResults: MutableLiveData<MostPopularItemEntity> = MutableLiveData()
+    val popularResults: LiveData<MostPopularItemEntity> get() = _popularResults
 
     private val _categoryVideoResults: MutableLiveData<List<VideoItemModel>> = MutableLiveData()
     val categoryVideoResults: LiveData<List<VideoItemModel>> get() = _categoryVideoResults
@@ -62,20 +66,29 @@ class VideoViewModel(private val videoRepositoryImpl: VideoRepositoryImpl) : Vie
  *         VideoViewModelFactory.newInstance()
  *     }
  */
-@Suppress("UNCHECKED_CAST")
-class VideoViewModelFactory : ViewModelProvider.Factory {
-    companion object {
-        private val repository = VideoRepositoryImpl()
-
-        fun newInstance(): ViewModelProvider.Factory {
-            return object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    if (modelClass.isAssignableFrom(VideoViewModel::class.java)) {
-                        return VideoViewModel(repository) as T
-                    }
-                    throw IllegalArgumentException("Unknown viewmodel class")
-                }
-            }
-        }
+//@Suppress("UNCHECKED_CAST")
+//class VideoViewModelFactory : ViewModelProvider.Factory {
+//    companion object {
+//        private val repository = VideoRepositoryImpl()
+//
+//        fun newInstance(): ViewModelProvider.Factory {
+//            return object : ViewModelProvider.Factory {
+//                override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//                    if (modelClass.isAssignableFrom(VideoViewModel::class.java)) {
+//                        return VideoViewModel(repository) as T
+//                    }
+//                    throw IllegalArgumentException("Unknown viewmodel class")
+//                }
+//            }
+//        }
+//    }
+//}
+class SearchViewModelFactory : ViewModelProvider.Factory {
+    private val repository = VideoRepositoryImpl(RetrofitClient.youtubeService)
+    override fun <T : ViewModel> create(
+        modelClass: Class<T>,
+        extras: CreationExtras
+    ): T {
+        return VideoViewModel(repository) as T
     }
 }

@@ -27,6 +27,7 @@ interface RemoteDataSource {
         @Query("part") part: String = "snippet",
         @Query("chart") chart: String = "mostPopular",
         @Query("key") key: String = API_KEY,
+        @Query("maxResults") maxResults: Int = 50,
         //추가
     ): VideoListResponse
 

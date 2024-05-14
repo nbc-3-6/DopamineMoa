@@ -6,7 +6,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 //Repository 세팅
-object RepositoryClient {
+object RetrofitClient {
     private const val BASE_URL = "https://www.googleapis.com/youtube/v3/"
 
     private val okHttpClient by lazy {

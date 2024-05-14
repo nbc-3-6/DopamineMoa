@@ -1,15 +1,15 @@
-package com.example.dopaminemoa.home.video.mapper
+package com.example.dopaminemoa.presentation.home.video.mapper
 
 import com.example.dopaminemoa.data.eachResponse.VideoItems
 import com.example.dopaminemoa.data.eachResponse.VideoListResponse
 import com.example.dopaminemoa.data.eachResponse.VideoSnippet
 import com.example.dopaminemoa.data.eachResponse.VideoThumbnail
 import com.example.dopaminemoa.data.eachResponse.VideoThumbnails
-import com.example.dopaminemoa.home.video.model.MostPopularItemEntity
-import com.example.dopaminemoa.home.video.model.VideoItemsEntity
-import com.example.dopaminemoa.home.video.model.VideoSnippetEntity
-import com.example.dopaminemoa.home.video.model.VideoThumbnailEntity
-import com.example.dopaminemoa.home.video.model.VideoThumbnailsEntity
+import com.example.dopaminemoa.presentation.home.video.model.MostPopularItemEntity
+import com.example.dopaminemoa.presentation.home.video.model.VideoItemsEntity
+import com.example.dopaminemoa.presentation.home.video.model.VideoSnippetEntity
+import com.example.dopaminemoa.presentation.home.video.model.VideoThumbnailEntity
+import com.example.dopaminemoa.presentation.home.video.model.VideoThumbnailsEntity
 
 
 fun VideoListResponse.toEntity() = MostPopularItemEntity(
@@ -20,7 +20,8 @@ fun List<VideoItems>.asVideoItemsEntity(): List<VideoItemsEntity> {
     return map {
         VideoItemsEntity(
             it.id,
-            it.snippet.toEntity()
+            it.snippet.toEntity(),
+//            it.contentDetails.toEntity() //추가
         )
     }
 }
@@ -46,3 +47,9 @@ fun VideoThumbnail.toEntity(): VideoThumbnailEntity {
         height
     )
 }
+
+//fun VideoContentDetails.toEntity(): VideoContentDetailsEntity{
+//    return VideoContentDetailsEntity(
+//        duration
+//    )
+//}
