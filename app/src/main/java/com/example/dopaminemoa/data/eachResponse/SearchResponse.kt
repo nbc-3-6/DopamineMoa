@@ -15,8 +15,7 @@ data class SearchListResponse(
 data class SearchPageInfo(
     @SerializedName("totalResults") val totalResults: Int,
     @SerializedName("resultsPerPage") val resultsPerPage: Int,
-
-    )
+)
 
 data class SearchItems(
     @SerializedName("kind") val kind: String,
@@ -43,6 +42,10 @@ data class SearchSnippet(
 )
 
 data class SearchThumbnails(
+    @SerializedName("high") val high: SearchThumbnail,
+)
+
+data class SearchThumbnail(
     @SerializedName("url") val url: String,
     @SerializedName("width") val width: Int,
     @SerializedName("height") val height: Int

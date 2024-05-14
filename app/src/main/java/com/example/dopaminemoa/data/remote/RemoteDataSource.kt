@@ -19,6 +19,7 @@ interface RemoteDataSource {
         @Query("q") query: String,
         @Query("type") type: String = "video",
         @Query("key") key: String = API_KEY,
+        @Query("maxResults") maxResults: Int = 10,
         ): SearchListResponse
 
     //videos
