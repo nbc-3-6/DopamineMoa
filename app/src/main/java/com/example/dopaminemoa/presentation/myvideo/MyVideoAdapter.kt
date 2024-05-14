@@ -1,4 +1,4 @@
-package com.example.dopaminemoa
+package com.example.dopaminemoa.presentation.myvideo
 
 import android.content.Context
 import android.view.LayoutInflater
