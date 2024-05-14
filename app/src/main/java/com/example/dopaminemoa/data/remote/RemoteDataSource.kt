@@ -1,5 +1,6 @@
 package com.example.dopaminemoa.data.remote
 
+import com.example.dopaminemoa.API_KEY
 import com.example.dopaminemoa.data.eachResponse.ChannelListResponse
 import com.example.dopaminemoa.data.eachResponse.SearchListResponse
 import com.example.dopaminemoa.data.eachResponse.VideoCategoryListResponse
@@ -10,8 +11,8 @@ import retrofit2.http.Query
 interface RemoteDataSource {
 
 
+//    @Headers("Authorization = $API_KEY") 수정 중 - 김재혁
     //search
-//    @Headers("Authorization = $API_KEY")
     @GET("search")
     suspend fun getSearchList(
         @Query("part") part: String = "snippet",
