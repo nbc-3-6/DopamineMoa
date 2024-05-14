@@ -1,15 +1,17 @@
 <resources>
     <string name="app_name">DopamineMoa</string>
-    <string name="et_hint">검색어를 입력해주세요</string>
-    <string name="search_none">검색어 결과가 없습니다.</string>
-    <string name="search_btn">검색</string>
-    <string name="views">조회수</string>
 
     <!--main-->
     <string name="main_toolbar_title">도파민모아</string>
     <string name="main_tab_search_title">Search</string>
     <string name="main_tab_home_title">Home</string>
     <string name="main_tab_myvideos_title">My Videos</string>
+
+    <!--search-->
+    <string name="et_hint">검색어를 입력해주세요</string>
+    <string name="search_none">검색어 결과가 없습니다.</string>
+    <string name="search_btn">검색</string>
+    <string name="views">조회수</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
