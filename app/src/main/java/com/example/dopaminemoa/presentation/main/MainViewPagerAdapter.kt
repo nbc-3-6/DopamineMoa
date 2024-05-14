@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.dopaminemoa.R
 import com.example.dopaminemoa.presentation.home.HomeFragment
-import com.example.dopaminemoa.presentation.myvideos.VideoDetailFragment
+import com.example.dopaminemoa.presentation.videodetail.VideoDetailFragment
 import com.example.dopaminemoa.presentation.search.SearchFragment
 
 class MainViewPagerAdapter(
