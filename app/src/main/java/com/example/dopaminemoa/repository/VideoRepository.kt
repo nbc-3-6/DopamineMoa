@@ -1,20 +1,25 @@
 package com.example.dopaminemoa.repository
 
+import com.example.dopaminemoa.data.remote.RemoteDataSource
+import com.example.dopaminemoa.home.video.mapper.toEntity
+import com.example.dopaminemoa.home.video.model.MostPopularItemEntity
 import com.example.dopaminemoa.mapper.VideoItemModel
 
 interface VideoRepository {
-    suspend fun searchPopularVideo(): List<VideoItemModel>
+    suspend fun searchPopularVideo(): MostPopularItemEntity
     suspend fun searchVideoByCategory(category: String): List<VideoItemModel>
     suspend fun searchChannelByCategory(category: String): List<VideoItemModel>
     suspend fun searchVideoByText(text: String): List<VideoItemModel>
 }
 
-class VideoRepositoryImpl: VideoRepository {
+class VideoRepositoryImpl(private val remoteDataSource: RemoteDataSource): VideoRepository {
     /**
      * 인기 비디오 검색 결과를 요청하는 함수입니다.
      */
-    override suspend fun searchPopularVideo(): List<VideoItemModel> {
-        TODO("Not yet implemented")
+    override suspend fun searchPopularVideo(): MostPopularItemEntity {
+        val videoListResponse = remoteDataSource.getVideosList()
+
+        return videoListResponse.toEntity()
         //return API킅라이언트.네트워크인터페이스.네트워크함수().데이터.asVideoItemModel()
     }
 

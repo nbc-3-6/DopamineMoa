@@ -3,47 +3,26 @@ package com.example.dopaminemoa.data.eachResponse
 import com.google.gson.annotations.SerializedName
 
 data class VideoListResponse(
-    @SerializedName("kind") val kind: String,
-    @SerializedName("etag") val etag: String,
     @SerializedName("items") val items: List<VideoItems>,
 )
 
 data class VideoItems(
-    @SerializedName("kind") val kind: String,
-    @SerializedName("etag") val etag: String,
     @SerializedName("id") val id: String,
     @SerializedName("snippet") val snippet: VideoSnippet
 )
 
 data class VideoSnippet(
-    @SerializedName("publishedAt") val publishedAt: String,
-    @SerializedName("channelId") val channelId: String,
-    @SerializedName("title") val title: String,
-    @SerializedName("description") val description: String,
-    @SerializedName("thumbnails") val thumbnails: Thumbnails,
-    @SerializedName("channelTitle") val channelTitle: String,
-    @SerializedName("categoryId") val categoryId: String,
-    @SerializedName("liveBroadcastContent") val liveBroadcastContent: String,
-    @SerializedName("defaultLanguage") val defaultLanguage: String,
-    @SerializedName("localized") val localized: Localized,
-    @SerializedName("defaultAudioLanguage") val defaultAudioLanguage: String,
+    @SerializedName("title") val title: String, //제목
+    @SerializedName("description") val description: String, //설명 (detail에서 필요)
+    @SerializedName("thumbnails") val thumbnails: VideoThumbnails, //썸네일 todo 시도 1.standard 사용?
 )
 
-data class Thumbnails(
-    @SerializedName("default") val default: VideoThumbnail,
-    @SerializedName("medium") val medium: VideoThumbnail,
-    @SerializedName("high") val high: VideoThumbnail,
-    @SerializedName("standard") val standard: VideoThumbnail,
-    @SerializedName("maxres") val maxres: VideoThumbnail,
+data class VideoThumbnails(
+    @SerializedName("standard") val standard: VideoThumbnail, //todo 시도1
 )
 
-data class VideoThumbnail(
-    @SerializedName("url") val url: String,
-    @SerializedName("width") val width: Int,
-    @SerializedName("height") val height: Int,
-)
-
-data class Localized(
-    @SerializedName("title") val title: String,
-    @SerializedName("description") val description: String
+data class VideoThumbnail( //썸네일 하위
+    @SerializedName("url") val url: String, //이미지 url
+    @SerializedName("width") val width: Int, //크기
+    @SerializedName("height") val height: Int, //크기
 )

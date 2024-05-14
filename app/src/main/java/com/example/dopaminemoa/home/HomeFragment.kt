@@ -1,4 +1,4 @@
-package com.example.dopaminemoa.Home
+package com.example.dopaminemoa.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
