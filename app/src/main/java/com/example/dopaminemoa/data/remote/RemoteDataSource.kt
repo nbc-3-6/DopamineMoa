@@ -5,7 +5,6 @@ import com.example.dopaminemoa.data.eachResponse.SearchListResponse
 import com.example.dopaminemoa.data.eachResponse.VideoCategoryListResponse
 import com.example.dopaminemoa.data.eachResponse.VideoListResponse
 import retrofit2.http.GET
-import retrofit2.http.Headers
 import retrofit2.http.Query
 
 interface RemoteDataSource {
