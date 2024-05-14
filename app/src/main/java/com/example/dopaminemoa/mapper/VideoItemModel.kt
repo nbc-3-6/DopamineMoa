@@ -5,5 +5,9 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class VideoItemModel(
-    val id: String
+    var type: Int,
+    val id: String,
+    var isLike: Boolean,
+    var title: String,
+    var channel: String
 ) : Parcelable
