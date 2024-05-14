@@ -35,8 +35,15 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        observeData()
         searchItem()
         setCategoryClickListener()
+    }
+
+    private fun observeData() {
+        viewModel.searchResults.observe(viewLifecycleOwner) {
+            adapter.updateList(it)
+        }
     }
 
     private fun searchItem() = with(binding) {
