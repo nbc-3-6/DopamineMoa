@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">DopamineMoa</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!--main-->
     <string name="main_toolbar_title">도파민모아</string>
