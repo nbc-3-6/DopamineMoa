@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.dopaminemoa.R
 import com.example.dopaminemoa.databinding.FragmentSearchBinding
 import com.example.dopaminemoa.databinding.FragmentSearchResultBinding
@@ -43,6 +44,18 @@ class SearchResultFragment : Fragment() {
         getText()
 
         observeData()
+        makeRecyclerView()
+    }
+
+    private fun makeRecyclerView() = with(binding) {
+        rvSearch.adapter = adapter
+        rvSearch.layoutManager = GridLayoutManager(requireActivity(), 2)
+
+        adapter.itemClick = object : SearchAdapter.ItemClick {
+            override fun onClick(view: View, item: VideoItemModel) {
+                selectItem(item)
+            }
+        }
     }
 
     private fun getText() = with(binding) {

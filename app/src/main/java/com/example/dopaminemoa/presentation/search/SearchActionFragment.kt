@@ -83,7 +83,7 @@ class SearchActionFragment : Fragment() {
     }
 
     private fun setFragmentMoving(text: String) {
-//        viewModel.searchVideoByText(text)
+        viewModel.searchVideoByText(text)
 
         val bundle = Bundle().apply {
             putString(BUNDLE_KEY_FOR_RESULT_FRAGMENT, text)
