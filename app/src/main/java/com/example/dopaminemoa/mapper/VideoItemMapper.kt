@@ -25,28 +25,17 @@ object VideoItemMapper {
         }
     }
 
-//    fun updateVideoViews(videoItems: List<VideoItemModel>, videoListResponse: VideoListResponse) : List<VideoItemModel> {
-//        return videoItems.map { videoItem ->
-//            val video = videoListResponse.items.find { it.id == videoItem.videoId }
-//            videoItem.copy(videoViews = video?.statictics?.viewCount ?: "")
-//        }
-//    }
-//
-//    fun updateChannelThumbnails(videoItems: List<VideoItemModel>, channelListResponse: ChannelListResponse) : List<VideoItemModel> {
-//        return videoItems.map { videoItem ->
-//            val video = ChannelListResponse.items.find { it.id == videoItem.videoId }
-//            videoItem.copy(channelThumbnails = channel?.snippet?.thumbnails.toString() ?: "")
-//        }
-//    }
+    fun updateVideoViews(videoItems: List<VideoItemModel>, videoListResponse: VideoListResponse) : List<VideoItemModel> {
+        return videoItems.map { videoItem ->
+            val video = videoListResponse.items.find { it.id == videoItem.videoId }
+            videoItem.copy(videoViews = video?.statistics?.viewCount ?: "")
+        }
+    }
+
+    fun updateChannelThumbnails(videoItems: List<VideoItemModel>, channelListResponse: ChannelListResponse) : List<VideoItemModel> {
+        return videoItems.map { videoItem ->
+            val channel = channelListResponse.items.find { it.id == videoItem.videoId }
+            videoItem.copy(channelThumbnails = channel?.snippet?.thumbnails.toString())
+        }
+    }
 }
-
-
-
-/**
- * 비디오 제목 - search
- * 비디오 썸네일 - search
- * 비디오 조회수 - video
- * 비디오 설명 - search
- * 채널 이름 - search
- * 채널 썸네일 - channel
- */
