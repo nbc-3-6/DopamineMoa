@@ -37,7 +37,6 @@ class SearchFragment : Fragment() {
 
         searchItem()
         observeData()
-//        setCategoryClickListener()
     }
 
     private fun observeData() {
@@ -48,8 +47,6 @@ class SearchFragment : Fragment() {
 
     private fun searchItem() = with(binding) {
         btnSearch.setOnClickListener {
-            Log.d("search", "검색 버튼 클릭")
-
             if (etSearch.text.toString().isNotEmpty()) {
                 viewModel.searchVideoByText(etSearch.text.toString())
                 makeView()
