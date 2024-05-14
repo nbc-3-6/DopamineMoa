@@ -58,9 +58,8 @@ class SearchFragment : Fragment() {
     }
 
     private fun makeView() = with(binding) {
-        hcvCategory.visibility = View.GONE
-        tvNone.visibility = View.GONE
         rvSearch.visibility = View.VISIBLE
+        tvNone.visibility = View.GONE
 
         rvSearch.adapter = adapter
         rvSearch.layoutManager = GridLayoutManager(requireActivity(), 2)

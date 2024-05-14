@@ -56,6 +56,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
+        android:scrollbars="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fl_search">
@@ -72,7 +73,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/rec_category_btn"
-                android:text="키즈"
+                android:text="#meme"
                 android:textSize="16sp" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -81,7 +82,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/rec_category_btn"
-                android:text="영어교육"
+                android:text="#코미디"
                 android:textSize="16sp" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -90,7 +91,9 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/rec_category_btn"
-                android:text="수면음악"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="#ㅋㅋㅋㅋㅋ"
                 android:textSize="16sp" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -99,7 +102,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/rec_category_btn"
-                android:text="영화"
+                android:text="#레전드"
                 android:textSize="16sp" />
         </LinearLayout>
     </HorizontalScrollView>
@@ -122,12 +125,13 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:orientation="vertical"
+        android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fl_search"
+        app:layout_constraintTop_toBottomOf="@+id/hcv_category"
         app:spanCount="2"
         tools:listitem="@layout/search_item" />
 
