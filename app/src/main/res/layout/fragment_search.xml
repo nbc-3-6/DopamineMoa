@@ -73,7 +73,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/rec_category_btn"
-                android:text="#meme"
+                android:text="@string/meme"
                 android:textSize="16sp" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -82,7 +82,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/rec_category_btn"
-                android:text="#코미디"
+                android:text="@string/comedy"
                 android:textSize="16sp" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -93,16 +93,16 @@
                 android:background="@drawable/rec_category_btn"
                 android:paddingStart="5dp"
                 android:paddingEnd="5dp"
-                android:text="#ㅋㅋㅋㅋㅋ"
+                android:text="@string/zzzzz"
                 android:textSize="16sp" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_category4"
+                android:id="@+id/btn_keyword4"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/rec_category_btn"
-                android:text="#레전드"
+                android:text="@string/legend"
                 android:textSize="16sp" />
         </LinearLayout>
     </HorizontalScrollView>
