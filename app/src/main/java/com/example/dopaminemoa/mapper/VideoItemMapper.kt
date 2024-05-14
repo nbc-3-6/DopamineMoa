@@ -14,7 +14,7 @@ object VideoItemMapper {
             VideoItemModel(
                 videoId = it.id.videoId,
                 videoTitle = it.snippet.title,
-                videoThumbnail = it.snippet.thumbnails.toString(),
+                videoThumbnail = it.snippet.thumbnails.high.url,
                 videoViews = "",
                 videoDescription = it.snippet.description,
                 channelTitle = it.snippet.channelTitle,

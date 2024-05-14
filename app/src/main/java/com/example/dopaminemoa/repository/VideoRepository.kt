@@ -1,6 +1,9 @@
 package com.example.dopaminemoa.repository
 
+import com.example.dopaminemoa.API_KEY
+import com.example.dopaminemoa.mapper.VideoItemMapper
 import com.example.dopaminemoa.mapper.VideoItemModel
+import com.example.dopaminemoa.network.RepositoryClient
 
 interface VideoRepository {
     suspend fun searchPopularVideo(): List<VideoItemModel>
@@ -15,7 +18,6 @@ class VideoRepositoryImpl: VideoRepository {
      */
     override suspend fun searchPopularVideo(): List<VideoItemModel> {
         TODO("Not yet implemented")
-        //return API킅라이언트.네트워크인터페이스.네트워크함수().데이터.asVideoItemModel()
     }
 
     /**
@@ -23,7 +25,6 @@ class VideoRepositoryImpl: VideoRepository {
      */
     override suspend fun searchVideoByCategory(category: String): List<VideoItemModel> {
         TODO("Not yet implemented")
-        //return API킅라이언트.네트워크인터페이스.네트워크함수(category).데이터.asVideoItemModel()
     }
 
     /**
@@ -31,14 +32,12 @@ class VideoRepositoryImpl: VideoRepository {
      */
     override suspend fun searchChannelByCategory(category: String): List<VideoItemModel> {
         TODO("Not yet implemented")
-        //return API킅라이언트.네트워크인터페이스.네트워크함수(category).데이터.asVideoItemModel()
     }
 
     /**
      * 입력된 검색어에 대한 검색 결과를 요청하는 함수입니다.
      */
     override suspend fun searchVideoByText(text: String): List<VideoItemModel> {
-        TODO("Not yet implemented")
-        //return API킅라이언트.네트워크인터페이스.네트워크함수(text).데이터.asVideoItemModel()
+        return VideoItemMapper.fromSearchItems(RepositoryClient.youtubeService.getSearchList("snippet", text, "video", API_KEY).items)
     }
 }

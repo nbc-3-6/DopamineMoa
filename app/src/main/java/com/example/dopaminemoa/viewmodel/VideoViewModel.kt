@@ -1,5 +1,6 @@
 package com.example.dopaminemoa.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -50,6 +51,7 @@ class VideoViewModel(private val videoRepositoryImpl: VideoRepositoryImpl) : Vie
      */
     fun searchVideoByText(text: String) = viewModelScope.launch {
         _searchResults.value = videoRepositoryImpl.searchVideoByText(text)
+        Log.d("viewmodel", searchResults.value.toString())
     }
 }
 
