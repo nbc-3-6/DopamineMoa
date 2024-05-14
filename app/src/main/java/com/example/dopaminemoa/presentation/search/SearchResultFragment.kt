@@ -5,20 +5,80 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
+import androidx.fragment.app.viewModels
 import com.example.dopaminemoa.R
+import com.example.dopaminemoa.databinding.FragmentSearchBinding
+import com.example.dopaminemoa.databinding.FragmentSearchResultBinding
+import com.example.dopaminemoa.mapper.VideoItemModel
+import com.example.dopaminemoa.viewmodel.VideoViewModel
+import com.example.dopaminemoa.viewmodel.VideoViewModelFactory
 
 
 class SearchResultFragment : Fragment() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
+    private var _binding: FragmentSearchResultBinding? = null
+    private val binding get() = _binding!!
+
+    private val viewModel: VideoViewModel by viewModels({ requireActivity() }) {
+        VideoViewModelFactory.newInstance()
     }
+
+    private val adapter = SearchAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search_result, container, false)
+        _binding = FragmentSearchResultBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        observeData()
+        backBtnPressed()
+        backToAction()
+    }
+
+    private fun observeData() {
+        viewModel.searchResults.observe(viewLifecycleOwner) {
+            adapter.updateList(it)
+        }
+    }
+
+    private fun backBtnPressed() = with(binding) {
+        ivBackBtn.setOnClickListener {
+            backToAction()
+        }
+    }
+
+    private fun backToAction() {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            parentFragment?.childFragmentManager?.popBackStack()
+        }
+    }
+
+    /**
+     * recyclerView에서 item을 선택했을 때 실행되는 함수입니다.
+     * Detail fagment로 이동시 데이터를 bundle로 넘기고 fragment를 전환하거나 하는 식의 코드가 필요합니다.
+     */
+    private fun selectItem(item: VideoItemModel) {
+        val bundle = Bundle().apply {
+            putParcelable(BUNDLE_KEY_FOR_DETAIL_FRAGMENT, item)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    companion object {
+        const val BUNDLE_KEY_FOR_DETAIL_FRAGMENT = "BUNDLE_KEY_FOR_DETAIL_FRAGMENT"
+        const val BUNDLE_KEY_FOR_RESULT_FRAGMENT = "BUNDLE_KEY_FOR_RESULT_FRAGMENT"
+
+        fun newInstanceForFragment() = SearchResultFragment()
     }
 }
