@@ -2,7 +2,6 @@ package com.example.dopaminemoa.presentation.search
 
 import androidx.fragment.app.viewModels
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +23,8 @@ class SearchFragment : Fragment() {
 
     private val adapter = SearchAdapter()
 
+    private var isSearchingByText = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,9 +35,11 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        isSearchingByText = false
 
-        searchItem()
         observeData()
+        searchItem()
+        setClickListener()
     }
 
     private fun observeData() {
@@ -45,16 +48,85 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun searchItem() = with(binding) {
+    private fun setClickListener() = with(binding) {
         btnSearch.setOnClickListener {
-            if (etSearch.text.toString().isNotEmpty()) {
-                viewModel.searchVideoByText(etSearch.text.toString())
-                makeView()
+            isSearchingByText = true
+            searchItem()
+        }
+        btnKeyword1.setOnClickListener {
+            isSearchingByText = false
+            SearchKeyword(it)
+        }
+        btnKeyword2.setOnClickListener {
+            isSearchingByText = false
+            SearchKeyword(it)
+        }
+        btnKeyword3.setOnClickListener {
+            isSearchingByText = false
+            SearchKeyword(it)
+        }
+        btnKeyword4.setOnClickListener {
+            isSearchingByText = false
+            SearchKeyword(it)
+        }
+    }
+
+    private fun searchItem() = with(binding) {
+        if (etSearch.text.toString().isNotEmpty()) {
+            val text = etSearch.text.toString()
+            requestSearchByKeyword(text)
+            makeView()
+        }
+    }
+
+    private fun requestSearchByKeyword(text: String) {
+        viewModel.searchVideoByText(text)
+        makeView()
+    }
+
+    private fun SearchKeyword(view: View) = with(binding) {
+        if (isSearchingByText) { //검색 중일 때 키워드 추가 검색
+            when(view.id) {
+                btnKeyword1.id -> {
+
+                }
+                btnKeyword2.id -> {
+
+                }
+                btnKeyword3.id -> {
+
+                }
+                btnKeyword4.id -> {
+
+                }
+                else -> throw IllegalArgumentException("Unknown button ID")
+            }
+        } else { //검색어 없이 키워드만 검색
+            when(view.id) {
+                btnKeyword1.id -> {
+                    requestSearchByKeyword(btnKeyword1.text.removePrefix("#").toString().toLowerCase())
+                }
+                btnKeyword2.id -> {
+                    requestSearchByKeyword(btnKeyword2.text.removePrefix("#").toString().toLowerCase())
+                }
+                btnKeyword3.id -> {
+                    requestSearchByKeyword(btnKeyword3.text.removePrefix("#").toString().toLowerCase())
+                }
+                btnKeyword4.id -> {
+                    requestSearchByKeyword(btnKeyword4.text.removePrefix("#").toString().toLowerCase())
+                }
+                else -> throw IllegalArgumentException("Unknown button ID")
             }
         }
     }
 
     private fun makeView() = with(binding) {
+        if (isSearchingByText) { //텍스트 검색 중
+            hcvCategory.visibility = View.VISIBLE
+        } else { //키워드 검색 중
+            hcvCategory.visibility = View.GONE
+        }
+
         rvSearch.visibility = View.VISIBLE
         tvNone.visibility = View.GONE
 
