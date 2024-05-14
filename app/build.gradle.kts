@@ -64,4 +64,11 @@ dependencies {
 
     //circle image view
     implementation("de.hdodenhof:circleimageview:3.1.0")
+
+    //room, glide - for url image
+    val room_version = "2.6.1"
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-common:$room_version")
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.14.2")
 }
