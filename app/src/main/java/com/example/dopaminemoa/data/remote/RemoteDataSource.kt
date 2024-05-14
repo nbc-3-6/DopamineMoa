@@ -11,12 +11,13 @@ import retrofit2.http.Query
 interface RemoteDataSource {
 
     //search
-    @Headers("Authorization = $API_KEY")
+//    @Headers("Authorization = $API_KEY")
     @GET("search")
     suspend fun getSearchList(
         @Query("part") part: String = "snippet",
         @Query("q") query: String,
         @Query("type") type: String = "video",
+        @Query("key") key: String = API_KEY,
         ): SearchListResponse
 
     //videos
@@ -24,6 +25,7 @@ interface RemoteDataSource {
     suspend fun getVideosList(
         @Query("part") part: String = "snippet",
         @Query("chart") chart: String = "mostPopular",
+        @Query("key") key: String = API_KEY,
         //추가
     ): VideoListResponse
 
@@ -33,6 +35,7 @@ interface RemoteDataSource {
     suspend fun getVideoCategoriesList(
         @Query("part") part: String = "snippet",
         @Query("regionCode") regionCode: String = "KR",
+        @Query("key") key: String = API_KEY,
         //추가
     ): VideoCategoryListResponse
 
@@ -41,6 +44,6 @@ interface RemoteDataSource {
     suspend fun getChannelsList(
         @Query("part") part: String = "snippet",
         @Query("id") channelId: String,
-//        @Query("key") key: String = "",
+        @Query("key") key: String = API_KEY,
     ): ChannelListResponse
 }
