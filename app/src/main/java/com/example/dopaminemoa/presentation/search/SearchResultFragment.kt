@@ -36,14 +36,44 @@ class SearchResultFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        backBtnPressed()
-        backToAction()
         getText()
+        backBtnPressed()
 
         observeData()
         makeRecyclerView()
-
         setClickListener()
+    }
+
+    private fun getText() = with(binding) {
+        val text = arguments?.getString(BUNDLE_KEY_FOR_RESULT_FRAGMENT) ?: ""
+        etSearch.setText(text)
+    }
+
+    private fun backBtnPressed() = with(binding) {
+        ivBackBtn.setOnClickListener {
+            parentFragment?.childFragmentManager?.popBackStack()
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            parentFragment?.childFragmentManager?.popBackStack()
+        }
+    }
+
+    private fun observeData() {
+        viewModel.searchResults.observe(viewLifecycleOwner) {
+            adapter.updateList(it)
+        }
+    }
+
+    private fun makeRecyclerView() = with(binding) {
+        rvSearch.adapter = adapter
+        rvSearch.layoutManager = GridLayoutManager(requireActivity(), 2)
+
+        adapter.itemClick = object : SearchAdapter.ItemClick {
+            override fun onClick(view: View, item: VideoItemModel) {
+                selectItem(item)
+            }
+        }
     }
 
     private fun setClickListener() = with(binding) {
@@ -71,6 +101,10 @@ class SearchResultFragment : Fragment() {
         }
     }
 
+    private fun reSearch(text: String) {
+        viewModel.searchVideoByText(text)
+    }
+
     private fun searchOnlyKeyword(view: View) = with(binding) {
         val searchText = etSearch.text.toString()
         when (view.id) {
@@ -94,43 +128,7 @@ class SearchResultFragment : Fragment() {
         }
     }
 
-    private fun reSearch(text: String) {
-        viewModel.searchVideoByText(text)
-    }
 
-    private fun makeRecyclerView() = with(binding) {
-        rvSearch.adapter = adapter
-        rvSearch.layoutManager = GridLayoutManager(requireActivity(), 2)
-
-        adapter.itemClick = object : SearchAdapter.ItemClick {
-            override fun onClick(view: View, item: VideoItemModel) {
-                selectItem(item)
-            }
-        }
-    }
-
-    private fun getText() = with(binding) {
-        val text = arguments?.getString(BUNDLE_KEY_FOR_RESULT_FRAGMENT) ?: ""
-        etSearch.setText(text)
-    }
-
-    private fun backBtnPressed() = with(binding) {
-        ivBackBtn.setOnClickListener {
-            parentFragment?.childFragmentManager?.popBackStack()
-        }
-    }
-
-    private fun backToAction() {
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            parentFragment?.childFragmentManager?.popBackStack()
-        }
-    }
-
-    private fun observeData() {
-        viewModel.searchResults.observe(viewLifecycleOwner) {
-            adapter.updateList(it)
-        }
-    }
 
     /**
      * recyclerView에서 item을 선택했을 때 실행되는 함수입니다.
