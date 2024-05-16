@@ -1,6 +1,7 @@
 package com.example.dopaminemoa.presentation.search
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,8 @@ import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.dopaminemoa.data.remote.NetworkException
+import com.example.dopaminemoa.data.remote.Resource
 import com.example.dopaminemoa.databinding.FragmentSearchResultBinding
 import com.example.dopaminemoa.mapper.VideoItemModel
 import com.example.dopaminemoa.viewmodel.VideoViewModel
@@ -60,8 +63,16 @@ class SearchResultFragment : Fragment() {
     }
 
     private fun observeData() {
-        viewModel.searchResults.observe(viewLifecycleOwner) {
-            adapter.updateList(it)
+        viewModel.searchResults.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    adapter.updateList(resource.data ?: emptyList())
+                }
+                is Resource.Error -> {
+                    val exception = resource.exception
+                    Log.d("서치리저트프래그먼트", exception?.message.toString())
+                }
+            }
         }
     }
 

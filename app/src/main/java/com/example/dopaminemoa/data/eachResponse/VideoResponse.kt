@@ -11,7 +11,7 @@ data class VideoListResponse(
 data class VideoItems(
     @SerializedName("kind") val kind: String,
     @SerializedName("etag") val etag: String,
-    @SerializedName("id") val id: String,
+    @SerializedName("id") val videoId: String,
     @SerializedName("snippet") val snippet: VideoSnippet,
     @SerializedName("Statistics") val statistics: VideoStatistics
 )

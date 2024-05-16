@@ -7,8 +7,8 @@ import com.example.dopaminemoa.data.eachResponse.SearchItems
  */
 
 object VideoItemMapper {
-    fun fromSearchItems(searchItems: List<SearchItems>): List<VideoItemModel> {
-        return searchItems.map {
+    fun fromSearchItems(items: List<SearchItems>): List<VideoItemModel> {
+        return items.map {
             VideoItemModel(
                 videoId = it.id.videoId,
                 videoTitle = it.snippet.title,
