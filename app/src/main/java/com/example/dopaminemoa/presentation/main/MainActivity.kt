@@ -2,11 +2,14 @@ package com.example.dopaminemoa.presentation.main
 
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.commit
 import com.example.dopaminemoa.R
 import com.example.dopaminemoa.databinding.ActivityMainBinding
+import com.example.dopaminemoa.presentation.videodetail.VideoDetailFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -55,4 +58,24 @@ class MainActivity : AppCompatActivity() {
         })
         tlMain.getTabAt(1)?.select() // Home을 default로 설정
     }
+
+    private fun showVideoDetailFragment() {
+        showToolbar(false)
+        showTabLayout(false)
+
+        val fragment = VideoDetailFragment.newInstance()
+        supportFragmentManager.commit {
+            replace(R.id.fl_video_detail, fragment)
+            addToBackStack(null)
+        }
+    }
+
+    private fun showToolbar(show: Boolean) {
+        binding.tbMain.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    private fun showTabLayout(show: Boolean) {
+        binding.tlMain.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
 }
