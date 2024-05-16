@@ -11,7 +11,8 @@ data class VideoItemModel(
     val videoViews: String, // 나중에 추가
     val videoDescription: String,
     val channelTitle: String,
-    val channelThumbnails: String // 나중에 추가
+    val channelThumbnails: String, // 나중에 추가
+    val category: String,
 ) : Parcelable
 
 
