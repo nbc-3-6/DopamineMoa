@@ -11,8 +11,9 @@ data class VideoListResponse(
 data class VideoItems(
     @SerializedName("kind") val kind: String,
     @SerializedName("etag") val etag: String,
-    @SerializedName("id") val id: String,
-    @SerializedName("snippet") val snippet: VideoSnippet
+    @SerializedName("id") val videoId: String,
+    @SerializedName("snippet") val snippet: VideoSnippet,
+    @SerializedName("Statistics") val statistics: VideoStatistics
 )
 
 data class VideoSnippet(
@@ -46,4 +47,12 @@ data class VideoThumbnail(
 data class Localized(
     @SerializedName("title") val title: String,
     @SerializedName("description") val description: String
+)
+
+data class VideoStatistics(
+    @SerializedName("viewCount") val viewCount: String,
+    @SerializedName("likeCount") val likeCount: String,
+    @SerializedName("dislikeCount") val dislikeCount: String,
+    @SerializedName("favoriteCount") val favoriteCount: String,
+    @SerializedName("commentCount") val commentCount: String,
 )
