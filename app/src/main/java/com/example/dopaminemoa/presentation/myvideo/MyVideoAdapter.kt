@@ -13,9 +13,12 @@ import com.bumptech.glide.Glide
 import com.example.dopaminemoa.Constants
 import com.example.dopaminemoa.databinding.MyvideoItemBinding
 import com.example.dopaminemoa.mapper.VideoItemModel
+import com.example.dopaminemoa.utils.Utils.addPrefItem
+import com.example.dopaminemoa.utils.Utils.deletePrefItem
 import de.hdodenhof.circleimageview.CircleImageView
 
-class MyVideoAdapter(private val mContext: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MyVideoAdapter(private val mContext: Context) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     // 표시될 항목들
     var items = ArrayList<VideoItemModel>()
@@ -31,6 +34,7 @@ class MyVideoAdapter(private val mContext: Context): RecyclerView.Adapter<Recycl
     fun setOnItemClickListener(listener: OnItemClickListener) {
         this.clickListener = listener
     }
+
     override fun getItemCount() = items.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -40,29 +44,30 @@ class MyVideoAdapter(private val mContext: Context): RecyclerView.Adapter<Recycl
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         Glide.with(mContext)
-            .load(items[position].id)
+            .load(items[position].videoId)
             .into((holder as ItemViewHolder).iv_thum_image)
 
         // 항목 타입 설정 (이미지 or 비디오)
         var type = "[Image] "
         if (items[position].type == Constants.SEARCH_TYPE_VIDEO) type = "[Video] "
 
-        holder.tv_title.text = type + items[position].title
+        holder.tv_title.text = type + items[position].videoTitle
 
         // 항목 클릭 이벤트
         holder.cl_thumb_item.setOnClickListener {
-            Log.d("MyVideoAdapter","#dopamine itemView onItemClick=${position}")
+            Log.d("MyVideoAdapter", "#dopamine itemView onItemClick=${position}")
             clickListener?.onItemClick(items[position], position)
         }
 
     }
 
     // 항목에 데이터 바인딩
-    inner class ItemViewHolder(binding: MyvideoItemBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+    inner class ItemViewHolder(binding: MyvideoItemBinding) : RecyclerView.ViewHolder(binding.root),
+        View.OnClickListener {
 
         var iv_thum_image: ImageView = binding.ivThumbnail
         var tv_title: TextView = binding.tvTitle
-        var iv_channel: CircleImageView= binding.ivChannel
+        var iv_channel: CircleImageView = binding.ivChannel
         var cl_thumb_item: ConstraintLayout = binding.clThumbItem
 
         init {
@@ -75,9 +80,18 @@ class MyVideoAdapter(private val mContext: Context): RecyclerView.Adapter<Recycl
          */
         override fun onClick(view: View) {
             val position = adapterPosition.takeIf { it != RecyclerView.NO_POSITION } ?: return
+            val item = items[position]
 
+            if (!item.isLike) {
+                addPrefItem(mContext, item)
+                item.isLike = true
+            } else {
+                deletePrefItem(mContext, item.videoId)
+                item.isLike = false
+            }
 
             notifyItemChanged(position)
         }
+
     }
 }
