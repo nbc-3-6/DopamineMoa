@@ -1,6 +1,5 @@
 package com.example.dopaminemoa.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,11 +7,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.dopaminemoa.data.remote.Resource
 import com.example.dopaminemoa.mapper.VideoItemModel
+import com.example.dopaminemoa.repository.VideoRepository
 import com.example.dopaminemoa.repository.VideoRepositoryImpl
 import kotlinx.coroutines.launch
 
 
-class VideoViewModel(private val videoRepositoryImpl: VideoRepositoryImpl) : ViewModel() {
+class VideoViewModel(private val videoRepository: VideoRepository) : ViewModel() {
 
     private val _popularResults: MutableLiveData<List<VideoItemModel>> = MutableLiveData()
     val popularResults: LiveData<List<VideoItemModel>> get() = _popularResults
@@ -30,28 +30,28 @@ class VideoViewModel(private val videoRepositoryImpl: VideoRepositoryImpl) : Vie
      * repository에 인기 비디오 검색 결과를 요청합니다.
      */
     fun searchPopularVideo() = viewModelScope.launch {
-        _popularResults.value = videoRepositoryImpl.searchPopularVideo()
+        _popularResults.value = videoRepository.searchPopularVideo()
     }
 
     /**
      * repository에 키워드를 사용한 비디오 검색 결과를 요청합니다.
      */
     fun searchVideoByCategory(category: String) = viewModelScope.launch {
-        _categoryVideoResults.value = videoRepositoryImpl.searchVideoByCategory(category)
+        _categoryVideoResults.value = videoRepository.searchVideoByCategory(category)
     }
 
     /**
      * repository에 키워드를 사용한 채널 검색 결과를 요청합니다.
      */
     fun searchChannelByCategory(category: String) = viewModelScope.launch {
-        _categoryChannelResults.value = videoRepositoryImpl.searchChannelByCategory(category)
+        _categoryChannelResults.value = videoRepository.searchChannelByCategory(category)
     }
 
     /**
      * repository에 검색어를 사용한 검색 결과를 요청합니다.
      */
     fun searchVideoByText(text: String) = viewModelScope.launch {
-        _searchResults.value = videoRepositoryImpl.searchVideoByText(text)
+        _searchResults.value = videoRepository.searchVideoByText(text)
     }
 }
 
