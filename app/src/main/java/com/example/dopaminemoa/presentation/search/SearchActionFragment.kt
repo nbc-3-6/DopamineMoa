@@ -58,6 +58,7 @@ class SearchActionFragment : Fragment() {
 
     /**
      * 검색 버튼을 클릭했을 때 실행되는 함수입니다.
+     * 키보드를 숨김 처리 합니다.
      */
     private fun searchItem() = with(binding) {
         if (etSearch.text.toString().isNotEmpty()) {
