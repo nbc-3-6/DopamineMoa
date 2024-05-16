@@ -1,4 +1,4 @@
-package com.example.dopaminemoa.presentation.home.videocategory.model
+package com.example.dopaminemoa.presentation.home.videocategory
 
 data class VideoCategoryEntity(
     val items: List<VideoCategoryItemsEntity>

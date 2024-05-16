@@ -2,6 +2,7 @@ package com.example.dopaminemoa.network
 
 import com.example.dopaminemoa.data.remote.RemoteDataSource
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -10,7 +11,9 @@ object RepositoryClient {
     private const val BASE_URL = "https://www.googleapis.com/youtube/v3/"
 
     private val okHttpClient by lazy {
+        val httpLoggingInterceptor = HttpLoggingInterceptor()
         OkHttpClient.Builder()
+            .addInterceptor(httpLoggingInterceptor)
             .build()
     }
 

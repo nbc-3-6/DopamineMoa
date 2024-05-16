@@ -8,7 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.dopaminemoa.mapper.PopularVideoItemModel
 import com.example.dopaminemoa.mapper.VideoItemModel
 import com.example.dopaminemoa.network.RepositoryClient
-import com.example.dopaminemoa.presentation.home.videocategory.model.VideoCategoryEntity
+import com.example.dopaminemoa.presentation.home.videocategory.VideoCategoryEntity
+import com.example.dopaminemoa.repository.Resource
 import com.example.dopaminemoa.repository.VideoRepository
 import com.example.dopaminemoa.repository.VideoRepositoryImpl
 import kotlinx.coroutines.launch
@@ -30,8 +31,8 @@ class VideoViewModel(private val videoRepository: VideoRepository) : ViewModel()
     private val _categoryChannelResults: MutableLiveData<List<VideoItemModel>> = MutableLiveData()
     val categoryChannelResults: LiveData<List<VideoItemModel>> get() = _categoryChannelResults
 
-    private val _searchResults: MutableLiveData<List<VideoItemModel>> = MutableLiveData()
-    val searchResults: LiveData<List<VideoItemModel>> get() = _searchResults
+    private val _searchResults: MutableLiveData<Resource<List<VideoItemModel>>> = MutableLiveData()
+    val searchResults: LiveData<Resource<List<VideoItemModel>>> get() = _searchResults
 
     /**
      * repository에 인기 비디오 검색 결과를 요청합니다.
@@ -43,8 +44,8 @@ class VideoViewModel(private val videoRepository: VideoRepository) : ViewModel()
     /**
      * repository에 키워드를 사용한 비디오 검색 결과를 요청합니다.
      */
-    fun searchVideoByCategory(categoryId: String) = viewModelScope.launch {
-        _videoListByCategory.value = videoRepository.searchVideoByCategory(categoryId)
+    fun searchVideoByCategory(category: String) = viewModelScope.launch {
+        _videoListByCategory.value = videoRepository.searchVideoByCategory(category)
     }
 
     //spinner 카테고리 목록

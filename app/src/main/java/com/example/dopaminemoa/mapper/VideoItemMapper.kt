@@ -8,8 +8,8 @@ import com.example.dopaminemoa.data.eachResponse.VideoItems
  */
 
 object VideoItemMapper {
-    fun fromSearchItems(searchItems: List<SearchItems>): List<VideoItemModel> {
-        return searchItems.map {
+    fun fromSearchItems(items: List<SearchItems>): List<VideoItemModel> {
+        return items.map {
             VideoItemModel(
                 videoId = it.id.videoId,
                 videoTitle = it.snippet.title,
@@ -18,7 +18,7 @@ object VideoItemMapper {
                 videoDescription = it.snippet.description,
                 channelTitle = it.snippet.channelTitle,
                 channelThumbnails = "", // 채널 썸네일 데이터는 향후 처리
-                categoryId = "",
+                category = "",
             )
         }
     }
@@ -33,7 +33,7 @@ object VideoItemMapper {
                 videoDescription = it.snippet.description,
                 channelTitle = it.snippet.channelTitle,
                 channelThumbnails = "",
-                categoryId = it.snippet.categoryId //카테고리 int값
+                category = it.snippet.category //카테고리 int값
 //                channelId = it.snippet.channelId, //채널명
             )
         }

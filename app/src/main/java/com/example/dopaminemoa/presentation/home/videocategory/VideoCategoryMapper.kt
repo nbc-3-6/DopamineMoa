@@ -1,11 +1,8 @@
-package com.example.dopaminemoa.presentation.home.videocategory.mapper
+package com.example.dopaminemoa.presentation.home.videocategory
 
 import com.example.dopaminemoa.data.eachResponse.VideoCategoryItems
 import com.example.dopaminemoa.data.eachResponse.VideoCategoryListResponse
 import com.example.dopaminemoa.data.eachResponse.VideoCategorySnippet
-import com.example.dopaminemoa.presentation.home.videocategory.model.VideoCategoryEntity
-import com.example.dopaminemoa.presentation.home.videocategory.model.VideoCategoryItemsEntity
-import com.example.dopaminemoa.presentation.home.videocategory.model.VideoCategorySnippetEntity
 
 fun VideoCategoryListResponse.toEntity() = VideoCategoryEntity(
     items = items.asVideoCategoryItemsEntity()

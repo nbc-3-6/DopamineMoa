@@ -17,7 +17,7 @@ data class VideoSnippet(
     @SerializedName("description") val description: String, //설명 (detail에서 필요)
     @SerializedName("thumbnails") val thumbnails: VideoThumbnails, //썸네일
     @SerializedName("channelTitle") val channelTitle: String,
-    @SerializedName("categoryId") val categoryId: String, //카테고리 int값
+    @SerializedName("categoryId") val category: String, //카테고리 int값
     @SerializedName("channelId") val channelId: String, //채널 아이디
 )
 
@@ -35,3 +35,4 @@ data class VideoThumbnail(
 //data class VideoContentDetails(
 //    @SerializedName("duration") val duration: String //영상 시간 PT*M*S
 //)
+

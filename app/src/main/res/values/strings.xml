@@ -6,8 +6,19 @@
     <string name="main_tab_search_title">Search</string>
     <string name="main_tab_home_title">Home</string>
     <string name="main_tab_myvideos_title">My Videos</string>
-
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!--search-->
+    <string name="search_et_hint">검색어를 입력해주세요</string>
+    <string name="search_tv_none">검색 결과가 없습니다.</string>
+    <string name="search_search_btn">검색</string>
+    <string name="search_tv_views">조회수</string>
+    <string name="search_tv_meme">#meme</string>
+    <string name="search_tv_comedy">#코미디</string>
+    <string name="search_tv_zzzzz">#ㅋㅋㅋㅋㅋ</string>
+    <string name="search_tv_legend">#레전드</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+<!--    <string name="hello_blank_fragment">Hello blank fragment</string>-->
 </resources>

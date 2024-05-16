@@ -1,4 +1,4 @@
-package com.example.dopaminemoa.presentation.home.videocategory.adapter
+package com.example.dopaminemoa.presentation.home.videocategory
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

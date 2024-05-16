@@ -1,4 +1,4 @@
-package com.example.dopaminemoa.presentation.myvideos
+package com.example.dopaminemoa.presentation.videodetail
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

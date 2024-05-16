@@ -2,7 +2,6 @@ package com.example.dopaminemoa.presentation.home
 
 import android.graphics.Rect
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,21 +13,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dopaminemoa.databinding.FragmentHomeBinding
 import com.example.dopaminemoa.presentation.home.video.MostPopularAdapter
-import com.example.dopaminemoa.presentation.home.videocategory.adapter.VideoCategoryAdapter
+import com.example.dopaminemoa.presentation.home.videocategory.VideoCategoryAdapter
 import com.example.dopaminemoa.viewmodel.VideoViewModel
 import com.example.dopaminemoa.viewmodel.VideoViewModelFactory
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-
-    //    private val viewModel by viewModels<VideoViewModel> {
-//        SearchViewModelFactory()
-//    }
     private val viewModel: VideoViewModel by viewModels({ requireActivity() }) {
         VideoViewModelFactory.newInstance()
     }
-
     //adapter
     private lateinit var mostPopularAdapter: MostPopularAdapter
     private lateinit var categoryAdapter: VideoCategoryAdapter
@@ -54,11 +48,9 @@ class HomeFragment : Fragment() {
 
 
     private fun initViewModel() {
-        //mostPopular
         viewModel.popularResults.observe(viewLifecycleOwner) { videos ->
             mostPopularAdapter.updateItems(videos)
         }
-        //카테고리만 받아오기
         viewModel.categoryVideoResults.observe(viewLifecycleOwner) { categoryEntity ->
             val categoryList = categoryEntity.items.map { it.snippet.title }
             categorySpinnerAdapter.clear()
@@ -66,7 +58,6 @@ class HomeFragment : Fragment() {
                 categorySpinnerAdapter.addAll(categoryList)
             }
         }
-        //
         viewModel.videoListByCategory.observe(viewLifecycleOwner) { videos ->
             categoryAdapter.submitList(videos)
         }
@@ -81,13 +72,7 @@ class HomeFragment : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.rvMostPopular.adapter = mostPopularAdapter
 
-        // 아이템 간격 주기
-        binding.rvMostPopular.addItemDecoration(object : RecyclerView.ItemDecoration() {
-            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-                super.getItemOffsets(outRect, view, parent, state)
-                outRect.right = 40
-            }
-        })
+        setGapRecyclerViewItem(binding.rvMostPopular,40)
     }
 
     private fun initVideoCategoryRecyclerView() {
@@ -95,14 +80,7 @@ class HomeFragment : Fragment() {
         binding.rvCategory.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.rvCategory.adapter = categoryAdapter
-
-        // 아이템 간격 주기
-        binding.rvCategory.addItemDecoration(object : RecyclerView.ItemDecoration() {
-            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-                super.getItemOffsets(outRect, view, parent, state)
-                outRect.right = 40
-            }
-        })
+        setGapRecyclerViewItem(binding.rvCategory, 40)
     }
 
     private fun initSpinner() {
@@ -116,11 +94,19 @@ class HomeFragment : Fragment() {
                 val categoryId = viewModel.categoryVideoResults.value?.items?.getOrNull(position)?.id
                 categoryId?.let { viewModel.searchVideoByCategory(it) }
             }
-
             override fun onNothingSelected(p0: AdapterView<*>?) {
                 TODO("Not yet implemented")
             }
         }
+    }
+    //아이템 간격
+    private fun setGapRecyclerViewItem(recyclerView: RecyclerView, spacing: Int) {
+        recyclerView.addItemDecoration(object : RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+                super.getItemOffsets(outRect, view, parent, state)
+                outRect.right = spacing
+            }
+        })
     }
 
     override fun onDestroyView() {

@@ -6,6 +6,7 @@ import com.example.dopaminemoa.data.eachResponse.SearchListResponse
 import com.example.dopaminemoa.data.eachResponse.VideoCategoryListResponse
 import com.example.dopaminemoa.data.eachResponse.VideoListResponse
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.Query
 
 interface RemoteDataSource {
@@ -16,16 +17,9 @@ interface RemoteDataSource {
         @Query("q") query: String,
         @Query("type") type: String = "video",
         @Query("key") key: String = API_KEY,
+//        @Query("maxResults") maxResults: Int = 10,
         ): SearchListResponse
 
-    @GET("videos")
-    suspend fun getPopularVideosList(
-        @Query("part") part: String = "snippet",
-        @Query("chart") chart: String = "mostPopular",
-        @Query("key") key: String = API_KEY,
-        @Query("regionCode") regionCode: String = "KR",
-        @Query("maxResults") maxResults: Int = 1,
-    ): VideoListResponse
     //videos
     @GET("videos")
     suspend fun getVideosList(
@@ -34,7 +28,7 @@ interface RemoteDataSource {
         @Query("key") key: String = API_KEY,
         @Query("regionCode") regionCode: String = "KR",
         @Query("maxResults") maxResults: Int = 1,
-        @Query("videoCategoryId") videoCategoryId: String,
+        @Query("videoCategoryId") videoCategoryId: String = "0",
     ): VideoListResponse
 
 
