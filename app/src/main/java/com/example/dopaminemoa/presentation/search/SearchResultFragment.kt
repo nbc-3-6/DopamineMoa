@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.dopaminemoa.R
 import com.example.dopaminemoa.repository.Resource
 import com.example.dopaminemoa.databinding.FragmentSearchResultBinding
 import com.example.dopaminemoa.mapper.VideoItemModel
@@ -131,6 +132,7 @@ class SearchResultFragment : Fragment() {
     private fun setClickListener() = with(binding) {
         btnSearch.setOnClickListener {
             searchItem()
+            setKeywordButtonColor(-1)
         }
         btnKeyword1.setOnClickListener {
             searchOnlyKeyword(it)
@@ -170,26 +172,69 @@ class SearchResultFragment : Fragment() {
         val searchText = etSearch.text.toString()
         when (view.id) {
             btnKeyword1.id -> {
-                val text = searchText + btnKeyword1.text.removePrefix("#").toString()
+                val text = searchText + " " + btnKeyword1.text.removePrefix("#").toString()
                 reSearch(text)
+                setKeywordButtonColor(btnKeyword1.id)
             }
 
             btnKeyword2.id -> {
-                val text = searchText + btnKeyword2.text.removePrefix("#").toString()
+                val text = searchText + " " + btnKeyword2.text.removePrefix("#").toString()
                 reSearch(text)
+                setKeywordButtonColor(btnKeyword2.id)
             }
 
             btnKeyword3.id -> {
-                val text = searchText + btnKeyword3.text.removePrefix("#").toString()
+                val text = searchText + " " + btnKeyword3.text.removePrefix("#").toString()
                 reSearch(text)
+                setKeywordButtonColor(btnKeyword3.id)
             }
 
             btnKeyword4.id -> {
-                val text = searchText + btnKeyword4.text.removePrefix("#").toString()
+                val text = searchText + " " + btnKeyword4.text.removePrefix("#").toString()
                 reSearch(text)
+                setKeywordButtonColor(btnKeyword4.id)
             }
 
             else -> throw IllegalArgumentException("Unknown button ID")
+        }
+    }
+
+    /**
+     * 키워드 버튼에 대한 색상 처리를 수행하는 함수입니다.
+     * 현재 검색에 적용된 버튼만 색상을 다르게 표시합니다.
+     */
+    private fun setKeywordButtonColor(id: Int) = with(binding) {
+        when (id) {
+            btnKeyword1.id -> {
+                btnKeyword1.setBackgroundResource(R.drawable.rec_category_btn_pressed)
+                btnKeyword2.setBackgroundResource(R.drawable.rec_category_btn)
+                btnKeyword3.setBackgroundResource(R.drawable.rec_category_btn)
+                btnKeyword4.setBackgroundResource(R.drawable.rec_category_btn)
+            }
+            btnKeyword2.id -> {
+                btnKeyword1.setBackgroundResource(R.drawable.rec_category_btn)
+                btnKeyword2.setBackgroundResource(R.drawable.rec_category_btn_pressed)
+                btnKeyword3.setBackgroundResource(R.drawable.rec_category_btn)
+                btnKeyword4.setBackgroundResource(R.drawable.rec_category_btn)
+            }
+            btnKeyword3.id -> {
+                btnKeyword1.setBackgroundResource(R.drawable.rec_category_btn)
+                btnKeyword2.setBackgroundResource(R.drawable.rec_category_btn)
+                btnKeyword3.setBackgroundResource(R.drawable.rec_category_btn_pressed)
+                btnKeyword4.setBackgroundResource(R.drawable.rec_category_btn)
+            }
+            btnKeyword4.id -> {
+                btnKeyword1.setBackgroundResource(R.drawable.rec_category_btn)
+                btnKeyword2.setBackgroundResource(R.drawable.rec_category_btn)
+                btnKeyword3.setBackgroundResource(R.drawable.rec_category_btn)
+                btnKeyword4.setBackgroundResource(R.drawable.rec_category_btn_pressed)
+            }
+            else -> {
+                btnKeyword1.setBackgroundResource(R.drawable.rec_category_btn)
+                btnKeyword2.setBackgroundResource(R.drawable.rec_category_btn)
+                btnKeyword3.setBackgroundResource(R.drawable.rec_category_btn)
+                btnKeyword4.setBackgroundResource(R.drawable.rec_category_btn)
+            }
         }
     }
 
