@@ -54,7 +54,7 @@ object Utils {
         val prefs = context.getSharedPreferences("pref", Activity.MODE_PRIVATE)
         val editor = prefs.edit()
         val gson = GsonBuilder().create()
-        editor.putString(item.id, gson.toJson(item))
+        editor.putString(item.videoId, gson.toJson(item))
         editor.apply()
     }
 
@@ -77,15 +77,15 @@ object Utils {
      * @param context 앱의 현재 컨텍스트
      * @return 북마크된 아이템의 ArrayList
      */
-    fun getPrefBookmarkItems(context: Context): ArrayList<VideoItemModel> {
+    fun getPrefLikeItems(context: Context): ArrayList<VideoItemModel> {
         val prefs = context.getSharedPreferences("pref", Activity.MODE_PRIVATE)
         val allEntries: Map<String, *> = prefs.all
-        val bookmarkItems = ArrayList<VideoItemModel>()
+        val likeItems = ArrayList<VideoItemModel>()
         val gson = GsonBuilder().create()
         for ((key, value) in allEntries) {
             val item = gson.fromJson(value as String, VideoItemModel::class.java)
-            bookmarkItems.add(item)
+            likeItems.add(item)
         }
-        return bookmarkItems
+        return likeItems
     }
 }
