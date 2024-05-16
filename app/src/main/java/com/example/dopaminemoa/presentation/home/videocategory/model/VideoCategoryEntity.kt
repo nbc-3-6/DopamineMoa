@@ -1,7 +1,7 @@
 package com.example.dopaminemoa.presentation.home.videocategory.model
 
 data class VideoCategoryEntity(
-    val items: List<VideoCategoryItemsEntity> //필요
+    val items: List<VideoCategoryItemsEntity>
 )
 
 data class VideoCategoryItemsEntity(

@@ -1,30 +1,29 @@
-package com.example.dopaminemoa.presentation.home.video.adapter
+package com.example.dopaminemoa.presentation.home.video
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.dopaminemoa.databinding.ItemVideoListBinding
-import com.example.dopaminemoa.presentation.home.video.model.VideoItemsEntity
+import com.example.dopaminemoa.mapper.PopularVideoItemModel
 
 
-class MostPopularAdapter(private var videoItems: List<VideoItemsEntity>) :
+class MostPopularAdapter(private var videoItems: List<PopularVideoItemModel>) :
     RecyclerView.Adapter<MostPopularAdapter.MostPopularViewHolder>() {
 
     inner class MostPopularViewHolder(private val binding: ItemVideoListBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(videoitem: VideoItemsEntity) {
+        fun bind(item: PopularVideoItemModel) {
             binding.apply {
-                tvTitle.text = videoitem.snippet.title
+                tvTitle.text = item.videoTitle
                 Glide.with(itemView)
-                    .load(videoitem.snippet.thumbnails.standard.url) // 썸네일 이미지 URL
+                    .load(item.videoThumbnail) // 썸네일 이미지 URL
                     .into(ivThumbnail)
             }
         }
     }
 
-    fun updateItems(newItems: List<VideoItemsEntity>) {
+    fun updateItems(newItems: List<PopularVideoItemModel>) {
         videoItems = newItems
         notifyDataSetChanged()
     }

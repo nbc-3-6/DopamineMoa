@@ -7,21 +7,22 @@ data class VideoListResponse(
 )
 
 data class VideoItems(
-    @SerializedName("id") val id: String,
+    @SerializedName("id") val videoId: String, //기존 id -> videoId
     @SerializedName("snippet") val snippet: VideoSnippet,
 //    @SerializedName("contentDetails") val contentDetails: VideoContentDetails,
 )
 
 data class VideoSnippet(
-    @SerializedName("title") val title: String, //제목
+    @SerializedName("title") val videoTitle: String, //제목
     @SerializedName("description") val description: String, //설명 (detail에서 필요)
-    @SerializedName("thumbnails") val thumbnails: VideoThumbnails, //썸네일 todo 시도 1.standard 사용?
+    @SerializedName("thumbnails") val thumbnails: VideoThumbnails, //썸네일
+    @SerializedName("channelTitle") val channelTitle: String,
     @SerializedName("categoryId") val categoryId: String, //카테고리 int값
     @SerializedName("channelId") val channelId: String, //채널 아이디
 )
 
 data class VideoThumbnails(
-    @SerializedName("standard") val standard: VideoThumbnail, //todo 시도1
+    @SerializedName("high") val high: VideoThumbnail,
 )
 
 data class VideoThumbnail(

@@ -18,14 +18,23 @@ interface RemoteDataSource {
         @Query("key") key: String = API_KEY,
         ): SearchListResponse
 
+    @GET("videos")
+    suspend fun getPopularVideosList(
+        @Query("part") part: String = "snippet",
+        @Query("chart") chart: String = "mostPopular",
+        @Query("key") key: String = API_KEY,
+        @Query("regionCode") regionCode: String = "KR",
+        @Query("maxResults") maxResults: Int = 1,
+    ): VideoListResponse
     //videos
     @GET("videos")
     suspend fun getVideosList(
         @Query("part") part: String = "snippet",
         @Query("chart") chart: String = "mostPopular",
         @Query("key") key: String = API_KEY,
+        @Query("regionCode") regionCode: String = "KR",
         @Query("maxResults") maxResults: Int = 1,
-        //추가
+        @Query("videoCategoryId") videoCategoryId: String,
     ): VideoListResponse
 
 
