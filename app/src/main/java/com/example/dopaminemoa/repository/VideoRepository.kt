@@ -1,8 +1,6 @@
 package com.example.dopaminemoa.repository
 
 import com.example.dopaminemoa.API_KEY
-import com.example.dopaminemoa.data.remote.NetworkException
-import com.example.dopaminemoa.data.remote.Resource
 import com.example.dopaminemoa.mapper.VideoItemMapper
 import com.example.dopaminemoa.mapper.VideoItemModel
 import com.example.dopaminemoa.network.RepositoryClient
@@ -38,6 +36,8 @@ class VideoRepositoryImpl: VideoRepository {
 
     /**
      * 입력된 검색어에 대한 검색 결과를 요청하는 함수입니다.
+     * try-catch로 통신 결과를 처리합니다.
+     * 통신 에러 발생 시 해당하는 에러 exception을 Resource.Error에 전달합니다.
      */
     override suspend fun searchVideoByText(text: String): Resource<List<VideoItemModel>> {
         return try {
@@ -45,7 +45,7 @@ class VideoRepositoryImpl: VideoRepository {
             if (response.items.isNotEmpty()) {
                 Resource.Success(VideoItemMapper.fromSearchItems(response.items))
             } else {
-                Resource.Error(NetworkException(0, "No data found"))
+                Resource.Error(NetworkException("No data found"))
             }
         } catch (e: Exception) {
             Resource.Error(e)

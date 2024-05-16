@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.dopaminemoa.data.remote.Resource
+import com.example.dopaminemoa.repository.Resource
 import com.example.dopaminemoa.databinding.FragmentSearchResultBinding
 import com.example.dopaminemoa.mapper.VideoItemModel
 import com.example.dopaminemoa.viewmodel.VideoViewModel
@@ -46,11 +46,18 @@ class SearchResultFragment : Fragment() {
         setClickListener()
     }
 
+    /**
+     * SearchActionFragment에서 담아준 text를 꺼내어 화면에 표시하는 함수입니다.
+     */
     private fun getText() = with(binding) {
         val text = arguments?.getString(BUNDLE_KEY_FOR_RESULT_FRAGMENT) ?: ""
         etSearch.setText(text)
     }
 
+    /**
+     * 뒤로가기 버튼에 대한 처리를 하는 함수입니다.
+     * 화면 상에 있는 백버튼 UI 또는 기기 자체의 백버튼 클릭 시 작동합니다.
+     */
     private fun backBtnPressed() = with(binding) {
         ivBackBtn.setOnClickListener {
             parentFragment?.childFragmentManager?.popBackStack()
@@ -61,6 +68,11 @@ class SearchResultFragment : Fragment() {
         }
     }
 
+    /**
+     * 통신으로 받아오는 데이터 상에 변화를 감지하는 함수입니다.
+     * 변화 발생 시 recyclerView adapter에 데이터 변경에 대한 update를 요청합니다.
+     * 통신에 에러 발생 시, 에러 타입을 구분하여 화면에 토스트를 출력합니다.
+     */
     private fun observeData() = with(binding) {
         viewModel.searchResults.observe(viewLifecycleOwner) { resource ->
 
@@ -77,21 +89,21 @@ class SearchResultFragment : Fragment() {
                     val exception = resource.exception
 
                     when {
-                        exception?.message?.contains("HTTP 400") == true -> {
+                        exception?.message?.contains("400") == true -> {
                             Toast.makeText(requireActivity(), "잘못된 요청입니다.", Toast.LENGTH_SHORT).show()
                         }
-                        exception?.message?.contains("HTTP 401") == true -> {
+                        exception?.message?.contains("401") == true -> {
                             Toast.makeText(requireActivity(), "요청이 승인되지 않았습니다.", Toast.LENGTH_SHORT).show()
                         }
-                        exception?.message?.contains("HTTP 403") == true -> {
+                        exception?.message?.contains("403") == true -> {
                             Toast.makeText(requireActivity(), "현재 기능을 일시적으로 사용할 수 없습니다.", Toast.LENGTH_SHORT).show()
                         }
-                        exception?.message?.contains("HTTP 404") == true -> {
+                        exception?.message?.contains("404") == true -> {
 //                            Toast.makeText(requireActivity(), "정보를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show() //필요시 사용
                             tvNone.visibility = View.VISIBLE
                         }
                         else -> {
-                            Toast.makeText(requireActivity(), "알 수 없는 문제가 생겼습니다. 고객센터에 문의하세요.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireActivity(), "알 수 없는 문제가 생겼습니다.", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
@@ -99,6 +111,9 @@ class SearchResultFragment : Fragment() {
         }
     }
 
+    /**
+     * recyclerView의 adapter와 click 리스너를 정의하는 함수입니다.
+     */
     private fun makeRecyclerView() = with(binding) {
         rvSearch.adapter = adapter
         rvSearch.layoutManager = GridLayoutManager(requireActivity(), 2)
@@ -110,6 +125,9 @@ class SearchResultFragment : Fragment() {
         }
     }
 
+    /**
+     * 검색 버튼 및 키워드 버튼에 대한 리스너 처리를 모아놓은 함수입니다.
+     */
     private fun setClickListener() = with(binding) {
         btnSearch.setOnClickListener {
             searchItem()
@@ -128,6 +146,9 @@ class SearchResultFragment : Fragment() {
         }
     }
 
+    /**
+     * 검색 버튼을 클릭했을 때 실행되는 함수입니다.
+     */
     private fun searchItem() = with(binding) {
         if (etSearch.text.toString().isNotEmpty()) {
             val text = etSearch.text.toString()
@@ -135,10 +156,16 @@ class SearchResultFragment : Fragment() {
         }
     }
 
+    /**
+     * 다시 검색을 요청하는 함수입니다.
+     */
     private fun reSearch(text: String) {
         viewModel.searchVideoByText(text)
     }
 
+    /**
+     * 키워드 버튼을 클릭했을 때 실행되는 함수입니다.
+     */
     private fun searchOnlyKeyword(view: View) = with(binding) {
         val searchText = etSearch.text.toString()
         when (view.id) {

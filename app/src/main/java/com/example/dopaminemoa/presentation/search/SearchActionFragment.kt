@@ -1,7 +1,6 @@
 package com.example.dopaminemoa.presentation.search
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -35,6 +34,9 @@ class SearchActionFragment : Fragment() {
         setClickListener()
     }
 
+    /**
+     * 검색 버튼 및 키워드 버튼에 대한 리스너 처리를 모아놓은 함수입니다.
+     */
     private fun setClickListener() = with(binding) {
         btnSearch.setOnClickListener {
             searchItem()
@@ -53,36 +55,46 @@ class SearchActionFragment : Fragment() {
         }
     }
 
+    /**
+     * 검색 버튼을 클릭했을 때 실행되는 함수입니다.
+     */
     private fun searchItem() = with(binding) {
         if (etSearch.text.toString().isNotEmpty()) {
             val text = etSearch.text.toString()
-            setFragmentMoving(text)
+            goToResultFragment(text)
         }
     }
 
+    /**
+     * 키워드 버튼을 클릭했을 때 실행되는 함수입니다.
+     */
     private fun searchOnlyKeyword(view: View) = with(binding) {
         when (view.id) {
             btnKeyword1.id -> {
                 val text = btnKeyword1.text.removePrefix("#").toString()
-                setFragmentMoving(text)
+                goToResultFragment(text)
             }
             btnKeyword2.id -> {
                 val text = btnKeyword2.text.removePrefix("#").toString()
-                setFragmentMoving(text)
+                goToResultFragment(text)
             }
             btnKeyword3.id -> {
                 val text = btnKeyword3.text.removePrefix("#").toString()
-                setFragmentMoving(text)
+                goToResultFragment(text)
             }
             btnKeyword4.id -> {
                 val text = btnKeyword4.text.removePrefix("#").toString()
-                setFragmentMoving(text)
+                goToResultFragment(text)
             }
             else -> throw IllegalArgumentException("Unknown button ID")
         }
     }
 
-    private fun setFragmentMoving(text: String) {
+    /**
+     * result fragment로의 전환을 처리하는 함수입니다.
+     * 검색어를 bundle에 담아서 함께 전달합니다.
+     */
+    private fun goToResultFragment(text: String) {
         viewModel.searchVideoByText(text)
 
         val bundle = Bundle().apply {
