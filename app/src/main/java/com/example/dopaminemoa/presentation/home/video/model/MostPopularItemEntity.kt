@@ -1,6 +1,7 @@
 package com.example.dopaminemoa.presentation.home.video.model
 
-//todo duration을 받아서 60초 미만인 data 가져오기
+
+
 data class MostPopularItemEntity(
     val items: List<VideoItemsEntity>,
 )
@@ -14,11 +15,13 @@ data class VideoItemsEntity(
 data class VideoSnippetEntity(
     val title: String, //제목
     val description: String, //설명 (detail에서 필요)
-    val thumbnails: VideoThumbnailsEntity, //썸네일 적절한 크기 todo 시도 1.standard 사용
+    val thumbnails: VideoThumbnailsEntity,
+    val categoryId: String, //카테고리 int
+    val channelId: String, //채널 아이디
 )
 
 data class VideoThumbnailsEntity(
-    val standard: VideoThumbnailEntity, //todo 시도1
+    val standard: VideoThumbnailEntity,
 )
 
 data class VideoThumbnailEntity( //썸네일 하위

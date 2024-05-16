@@ -9,9 +9,6 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface RemoteDataSource {
-
-
-//    @Headers("Authorization = $API_KEY") 수정 중 - 김재혁
     //search
     @GET("search")
     suspend fun getSearchList(
@@ -27,7 +24,7 @@ interface RemoteDataSource {
         @Query("part") part: String = "snippet",
         @Query("chart") chart: String = "mostPopular",
         @Query("key") key: String = API_KEY,
-        @Query("maxResults") maxResults: Int = 50,
+        @Query("maxResults") maxResults: Int = 1,
         //추가
     ): VideoListResponse
 

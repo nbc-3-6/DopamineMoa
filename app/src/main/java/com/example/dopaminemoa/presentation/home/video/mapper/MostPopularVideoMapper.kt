@@ -30,7 +30,9 @@ fun VideoSnippet.toEntity(): VideoSnippetEntity {
     return VideoSnippetEntity(
         title,
         description,
-        thumbnails.toEntity()
+        thumbnails.toEntity(),
+        categoryId,
+        channelId
     )
 }
 

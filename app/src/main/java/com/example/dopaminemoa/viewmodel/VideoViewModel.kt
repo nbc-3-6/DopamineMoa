@@ -6,11 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.example.dopaminemoa.data.remote.RemoteDataSource
 import com.example.dopaminemoa.presentation.home.video.model.MostPopularItemEntity
 import com.example.dopaminemoa.mapper.VideoItemModel
 import com.example.dopaminemoa.network.RetrofitClient
-//import com.example.dopaminemoa.home.video.repository.VideoRepositoryImpl
+import com.example.dopaminemoa.presentation.home.videocategory.model.VideoCategoryEntity
 import com.example.dopaminemoa.repository.VideoRepositoryImpl
 import kotlinx.coroutines.launch
 
@@ -20,8 +19,13 @@ class VideoViewModel(private val videoRepositoryImpl: VideoRepositoryImpl) : Vie
     private val _popularResults: MutableLiveData<MostPopularItemEntity> = MutableLiveData()
     val popularResults: LiveData<MostPopularItemEntity> get() = _popularResults
 
-    private val _categoryVideoResults: MutableLiveData<List<VideoItemModel>> = MutableLiveData()
-    val categoryVideoResults: LiveData<List<VideoItemModel>> get() = _categoryVideoResults
+    //카테고리만 받기
+    private val _categoryVideoResults: MutableLiveData<VideoCategoryEntity> = MutableLiveData()
+    val categoryVideoResults: LiveData<VideoCategoryEntity> get() = _categoryVideoResults
+
+    //카테고리에 대한 영상
+    private val _videoListByCategory: MutableLiveData<VideoCategoryEntity> = MutableLiveData()
+    val videoListByCategory: LiveData<VideoCategoryEntity> get() = _videoListByCategory
 
     private val _categoryChannelResults: MutableLiveData<List<VideoItemModel>> = MutableLiveData()
     val categoryChannelResults: LiveData<List<VideoItemModel>> get() = _categoryChannelResults
@@ -39,9 +43,15 @@ class VideoViewModel(private val videoRepositoryImpl: VideoRepositoryImpl) : Vie
     /**
      * repository에 키워드를 사용한 비디오 검색 결과를 요청합니다.
      */
-    fun searchVideoByCategory(category: String) = viewModelScope.launch {
-        _categoryVideoResults.value = videoRepositoryImpl.searchVideoByCategory(category)
+//    fun searchVideoByCategory(category: String) = viewModelScope.launch {
+//        _videoListByCategory.value = videoRepositoryImpl.searchVideoByCategory(category)
+//    }
+
+    //spinner 카테고리
+    fun takeVideoCategories() = viewModelScope.launch {
+        _categoryVideoResults.value = videoRepositoryImpl.fetchVideoCategories()
     }
+
 
     /**
      * repository에 키워드를 사용한 채널 검색 결과를 요청합니다.
