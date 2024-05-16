@@ -1,15 +1,14 @@
 package com.example.dopaminemoa.presentation.search
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.dopaminemoa.data.remote.NetworkException
 import com.example.dopaminemoa.data.remote.Resource
 import com.example.dopaminemoa.databinding.FragmentSearchResultBinding
 import com.example.dopaminemoa.mapper.VideoItemModel
@@ -62,15 +61,39 @@ class SearchResultFragment : Fragment() {
         }
     }
 
-    private fun observeData() {
+    private fun observeData() = with(binding) {
         viewModel.searchResults.observe(viewLifecycleOwner) { resource ->
+
+            if (tvNone.visibility == View.VISIBLE) {
+                tvNone.visibility = View.GONE
+            }
+
             when (resource) {
                 is Resource.Success -> {
                     adapter.updateList(resource.data ?: emptyList())
                 }
+
                 is Resource.Error -> {
                     val exception = resource.exception
-                    Log.d("서치리저트프래그먼트", exception?.message.toString())
+
+                    when {
+                        exception?.message?.contains("HTTP 400") == true -> {
+                            Toast.makeText(requireActivity(), "잘못된 요청입니다.", Toast.LENGTH_SHORT).show()
+                        }
+                        exception?.message?.contains("HTTP 401") == true -> {
+                            Toast.makeText(requireActivity(), "요청이 승인되지 않았습니다.", Toast.LENGTH_SHORT).show()
+                        }
+                        exception?.message?.contains("HTTP 403") == true -> {
+                            Toast.makeText(requireActivity(), "현재 기능을 일시적으로 사용할 수 없습니다.", Toast.LENGTH_SHORT).show()
+                        }
+                        exception?.message?.contains("HTTP 404") == true -> {
+//                            Toast.makeText(requireActivity(), "정보를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show() //필요시 사용
+                            tvNone.visibility = View.VISIBLE
+                        }
+                        else -> {
+                            Toast.makeText(requireActivity(), "알 수 없는 문제가 생겼습니다. 고객센터에 문의하세요.", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
             }
         }
@@ -123,22 +146,25 @@ class SearchResultFragment : Fragment() {
                 val text = searchText + btnKeyword1.text.removePrefix("#").toString()
                 reSearch(text)
             }
+
             btnKeyword2.id -> {
                 val text = searchText + btnKeyword2.text.removePrefix("#").toString()
                 reSearch(text)
             }
+
             btnKeyword3.id -> {
                 val text = searchText + btnKeyword3.text.removePrefix("#").toString()
                 reSearch(text)
             }
+
             btnKeyword4.id -> {
                 val text = searchText + btnKeyword4.text.removePrefix("#").toString()
                 reSearch(text)
             }
+
             else -> throw IllegalArgumentException("Unknown button ID")
         }
     }
-
 
 
     /**
