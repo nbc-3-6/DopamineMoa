@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="8dp"
-        android:text="@string/views"
+        android:text="@string/search_tv_views"
         android:textColor="@color/white"
         android:textSize="10sp"
         android:textStyle="bold"

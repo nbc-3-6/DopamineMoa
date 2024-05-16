@@ -31,7 +31,7 @@
             android:layout_marginStart="40dp"
             android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
-            android:hint="@string/et_hint"
+            android:hint="@string/search_et_hint"
             android:maxLines="1"
             android:singleLine="true"
             android:textSize="16sp" />
@@ -43,7 +43,7 @@
         android:layout_height="40sp"
         android:background="@drawable/rec_search_btn"
         android:backgroundTint="@color/black"
-        android:text="@string/search_btn"
+        android:text="@string/search_search_btn"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/fl_search"
         app:layout_constraintEnd_toEndOf="parent"
@@ -74,7 +74,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/rec_category_btn"
-                android:text="@string/meme"
+                android:text="@string/search_tv_meme"
                 android:textSize="16sp" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -83,7 +83,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/rec_category_btn"
-                android:text="@string/comedy"
+                android:text="@string/search_tv_comedy"
                 android:textSize="16sp" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -94,7 +94,7 @@
                 android:background="@drawable/rec_category_btn"
                 android:paddingStart="5dp"
                 android:paddingEnd="5dp"
-                android:text="@string/zzzzz"
+                android:text="@string/search_tv_zzzzz"
                 android:textSize="16sp" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -103,7 +103,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/rec_category_btn"
-                android:text="@string/legend"
+                android:text="@string/search_tv_legend"
                 android:textSize="16sp" />
         </LinearLayout>
     </HorizontalScrollView>
