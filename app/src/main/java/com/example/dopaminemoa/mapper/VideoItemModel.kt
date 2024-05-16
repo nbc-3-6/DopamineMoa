@@ -5,9 +5,13 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class VideoItemModel(
+    val videoId: String,
+    val videoTitle: String,
+    val videoThumbnail: String,
+    val videoViews: String, // 나중에 추가
+    val videoDescription: String,
+    val channelTitle: String,
+    val channelThumbnails: String, // 나중에 추가
     var type: Int,
-    val id: String,
-    var isLike: Boolean,
-    var title: String,
-    var channel: String
+    var isLike: Boolean
 ) : Parcelable
