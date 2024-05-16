@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.example.dopaminemoa.databinding.FragmentSearchActionBinding
 import com.example.dopaminemoa.presentation.search.SearchResultFragment.Companion.BUNDLE_KEY_FOR_RESULT_FRAGMENT
+import com.example.dopaminemoa.presentation.util.UtilityKeyboard.hideKeyboard
 import com.example.dopaminemoa.viewmodel.VideoViewModel
 import com.example.dopaminemoa.viewmodel.VideoViewModelFactory
 
@@ -61,6 +62,9 @@ class SearchActionFragment : Fragment() {
     private fun searchItem() = with(binding) {
         if (etSearch.text.toString().isNotEmpty()) {
             val text = etSearch.text.toString()
+
+            hideKeyboard()
+
             goToResultFragment(text)
         }
     }
