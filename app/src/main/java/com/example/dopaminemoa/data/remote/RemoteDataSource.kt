@@ -1,6 +1,6 @@
 package com.example.dopaminemoa.data.remote
 
-import com.example.dopaminemoa.API_KEY
+import com.example.dopaminemoa.Const.Companion.API_KEY
 import com.example.dopaminemoa.data.eachResponse.ChannelListResponse
 import com.example.dopaminemoa.data.eachResponse.SearchListResponse
 import com.example.dopaminemoa.data.eachResponse.VideoCategoryListResponse

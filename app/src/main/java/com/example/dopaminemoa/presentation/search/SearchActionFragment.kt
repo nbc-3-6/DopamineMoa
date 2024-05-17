@@ -17,8 +17,8 @@ class SearchActionFragment : Fragment() {
     private var _binding: FragmentSearchActionBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: VideoViewModel by viewModels({ requireActivity() }) {
-        VideoViewModelFactory.newInstance()
+    private val viewModel: VideoViewModel by viewModels {
+        VideoViewModelFactory.newInstance(requireContext())
     }
 
     override fun onCreateView(

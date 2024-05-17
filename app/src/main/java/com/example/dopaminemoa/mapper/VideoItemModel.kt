@@ -13,6 +13,7 @@ data class VideoItemModel(
     val channelTitle: String,
     val channelThumbnails: String, // 나중에 추가
     val category: String,
+    val isLiked: Boolean,
 ) : Parcelable
 
 

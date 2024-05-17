@@ -6,8 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.dopaminemoa.R
+import com.example.dopaminemoa.presentation.home.HomeFragment
 
 class MyVideoFragment : Fragment() {
+    companion object {
+        fun newInstance() = MyVideoFragment()
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
