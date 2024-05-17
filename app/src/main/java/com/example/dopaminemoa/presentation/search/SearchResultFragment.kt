@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.dopaminemoa.R
 import com.example.dopaminemoa.repository.Resource
 import com.example.dopaminemoa.databinding.FragmentSearchResultBinding
-import com.example.dopaminemoa.mapper.VideoItemModel
+import com.example.dopaminemoa.mapper.model.VideoItemModel
 import com.example.dopaminemoa.viewmodel.VideoViewModel
 import com.example.dopaminemoa.viewmodel.VideoViewModelFactory
 

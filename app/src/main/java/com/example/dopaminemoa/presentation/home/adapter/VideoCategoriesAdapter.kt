@@ -1,14 +1,14 @@
-package com.example.dopaminemoa.presentation.home.videocategory
+package com.example.dopaminemoa.presentation.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.dopaminemoa.databinding.ItemVideoListBinding
-import com.example.dopaminemoa.mapper.PopularVideoItemModel
+import com.example.dopaminemoa.mapper.model.PopularVideoItemModel
 
-class VideoCategoryAdapter(private var videoItems: List<PopularVideoItemModel>) :
-    RecyclerView.Adapter<VideoCategoryAdapter.CategoryViewHolder>() {
+class VideoCategoriesAdapter(private var videoItems: List<PopularVideoItemModel>) :
+    RecyclerView.Adapter<VideoCategoriesAdapter.CategoryViewHolder>() {
 
     inner class CategoryViewHolder(private val binding: ItemVideoListBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -16,7 +16,7 @@ class VideoCategoryAdapter(private var videoItems: List<PopularVideoItemModel>) 
             binding.apply {
                 tvTitle.text = item.videoTitle
                 Glide.with(itemView)
-                    .load(item.videoThumbnail) // 썸네일 이미지 URL
+                    .load(item.videoThumbnail)
                     .into(ivThumbnail)
             }
         }

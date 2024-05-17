@@ -1,7 +1,13 @@
 package com.example.dopaminemoa.mapper
 
+import com.example.dopaminemoa.data.eachResponse.ChannelItem
 import com.example.dopaminemoa.data.eachResponse.SearchItems
+import com.example.dopaminemoa.data.eachResponse.VideoCategoryItems
 import com.example.dopaminemoa.data.eachResponse.VideoItems
+import com.example.dopaminemoa.mapper.model.ChannelItemModel
+import com.example.dopaminemoa.mapper.model.PopularVideoItemModel
+import com.example.dopaminemoa.mapper.model.CategoryItemModel
+import com.example.dopaminemoa.mapper.model.VideoItemModel
 
 /**
  * api를 통해 응답 받은 데이터 중 view에서 사용할 데이터만 매핑하여 데이터 목록을 반환하는 함수입니다.
@@ -19,6 +25,7 @@ object VideoItemMapper {
                 channelTitle = it.snippet.channelTitle,
                 channelThumbnails = "", // 채널 썸네일 데이터는 향후 처리
                 category = "",
+                channelId = "",
             )
         }
     }
@@ -33,8 +40,29 @@ object VideoItemMapper {
                 videoDescription = it.snippet.description,
                 channelTitle = it.snippet.channelTitle,
                 channelThumbnails = "",
-                category = it.snippet.category //카테고리 int값
-//                channelId = it.snippet.channelId, //채널명
+                category = it.snippet.category, //카테고리 int값
+                channelId = it.snippet.channelId, //채널명
+            )
+        }
+    }
+    fun fromCategoryItems(categoryItems: List<VideoCategoryItems>): List<CategoryItemModel>{
+        return categoryItems.map{
+            CategoryItemModel(
+                id = it.id,
+                title = it.snippet.title,
+                channelId = it.snippet.channelId,
+                assignable = it.snippet.assignable,
+            )
+        }
+    }
+
+    fun fromChannelItems(channelItems: List<ChannelItem>): List<ChannelItemModel>{
+        return channelItems.map {
+            ChannelItemModel(
+                id = it.id,
+                title = it.snippet.title,
+                description = it.snippet.description,
+                channelThumbnails = it.snippet.thumbnails.high.url
             )
         }
     }

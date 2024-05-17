@@ -18,19 +18,29 @@ interface RemoteDataSource {
         @Query("type") type: String = "video",
         @Query("key") key: String = API_KEY,
 //        @Query("maxResults") maxResults: Int = 10,
-        ): SearchListResponse
+    ): SearchListResponse
 
-    //videos
+    //mostPopularVideos
     @GET("videos")
     suspend fun getVideosList(
+        //popular
         @Query("part") part: String = "snippet",
         @Query("chart") chart: String = "mostPopular",
         @Query("key") key: String = API_KEY,
         @Query("regionCode") regionCode: String = "KR",
-        @Query("maxResults") maxResults: Int = 1,
-        @Query("videoCategoryId") videoCategoryId: String = "0",
+//        @Query("maxResults") maxResults: Int = 15,
     ): VideoListResponse
 
+    //CategoryVideos
+    @GET("videos")
+    suspend fun getVideosByCategoryList(
+        @Query("part") part: String = "snippet",
+        @Query("chart") chart: String = "mostPopular",
+        @Query("key") key: String = API_KEY,
+        @Query("regionCode") regionCode: String = "KR",
+//        @Query("maxResults") maxResults: Int = 15,
+        @Query("videoCategoryId") videoCategoryId: String,
+    ): VideoListResponse
 
     //videoCategories
     @GET("videoCategories")
@@ -38,7 +48,7 @@ interface RemoteDataSource {
         @Query("part") part: String = "snippet",
         @Query("regionCode") regionCode: String = "KR",
         @Query("key") key: String = API_KEY,
-        //추가
+        @Query("hl") hl: String = "ko_KR",
     ): VideoCategoryListResponse
 
     //channels
@@ -47,5 +57,6 @@ interface RemoteDataSource {
         @Query("part") part: String = "snippet",
         @Query("id") channelId: String,
         @Query("key") key: String = API_KEY,
+        @Query("hl") hl: String = "ko_KR",
     ): ChannelListResponse
 }

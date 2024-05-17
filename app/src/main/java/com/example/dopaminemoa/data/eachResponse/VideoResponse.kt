@@ -9,16 +9,15 @@ data class VideoListResponse(
 data class VideoItems(
     @SerializedName("id") val videoId: String, //기존 id -> videoId
     @SerializedName("snippet") val snippet: VideoSnippet,
-//    @SerializedName("contentDetails") val contentDetails: VideoContentDetails,
 )
 
 data class VideoSnippet(
-    @SerializedName("title") val videoTitle: String, //제목
-    @SerializedName("description") val description: String, //설명 (detail에서 필요)
-    @SerializedName("thumbnails") val thumbnails: VideoThumbnails, //썸네일
+    @SerializedName("title") val videoTitle: String,
+    @SerializedName("description") val description: String,
+    @SerializedName("thumbnails") val thumbnails: VideoThumbnails,
     @SerializedName("channelTitle") val channelTitle: String,
-    @SerializedName("categoryId") val category: String, //카테고리 int값
-    @SerializedName("channelId") val channelId: String, //채널 아이디
+    @SerializedName("categoryId") val category: String,
+    @SerializedName("channelId") val channelId: String,
 )
 
 data class VideoThumbnails(
@@ -27,12 +26,8 @@ data class VideoThumbnails(
 
 data class VideoThumbnail(
     //썸네일 하위
-    @SerializedName("url") val url: String, //이미지 url
-    @SerializedName("width") val width: Int, //크기
-    @SerializedName("height") val height: Int, //크기
+    @SerializedName("url") val url: String,
+    @SerializedName("width") val width: Int,
+    @SerializedName("height") val height: Int,
 )
-
-//data class VideoContentDetails(
-//    @SerializedName("duration") val duration: String //영상 시간 PT*M*S
-//)
 

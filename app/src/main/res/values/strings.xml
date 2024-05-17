@@ -19,6 +19,10 @@
     <string name="search_tv_zzzzz">#ㅋㅋㅋㅋㅋ</string>
     <string name="search_tv_legend">#레전드</string>
 
+
+    <!--home-->
+    <string name="home_tv_channel">관련 채널</string>
+
     <!-- TODO: Remove or change this placeholder text -->
 <!--    <string name="hello_blank_fragment">Hello blank fragment</string>-->
 </resources>

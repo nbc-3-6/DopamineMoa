@@ -2,6 +2,7 @@ package com.example.dopaminemoa.presentation.home
 
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +13,9 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dopaminemoa.databinding.FragmentHomeBinding
-import com.example.dopaminemoa.presentation.home.video.MostPopularAdapter
-import com.example.dopaminemoa.presentation.home.videocategory.VideoCategoryAdapter
+import com.example.dopaminemoa.presentation.home.adapter.ChannelsAdapter
+import com.example.dopaminemoa.presentation.home.adapter.VideosAdapter
+import com.example.dopaminemoa.presentation.home.adapter.VideoCategoriesAdapter
 import com.example.dopaminemoa.viewmodel.VideoViewModel
 import com.example.dopaminemoa.viewmodel.VideoViewModelFactory
 
@@ -24,8 +26,9 @@ class HomeFragment : Fragment() {
         VideoViewModelFactory.newInstance()
     }
     //adapter
-    private lateinit var mostPopularAdapter: MostPopularAdapter
-    private lateinit var categoryAdapter: VideoCategoryAdapter
+    private lateinit var videosAdapter: VideosAdapter
+    private lateinit var categoryAdapter: VideoCategoriesAdapter
+    private lateinit var channelsAdapter: ChannelsAdapter
     private lateinit var categorySpinnerAdapter: ArrayAdapter<String>
 
 
@@ -40,19 +43,20 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initMostPopularRecyclerView()
         initViewModel()
-        initSpinner()
+        initMostPopularRecyclerView()
         initVideoCategoryRecyclerView()
+        initChannelsRecyclerView()
+        initSpinner()
     }
 
 
     private fun initViewModel() {
         viewModel.popularResults.observe(viewLifecycleOwner) { videos ->
-            mostPopularAdapter.updateItems(videos)
+            videosAdapter.submitList(videos)
         }
-        viewModel.categoryVideoResults.observe(viewLifecycleOwner) { categoryEntity ->
-            val categoryList = categoryEntity.items.map { it.snippet.title }
+        viewModel.categoryVideoResults.observe(viewLifecycleOwner) { categories ->
+            val categoryList = categories.map { it.title }
             categorySpinnerAdapter.clear()
             if (categoryList.isNotEmpty()) {
                 categorySpinnerAdapter.addAll(categoryList)
@@ -61,26 +65,44 @@ class HomeFragment : Fragment() {
         viewModel.videoListByCategory.observe(viewLifecycleOwner) { videos ->
             categoryAdapter.submitList(videos)
         }
+        viewModel.channelIds.observe(viewLifecycleOwner) { channelId ->
+            viewModel.searchChannelByCategory(channelId)
+            Log.d("채널 아이디","$channelId")
+        }
+        viewModel.categoryChannelResults.observe(viewLifecycleOwner){ channelsItem ->
+            channelsAdapter.submitList(channelsItem)
+        }
+        viewModel.selectedCategory.observe(viewLifecycleOwner) { selectedCategory ->
+            binding.tvChannelTitle.text = selectedCategory
+        }
 
         viewModel.searchPopularVideo()
         viewModel.takeVideoCategories()
     }
 
     private fun initMostPopularRecyclerView() {
-        mostPopularAdapter = MostPopularAdapter(emptyList())
+        videosAdapter = VideosAdapter(emptyList())
         binding.rvMostPopular.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.rvMostPopular.adapter = mostPopularAdapter
+        binding.rvMostPopular.adapter = videosAdapter
 
-        setGapRecyclerViewItem(binding.rvMostPopular,40)
+        setGapRecyclerViewItem(binding.rvMostPopular)
     }
 
     private fun initVideoCategoryRecyclerView() {
-        categoryAdapter = VideoCategoryAdapter(emptyList())
+        categoryAdapter = VideoCategoriesAdapter(emptyList())
         binding.rvCategory.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.rvCategory.adapter = categoryAdapter
-        setGapRecyclerViewItem(binding.rvCategory, 40)
+        setGapRecyclerViewItem(binding.rvCategory)
+    }
+
+    private fun initChannelsRecyclerView(){
+        channelsAdapter = ChannelsAdapter(emptyList())
+        binding.rvChannels.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.rvChannels.adapter = channelsAdapter
+        setGapRecyclerViewItem(binding.rvChannels)
     }
 
     private fun initSpinner() {
@@ -91,20 +113,23 @@ class HomeFragment : Fragment() {
         binding.snCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 //선택한 카테고리 받기
-                val categoryId = viewModel.categoryVideoResults.value?.items?.getOrNull(position)?.id
+                val categoryId = viewModel.categoryVideoResults.value?.getOrNull(position)?.id
                 categoryId?.let { viewModel.searchVideoByCategory(it) }
+                val selectedCategory = parent?.getItemAtPosition(position).toString()
+                viewModel.updateSelectedCategory(selectedCategory)
             }
             override fun onNothingSelected(p0: AdapterView<*>?) {
                 TODO("Not yet implemented")
             }
         }
     }
+
     //아이템 간격
-    private fun setGapRecyclerViewItem(recyclerView: RecyclerView, spacing: Int) {
+    private fun setGapRecyclerViewItem(recyclerView: RecyclerView, rightSpace: Int= 40) {
         recyclerView.addItemDecoration(object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
                 super.getItemOffsets(outRect, view, parent, state)
-                outRect.right = spacing
+                outRect.right = rightSpace
             }
         })
     }

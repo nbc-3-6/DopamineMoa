@@ -18,10 +18,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
-            android:src="@drawable/iv_example"
+            android:src="@drawable/img_sample"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
     </androidx.cardview.widget.CardView>
 
     <TextView
@@ -31,13 +30,15 @@
         app:layout_constraintTop_toBottomOf="@id/cardView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="@id/cardView"
+        android:gravity="center"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="7dp"
         android:layout_marginEnd="10dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textSize="11sp"
+        android:textSize="13sp"
         android:textStyle="bold"
+        android:paddingBottom="15dp"
         tools:text="채널이름채널이름채널이름채널이름채널이름" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

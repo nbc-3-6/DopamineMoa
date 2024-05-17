@@ -1,15 +1,15 @@
-package com.example.dopaminemoa.presentation.home.video
+package com.example.dopaminemoa.presentation.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.dopaminemoa.databinding.ItemVideoListBinding
-import com.example.dopaminemoa.mapper.PopularVideoItemModel
+import com.example.dopaminemoa.mapper.model.PopularVideoItemModel
 
 
-class MostPopularAdapter(private var videoItems: List<PopularVideoItemModel>) :
-    RecyclerView.Adapter<MostPopularAdapter.MostPopularViewHolder>() {
+class VideosAdapter(private var videoItems: List<PopularVideoItemModel>) :
+    RecyclerView.Adapter<VideosAdapter.MostPopularViewHolder>() {
 
     inner class MostPopularViewHolder(private val binding: ItemVideoListBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -23,7 +23,7 @@ class MostPopularAdapter(private var videoItems: List<PopularVideoItemModel>) :
         }
     }
 
-    fun updateItems(newItems: List<PopularVideoItemModel>) {
+    fun submitList(newItems: List<PopularVideoItemModel>) {
         videoItems = newItems
         notifyDataSetChanged()
     }

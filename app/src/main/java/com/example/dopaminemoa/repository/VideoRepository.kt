@@ -2,18 +2,18 @@ package com.example.dopaminemoa.repository
 
 import com.example.dopaminemoa.API_KEY
 import com.example.dopaminemoa.data.remote.RemoteDataSource
-import com.example.dopaminemoa.mapper.PopularVideoItemModel
+import com.example.dopaminemoa.mapper.model.ChannelItemModel
+import com.example.dopaminemoa.mapper.model.PopularVideoItemModel
+import com.example.dopaminemoa.mapper.model.CategoryItemModel
 import com.example.dopaminemoa.mapper.VideoItemMapper
-import com.example.dopaminemoa.presentation.home.videocategory.toEntity
-import com.example.dopaminemoa.mapper.VideoItemModel
+import com.example.dopaminemoa.mapper.model.VideoItemModel
 import com.example.dopaminemoa.network.RepositoryClient
-import com.example.dopaminemoa.presentation.home.videocategory.VideoCategoryEntity
 
 interface VideoRepository {
     suspend fun searchPopularVideo(): List<PopularVideoItemModel>
     suspend fun searchVideoByCategory(categoryId: String): List<PopularVideoItemModel>
-    suspend fun fetchVideoCategories() : VideoCategoryEntity
-    suspend fun searchChannelByCategory(category: String): List<VideoItemModel>
+    suspend fun takeVideoCategories() : List<CategoryItemModel>
+    suspend fun searchChannelByCategory(channel: String): List<ChannelItemModel>
     suspend fun searchVideoByText(text: String): Resource<List<VideoItemModel>>
 }
 
@@ -29,23 +29,24 @@ class VideoRepositoryImpl(private val remoteDataSource: RemoteDataSource) : Vide
     /**
      * 선택한 카테고리에 대한 비디오 검색 결과를 요청하는 함수입니다.
      */
-    override suspend fun searchVideoByCategory(category:String): List<PopularVideoItemModel> {
-        val videoListResponse = remoteDataSource.getVideosList(videoCategoryId = category)
+    override suspend fun searchVideoByCategory(categoryId:String): List<PopularVideoItemModel> {
+        val videoListResponse = remoteDataSource.getVideosByCategoryList(videoCategoryId = categoryId)
         return VideoItemMapper.fromPopularItems(videoListResponse.items)
     }
     /**
      * spinner에 카테고리를 넣기 위한 함수입니다.
      */
-    override suspend fun fetchVideoCategories(): VideoCategoryEntity { //카테고리 목록
+    override suspend fun takeVideoCategories(): List<CategoryItemModel> { //카테고리 목록
         val videoListResponse = remoteDataSource.getVideoCategoriesList()
-        return videoListResponse.toEntity()
+        return VideoItemMapper.fromCategoryItems(videoListResponse.items)
     }
 
     /**
      * 선택한 카테고리에 대한 채널 검색 결과를 요청하는 함숩니다.
      */
-    override suspend fun searchChannelByCategory(category: String): List<VideoItemModel> {
-        TODO("Not yet implemented")
+    override suspend fun searchChannelByCategory(channel: String): List<ChannelItemModel> {
+        val videoListResponse = remoteDataSource.getChannelsList(channelId = channel)
+        return VideoItemMapper.fromChannelItems(videoListResponse.items)
     }
 
     /**
