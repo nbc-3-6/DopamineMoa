@@ -253,7 +253,6 @@ class SearchResultFragment : Fragment() {
             putParcelable(BUNDLE_KEY_FOR_DETAIL_FRAGMENT, item)
         }
 
-        // com.example.dopaminemoa.presentation.videodetail.VideoDetailFragment 인스턴스를 생성하고 Bundle을 전달
         val detailFragment = VideoDetailFragment.newInstance(bundle)
         (requireActivity() as MainActivity).showVideoDetailFragment(detailFragment)
     }

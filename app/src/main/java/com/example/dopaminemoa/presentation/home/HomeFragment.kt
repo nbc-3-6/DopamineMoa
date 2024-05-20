@@ -114,7 +114,7 @@ class HomeFragment : Fragment() {
 
     private fun initMostPopularRecyclerView() {
         videosAdapter = VideosAdapter(emptyList()) { videoItem ->
-            navigateToVideoDetailFragment(videoItem)
+            selectItem(videoItem)
         }
         binding.rvMostPopular.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -125,7 +125,7 @@ class HomeFragment : Fragment() {
 
     private fun initVideoCategoryRecyclerView() {
         categoryAdapter = VideoCategoriesAdapter(emptyList()) { videoItem ->
-            navigateToVideoDetailFragment(videoItem)
+            selectItem(videoItem)
         }
         binding.rvCategory.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -134,7 +134,7 @@ class HomeFragment : Fragment() {
         setGapRecyclerViewItem(binding.rvCategory)
     }
 
-    private fun navigateToVideoDetailFragment(videoItem: PopularVideoItemModel) {
+    private fun selectItem(videoItem: PopularVideoItemModel) {
         val videoItemModel = videoItem.toVideoItemModel() // PopularVideoItemModel을 VideoItemModel로 변환
         val bundle = Bundle().apply {
             putParcelable(BUNDLE_KEY_FOR_DETAIL_FRAGMENT, videoItemModel) // VideoItemModel을 전달
