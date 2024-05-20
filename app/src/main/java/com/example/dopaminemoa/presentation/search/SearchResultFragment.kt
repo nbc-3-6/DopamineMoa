@@ -25,7 +25,7 @@ class SearchResultFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: VideoViewModel by viewModels {
-        VideoViewModelFactory(RepositoryClient.youtubeService, requireContext())
+        VideoViewModelFactory.newInstance(RepositoryClient.youtubeService, requireContext())
     }
 
     private val adapter = SearchAdapter()

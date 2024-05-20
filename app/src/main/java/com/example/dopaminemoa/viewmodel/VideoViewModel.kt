@@ -129,10 +129,13 @@ class VideoViewModel(private val videoRepository: VideoRepository) : ViewModel()
 }
 
 @Suppress("UNCHECKED_CAST")
-class VideoViewModelFactory(
-    private val remoteDataSource: RemoteDataSource,
-    private val context: Context
-) : ViewModelProvider.Factory {
+class VideoViewModelFactory(private val remoteDataSource: RemoteDataSource, private val context: Context) : ViewModelProvider.Factory {
+    companion object {
+        fun newInstance(remoteDataSource: RemoteDataSource, context: Context): VideoViewModelFactory {
+            return VideoViewModelFactory(remoteDataSource, context)
+        }
+    }
+
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(VideoViewModel::class.java)) {
             return VideoViewModel(VideoRepositoryImpl(remoteDataSource, context)) as T
