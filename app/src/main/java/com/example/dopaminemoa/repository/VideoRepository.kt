@@ -17,7 +17,11 @@ interface VideoRepository {
     suspend fun searchVideoByText(text: String): Resource<List<VideoItemModel>>
     suspend fun saveVideoItem(videoItemModel: VideoItemModel)
     suspend fun removeVideoItem(videoItemModel: VideoItemModel)
+
+    fun isVideoLikedInPrefs(videoId: String?): Boolean
+
     suspend fun getStorageItems(): List<VideoItemModel>
+    fun clearPrefs()
 }
 
 class VideoRepositoryImpl(context: Context): VideoRepository {
@@ -95,13 +99,18 @@ class VideoRepositoryImpl(context: Context): VideoRepository {
         savePrefsItems(likedItems)
     }
 
+    // SharedPreferences에 저장된 모든 데이터 삭제
+    override fun clearPrefs() {
+        pref.edit().clear().apply()
+    }
+
     // sharedPreference에 저장된 아이템들을 리스트로 가져옴
     override suspend fun getStorageItems(): List<VideoItemModel> {
         return getPrefsItems()
     }
 
     // 특정 videoId가 저장되어 있는지 확인
-    suspend fun isVideoItemLiked(videoId: String): Boolean {
+    override fun isVideoLikedInPrefs(videoId: String?): Boolean {
         val likedItems = getPrefsItems()
         return likedItems.any { it.videoId == videoId }
     }

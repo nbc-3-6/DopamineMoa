@@ -1,5 +1,6 @@
 package com.example.dopaminemoa.presentation.videodetail
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,68 +12,55 @@ import com.example.dopaminemoa.repository.VideoRepository
 import kotlinx.coroutines.launch
 
 class VideoDetailViewModel (
-    private val videoRepository: VideoRepository
+    private val videoRepository: VideoRepository,
+    private val applicationContext: Context
+
 ) : ViewModel() {
 
-    private val _saveResult = MutableLiveData(SaveUiState.init())
+    private val _saveResult = MutableLiveData<SaveUiState>()
     val saveResult: LiveData<SaveUiState> get() = _saveResult
-    private fun saveVideoItem(videoItemModel: VideoItemModel) = viewModelScope.launch {
-        videoRepository.saveVideoItem(videoItemModel)
 
-        updateSnackMessage(R.string.videodetail_snack_save)
-    }
-
-    private fun removeVideoItem(videoItemModel: VideoItemModel) = viewModelScope.launch {
-        videoRepository.removeVideoItem(videoItemModel)
-
-        updateSnackMessage(R.string.videodetail_snack_delete)
-    }
-
-    private fun updateSnackMessage(snackMessage: Int) {
-        _saveResult.value = _saveResult.value?.copy(
-            showSnackMessage = true,
-            snackMessage = snackMessage
-        )
-    }
-
-    fun updateSaveItem(videoItemModel: VideoItemModel) {
-        val updatedItem = videoItemModel.copy(isLiked = videoItemModel.isLiked.not())
-
+    private fun saveVideoItem(videoItemModel: VideoItemModel) {
         viewModelScope.launch {
-            if (updatedItem.isLiked) {
-                saveVideoItem(updatedItem)
-            } else {
-                removeVideoItem(updatedItem)
-            }
-
-            // 좋아요 상태가 변경된 후, _saveResult의 list를 업데이트
-            _saveResult.value = _saveResult.value?.copy(
-                savedList = _saveResult.value?.savedList?.map {
-                    if (it.videoId == updatedItem.videoId) updatedItem else it
-                } ?: emptyList()
-            )
+            videoRepository.saveVideoItem(videoItemModel.copy(isLiked = true))
+            _saveResult.value = SaveUiState.Success(applicationContext.getString(R.string.videodetail_snack_save))
         }
     }
 
-    fun reloadStorageItems() = viewModelScope.launch {
-        val storageItems = videoRepository.getStorageItems()
+    private fun removeVideoItem(videoItemModel: VideoItemModel) {
+        viewModelScope.launch {
+            videoRepository.removeVideoItem(videoItemModel.copy(isLiked = false))
+            _saveResult.value = SaveUiState.Success(applicationContext.getString(R.string.videodetail_snack_delete))
+        }
+    }
 
-        _saveResult.value = _saveResult.value?.copy(
-            showSnackMessage = false,
-            savedList = _saveResult.value?.savedList?.map { currentItem ->
-                currentItem.copy(isLiked = storageItems.any { it.videoId == currentItem.videoId })
-            } ?: emptyList()
-        )
+    fun updateSaveItem(videoItemModel: VideoItemModel) {
+        viewModelScope.launch {
+            if (videoItemModel.isLiked) {
+                saveVideoItem(videoItemModel)
+            } else {
+                removeVideoItem(videoItemModel)
+            }
+        }
+    }
+
+    fun isVideoLikedInPrefs(videoId: String?): Boolean {
+        return videoRepository.isVideoLikedInPrefs(videoId)
+    }
+
+    fun clearPreferences() {
+        videoRepository.clearPrefs()
     }
 }
 
 class VideoDetailViewModelFactory(
-    private val videoRepository: VideoRepository
+    private val videoRepository: VideoRepository,
+    private val applicationContext: Context
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(VideoDetailViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return VideoDetailViewModel(videoRepository) as T
+            return VideoDetailViewModel(videoRepository, applicationContext) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
