@@ -39,7 +39,6 @@ class VideoDetailFragment : Fragment() {
 
         val item = arguments?.getParcelable<VideoItemModel>(BUNDLE_KEY_FOR_DETAIL_FRAGMENT)
         val isLikedInPrefs = viewModel.isVideoLikedInPrefs(item?.videoId)
-        Log.d(TAG, "isLikedInPrefs: $isLikedInPrefs")
 
         // 초기 바인딩 시 isLikedInPrefs 값에 따라 ivLike 이미지 설정
         updateLikeButton(item, isLikedInPrefs)
@@ -75,13 +74,11 @@ class VideoDetailFragment : Fragment() {
     }
 
     private fun updateLikeButton(item: VideoItemModel?, isLikedInPrefs: Boolean) {
-        if (isLikedInPrefs) {
-            binding.ivLike.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_liked))
-        } else {
-            binding.ivLike.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_like))
-        }
+        binding.ivLike.setImageResource(
+            if (isLikedInPrefs) R.drawable.ic_liked
+            else R.drawable.ic_like
+        )
         item?.isLiked = isLikedInPrefs
-        Log.d(TAG, "I_Liked2: ${item?.isLiked}")
     }
 
     override fun onDestroyView() {

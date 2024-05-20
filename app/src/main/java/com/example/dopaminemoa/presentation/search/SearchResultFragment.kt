@@ -25,7 +25,7 @@ class SearchResultFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: VideoViewModel by viewModels {
-        VideoViewModelFactory.newInstance(requireContext())
+        VideoViewModelFactory(requireContext())
     }
 
     private val adapter = SearchAdapter()
@@ -40,6 +40,10 @@ class SearchResultFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        arguments?.getString(BUNDLE_KEY_FOR_RESULT_FRAGMENT)?.let { searchText ->
+            viewModel.searchVideoByText(searchText)
+        }
 
         getText()
         backBtnPressed()
