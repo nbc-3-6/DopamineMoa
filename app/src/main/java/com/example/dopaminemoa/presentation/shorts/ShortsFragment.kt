@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.dopaminemoa.R
 import com.example.dopaminemoa.databinding.FragmentShortsBinding
 import com.example.dopaminemoa.mapper.model.VideoItemModel
-import com.example.dopaminemoa.presentation.search.SearchResultFragment
 import com.example.dopaminemoa.repository.Resource
 import com.example.dopaminemoa.viewmodel.VideoViewModel
 import com.example.dopaminemoa.viewmodel.VideoViewModelFactory
@@ -78,24 +77,28 @@ class ShortsFragment : Fragment() {
         when (view.id) {
             btnCategory1.id -> {
                 val text = btnCategory1.text.toString() + " #shorts"
-                viewModel.searchVideoByText(text)
-                setKeywordButtonColor(btnCategory1.id)
+                viewModel.searchVideoByTextForShorts(text)
+                setCategoryButtonColor(btnCategory1.id)
             }
             btnCategory2.id -> {
-                val text = btnCategory1.text.toString() + " #shorts"
-                viewModel.searchVideoByText(text)
+                val text = btnCategory2.text.toString() + " #shorts"
+                viewModel.searchVideoByTextForShorts(text)
+                setCategoryButtonColor(btnCategory2.id)
             }
             btnCategory3.id -> {
-                val text = btnCategory1.text.toString() + " #shorts"
-                viewModel.searchVideoByText(text)
+                val text = btnCategory3.text.toString() + " #shorts"
+                viewModel.searchVideoByTextForShorts(text)
+                setCategoryButtonColor(btnCategory3.id)
             }
             btnCategory4.id -> {
-                val text = btnCategory1.text.toString() + " #shorts"
-                viewModel.searchVideoByText(text)
+                val text = btnCategory4.text.toString() + " #shorts"
+                viewModel.searchVideoByTextForShorts(text)
+                setCategoryButtonColor(btnCategory4.id)
             }
             btnCategory5.id -> {
-                val text = btnCategory1.text.toString() + " #shorts"
-                viewModel.searchVideoByText(text)
+                val text = btnCategory5.text.toString() + " #shorts"
+                viewModel.searchVideoByTextForShorts(text)
+                setCategoryButtonColor(btnCategory5.id)
             }
             else -> throw IllegalArgumentException("Unknown button ID")
         }
@@ -105,7 +108,7 @@ class ShortsFragment : Fragment() {
      * 카테고리 버튼에 대한 색상 처리를 수행하는 함수입니다.
      * 현재 검색에 적용된 버튼만 색상을 다르게 표시합니다.
      */
-    private fun setKeywordButtonColor(id: Int) = with(binding) {
+    private fun setCategoryButtonColor(id: Int) = with(binding) {
         when (id) {
             btnCategory1.id -> {
                 btnCategory1.setBackgroundResource(R.drawable.rec_keyword_btn_pressed)
@@ -158,7 +161,7 @@ class ShortsFragment : Fragment() {
      * 통신에 에러 발생 시, 에러 타입을 구분하여 화면에 토스트를 출력합니다.
      */
     private fun observeData() {
-        viewModel.searchResults.observe(viewLifecycleOwner) { resource ->
+        viewModel.searchResultsForShorts.observe(viewLifecycleOwner) { resource ->
             when (resource) {
                 is Resource.Success -> {
                     adapter.updateList(resource.data ?: emptyList())
@@ -206,7 +209,7 @@ class ShortsFragment : Fragment() {
      */
     private fun selectItem(item: VideoItemModel) {
         val bundle = Bundle().apply {
-            putParcelable(SearchResultFragment.BUNDLE_KEY_FOR_DETAIL_FRAGMENT, item)
+            putParcelable(BUNDLE_KEY_FOR_DETAIL_FRAGMENT_FROM_SHORTS, item)
         }
     }
 
@@ -216,6 +219,8 @@ class ShortsFragment : Fragment() {
     }
 
     companion object {
+        const val BUNDLE_KEY_FOR_DETAIL_FRAGMENT_FROM_SHORTS = "BUNDLE_KEY_FOR_DETAIL_FRAGMENT_FROM_SHORTS"
+
         fun newInstance() = ShortsFragment()
     }
 }

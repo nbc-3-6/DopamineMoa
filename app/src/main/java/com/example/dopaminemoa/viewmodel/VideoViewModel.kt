@@ -44,6 +44,9 @@ class VideoViewModel(private val videoRepository: VideoRepository) : ViewModel()
     private val _searchResults: MutableLiveData<Resource<List<VideoItemModel>>> = MutableLiveData()
     val searchResults: LiveData<Resource<List<VideoItemModel>>> get() = _searchResults
 
+    private val _searchResultsForShorts: MutableLiveData<Resource<List<VideoItemModel>>> = MutableLiveData()
+    val searchResultsForShorts: LiveData<Resource<List<VideoItemModel>>> get() = _searchResultsForShorts
+
     /**
      * repository에 인기 비디오 검색 결과를 요청합니다.
      */
@@ -86,6 +89,10 @@ class VideoViewModel(private val videoRepository: VideoRepository) : ViewModel()
      */
     fun searchVideoByText(text: String) = viewModelScope.launch {
         _searchResults.value = videoRepository.searchVideoByText(text)
+    }
+
+    fun searchVideoByTextForShorts(text: String) = viewModelScope.launch {
+        _searchResultsForShorts.value = videoRepository.searchVideoByText(text)
     }
 }
 
