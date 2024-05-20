@@ -1,17 +1,16 @@
 package com.example.dopaminemoa.viewmodel
 
 import android.content.Context
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.dopaminemoa.data.remote.RemoteDataSource
 import com.example.dopaminemoa.mapper.model.PopularVideoItemModel
 import com.example.dopaminemoa.mapper.model.CategoryItemModel
 import com.example.dopaminemoa.mapper.model.ChannelItemModel
 import com.example.dopaminemoa.mapper.model.VideoItemModel
-import com.example.dopaminemoa.network.RepositoryClient
 import com.example.dopaminemoa.repository.Resource
 import com.example.dopaminemoa.repository.VideoRepository
 import com.example.dopaminemoa.repository.VideoRepositoryImpl
@@ -131,22 +130,13 @@ class VideoViewModel(private val videoRepository: VideoRepository) : ViewModel()
  *     }
  */
 @Suppress("UNCHECKED_CAST")
-class VideoViewModelFactory : ViewModelProvider.Factory {
-    companion object {
-        private val repository = VideoRepositoryImpl(RepositoryClient.youtubeService) //?
-        fun newInstance(): ViewModelProvider.Factory {
-            return object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    if (modelClass.isAssignableFrom(VideoViewModel::class.java)) {
-                        return VideoViewModel(repository) as T
-                    }
-                    throw IllegalArgumentException("Unknown viewmodel class")
-                }
-            }
-class VideoViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
+class VideoViewModelFactory(
+    private val remoteDataSource: RemoteDataSource,
+    private val context: Context
+) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(VideoViewModel::class.java)) {
-            return VideoViewModel(VideoRepositoryImpl(context)) as T
+            return VideoViewModel(VideoRepositoryImpl(remoteDataSource, context)) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

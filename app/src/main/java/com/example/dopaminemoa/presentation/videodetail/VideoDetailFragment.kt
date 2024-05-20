@@ -1,18 +1,16 @@
 package com.example.dopaminemoa.presentation.videodetail
 
-import android.content.ContentValues.TAG
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import coil.load
 import com.example.dopaminemoa.R
 import com.example.dopaminemoa.databinding.FragmentVideoDetailBinding
-import com.example.dopaminemoa.mapper.VideoItemModel
+import com.example.dopaminemoa.mapper.model.VideoItemModel
+import com.example.dopaminemoa.network.RepositoryClient
 import com.example.dopaminemoa.presentation.search.SearchResultFragment.Companion.BUNDLE_KEY_FOR_DETAIL_FRAGMENT
 import com.example.dopaminemoa.repository.VideoRepositoryImpl
 import com.google.android.material.snackbar.Snackbar
@@ -21,7 +19,7 @@ class VideoDetailFragment : Fragment() {
     private var _binding: FragmentVideoDetailBinding? = null
     private val binding get() = _binding!!
     private val viewModel: VideoDetailViewModel by viewModels {
-        VideoDetailViewModelFactory(VideoRepositoryImpl(requireContext()),
+        VideoDetailViewModelFactory(VideoRepositoryImpl(RepositoryClient.youtubeService, requireContext()),
             requireContext().applicationContext
         )
     }

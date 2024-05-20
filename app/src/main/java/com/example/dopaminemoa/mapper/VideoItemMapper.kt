@@ -26,7 +26,7 @@ object VideoItemMapper {
                 channelThumbnails = "", // 채널 썸네일 데이터는 향후 처리
                 category = "",
                 channelId = "",
-                isLiked = false,
+                isLiked = false, // 기본값 추가
             )
         }
     }
@@ -43,10 +43,26 @@ object VideoItemMapper {
                 channelThumbnails = "",
                 category = it.snippet.category, //카테고리 int값
                 channelId = it.snippet.channelId, //채널명
-                isLiked = false,
+                isLiked = false, // 기본값 추가
             )
         }
     }
+
+    fun PopularVideoItemModel.toVideoItemModel(): VideoItemModel {
+        return VideoItemModel(
+            videoId = this.videoId,
+            videoTitle = this.videoTitle,
+            videoThumbnail = this.videoThumbnail,
+            videoViews = this.videoViews,
+            videoDescription = this.videoDescription,
+            channelTitle = this.channelTitle,
+            channelThumbnails = this.channelThumbnails,
+            category = this.category,
+            channelId = this.channelId,
+            isLiked = this.isLiked
+        )
+    }
+
     fun fromCategoryItems(categoryItems: List<VideoCategoryItems>): List<CategoryItemModel>{
         return categoryItems.map{
             CategoryItemModel(
@@ -54,6 +70,7 @@ object VideoItemMapper {
                 title = it.snippet.title,
                 channelId = it.snippet.channelId,
                 assignable = it.snippet.assignable,
+                isLiked = false, // 기본값 추가
             )
         }
     }

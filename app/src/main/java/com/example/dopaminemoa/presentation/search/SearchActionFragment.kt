@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.example.dopaminemoa.databinding.FragmentSearchActionBinding
+import com.example.dopaminemoa.network.RepositoryClient
 import com.example.dopaminemoa.presentation.search.SearchResultFragment.Companion.BUNDLE_KEY_FOR_RESULT_FRAGMENT
 import com.example.dopaminemoa.presentation.util.UtilityKeyboard.hideKeyboard
 import com.example.dopaminemoa.viewmodel.VideoViewModel
@@ -18,7 +19,7 @@ class SearchActionFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: VideoViewModel by viewModels {
-        VideoViewModelFactory(requireContext())
+        VideoViewModelFactory(RepositoryClient.youtubeService, requireContext())
     }
 
     override fun onCreateView(

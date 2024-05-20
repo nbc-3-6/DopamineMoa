@@ -57,9 +57,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun showVideoDetailFragment(detailFragment: Fragment) {
-        showToolbar(false)
-        showTabLayout(false)
-
         supportFragmentManager.commit {
             replace(R.id.fl_video_detail, detailFragment)
             addToBackStack(null)

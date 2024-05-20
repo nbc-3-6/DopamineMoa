@@ -12,12 +12,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.dopaminemoa.R
 import com.example.dopaminemoa.repository.Resource
 import com.example.dopaminemoa.databinding.FragmentSearchResultBinding
-import com.example.dopaminemoa.mapper.VideoItemModel
+import com.example.dopaminemoa.mapper.model.VideoItemModel
+import com.example.dopaminemoa.network.RepositoryClient
 import com.example.dopaminemoa.presentation.main.MainActivity
 import com.example.dopaminemoa.presentation.videodetail.VideoDetailFragment
 import com.example.dopaminemoa.viewmodel.VideoViewModel
 import com.example.dopaminemoa.viewmodel.VideoViewModelFactory
-
 
 class SearchResultFragment : Fragment() {
 
@@ -25,7 +25,7 @@ class SearchResultFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: VideoViewModel by viewModels {
-        VideoViewModelFactory(requireContext())
+        VideoViewModelFactory(RepositoryClient.youtubeService, requireContext())
     }
 
     private val adapter = SearchAdapter()
@@ -243,7 +243,6 @@ class SearchResultFragment : Fragment() {
             }
         }
     }
-
 
     /**
      * recyclerView에서 item을 선택했을 때 실행되는 함수입니다.
