@@ -1,10 +1,10 @@
 package com.example.dopaminemoa.presentation.main
 
-import android.graphics.PorterDuff
 import android.os.Bundle
-import android.widget.TextView
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import com.example.dopaminemoa.R
 import com.example.dopaminemoa.databinding.ActivityMainBinding
 import com.google.android.material.tabs.TabLayout
@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         // TabLayout x ViewPager2
         vpMain.adapter = viewPagerAdapter
         vpMain.offscreenPageLimit = viewPagerAdapter.itemCount
+        vpMain.isUserInputEnabled = false
 
         TabLayoutMediator(tlMain, vpMain) { tab, position ->
             tab.setText(viewPagerAdapter.getTitle(position))
@@ -53,6 +54,21 @@ class MainActivity : AppCompatActivity() {
                 // 재선택 시
             }
         })
-        tlMain.getTabAt(1)?.select() // Home을 default로 설정
+        tlMain.getTabAt(1)?.select() // 홈을 default로 설정
+    }
+
+    fun showVideoDetailFragment(detailFragment: Fragment) {
+        supportFragmentManager.commit {
+            replace(R.id.fl_video_detail, detailFragment)
+            addToBackStack(null)
+        }
+    }
+
+    private fun showToolbar(show: Boolean) {
+        binding.tbMain.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    private fun showTabLayout(show: Boolean) {
+        binding.tlMain.visibility = if (show) View.VISIBLE else View.GONE
     }
 }

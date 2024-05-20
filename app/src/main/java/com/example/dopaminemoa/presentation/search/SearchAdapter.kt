@@ -6,8 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.dopaminemoa.databinding.SearchItemBinding
-import com.example.dopaminemoa.mapper.VideoItemModel
-import com.example.dopaminemoa.presentation.util.UtilityUrlConverter.fromString
+import com.example.dopaminemoa.mapper.model.VideoItemModel
 
 class SearchAdapter : RecyclerView.Adapter<SearchAdapter.SearchViewHolder>() {
 
@@ -42,8 +41,7 @@ class SearchAdapter : RecyclerView.Adapter<SearchAdapter.SearchViewHolder>() {
         fun bind(item: VideoItemModel) = with(binding) {
             tvTitle.text = item.videoTitle
             tvChannel.text = item.channelTitle
-            val url = fromString(item.videoThumbnail)
-            Glide.with(itemView).load(url).into(ivItem)
+            Glide.with(itemView).load(item.videoThumbnail).into(ivItem)
 
             tvViews.text
             ivChannel

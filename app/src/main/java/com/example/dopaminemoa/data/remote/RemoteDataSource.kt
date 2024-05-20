@@ -1,6 +1,6 @@
 package com.example.dopaminemoa.data.remote
 
-import com.example.dopaminemoa.API_KEY
+import com.example.dopaminemoa.Const.Companion.API_KEY
 import com.example.dopaminemoa.data.eachResponse.ChannelListResponse
 import com.example.dopaminemoa.data.eachResponse.SearchListResponse
 import com.example.dopaminemoa.data.eachResponse.VideoCategoryListResponse
@@ -10,9 +10,6 @@ import retrofit2.http.HTTP
 import retrofit2.http.Query
 
 interface RemoteDataSource {
-
-
-//    @Headers("Authorization = $API_KEY") 수정 중 - 김재혁
     //search
     @GET("search")
     suspend fun getSearchList(
@@ -21,17 +18,29 @@ interface RemoteDataSource {
         @Query("type") type: String = "video",
         @Query("key") key: String = API_KEY,
 //        @Query("maxResults") maxResults: Int = 10,
-        ): SearchListResponse
+    ): SearchListResponse
 
-    //videos
+    //mostPopularVideos
     @GET("videos")
     suspend fun getVideosList(
+        //popular
         @Query("part") part: String = "snippet",
         @Query("chart") chart: String = "mostPopular",
         @Query("key") key: String = API_KEY,
-        //추가
+        @Query("regionCode") regionCode: String = "KR",
+//        @Query("maxResults") maxResults: Int = 50,
     ): VideoListResponse
 
+    //CategoryVideos
+    @GET("videos")
+    suspend fun getVideosByCategoryList(
+        @Query("part") part: String = "snippet",
+        @Query("chart") chart: String = "mostPopular",
+        @Query("key") key: String = API_KEY,
+        @Query("regionCode") regionCode: String = "KR",
+//        @Query("maxResults") maxResults: Int = 15,
+        @Query("videoCategoryId") videoCategoryId: String,
+    ): VideoListResponse
 
     //videoCategories
     @GET("videoCategories")
@@ -39,7 +48,7 @@ interface RemoteDataSource {
         @Query("part") part: String = "snippet",
         @Query("regionCode") regionCode: String = "KR",
         @Query("key") key: String = API_KEY,
-        //추가
+        @Query("hl") hl: String = "ko_KR",
     ): VideoCategoryListResponse
 
     //channels
@@ -48,5 +57,6 @@ interface RemoteDataSource {
         @Query("part") part: String = "snippet",
         @Query("id") channelId: String,
         @Query("key") key: String = API_KEY,
+        @Query("hl") hl: String = "ko_KR",
     ): ChannelListResponse
 }

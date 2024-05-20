@@ -12,18 +12,20 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.dopaminemoa.R
 import com.example.dopaminemoa.repository.Resource
 import com.example.dopaminemoa.databinding.FragmentSearchResultBinding
-import com.example.dopaminemoa.mapper.VideoItemModel
+import com.example.dopaminemoa.mapper.model.VideoItemModel
+import com.example.dopaminemoa.network.RepositoryClient
+import com.example.dopaminemoa.presentation.main.MainActivity
+import com.example.dopaminemoa.presentation.videodetail.VideoDetailFragment
 import com.example.dopaminemoa.viewmodel.VideoViewModel
 import com.example.dopaminemoa.viewmodel.VideoViewModelFactory
-
 
 class SearchResultFragment : Fragment() {
 
     private var _binding: FragmentSearchResultBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: VideoViewModel by viewModels({ requireActivity() }) {
-        VideoViewModelFactory.newInstance()
+    private val viewModel: VideoViewModel by viewModels {
+        VideoViewModelFactory.newInstance(RepositoryClient.youtubeService, requireContext())
     }
 
     private val adapter = SearchAdapter()
@@ -38,6 +40,10 @@ class SearchResultFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        arguments?.getString(BUNDLE_KEY_FOR_RESULT_FRAGMENT)?.let { searchText ->
+            viewModel.searchVideoByText(searchText)
+        }
 
         getText()
         backBtnPressed()
@@ -206,38 +212,37 @@ class SearchResultFragment : Fragment() {
     private fun setKeywordButtonColor(id: Int) = with(binding) {
         when (id) {
             btnKeyword1.id -> {
-                btnKeyword1.setBackgroundResource(R.drawable.rec_category_btn_pressed)
-                btnKeyword2.setBackgroundResource(R.drawable.rec_category_btn)
-                btnKeyword3.setBackgroundResource(R.drawable.rec_category_btn)
-                btnKeyword4.setBackgroundResource(R.drawable.rec_category_btn)
+                btnKeyword1.setBackgroundResource(R.drawable.rec_keyword_btn_pressed)
+                btnKeyword2.setBackgroundResource(R.drawable.rec_keyword_btn)
+                btnKeyword3.setBackgroundResource(R.drawable.rec_keyword_btn)
+                btnKeyword4.setBackgroundResource(R.drawable.rec_keyword_btn)
             }
             btnKeyword2.id -> {
-                btnKeyword1.setBackgroundResource(R.drawable.rec_category_btn)
-                btnKeyword2.setBackgroundResource(R.drawable.rec_category_btn_pressed)
-                btnKeyword3.setBackgroundResource(R.drawable.rec_category_btn)
-                btnKeyword4.setBackgroundResource(R.drawable.rec_category_btn)
+                btnKeyword1.setBackgroundResource(R.drawable.rec_keyword_btn)
+                btnKeyword2.setBackgroundResource(R.drawable.rec_keyword_btn_pressed)
+                btnKeyword3.setBackgroundResource(R.drawable.rec_keyword_btn)
+                btnKeyword4.setBackgroundResource(R.drawable.rec_keyword_btn)
             }
             btnKeyword3.id -> {
-                btnKeyword1.setBackgroundResource(R.drawable.rec_category_btn)
-                btnKeyword2.setBackgroundResource(R.drawable.rec_category_btn)
-                btnKeyword3.setBackgroundResource(R.drawable.rec_category_btn_pressed)
-                btnKeyword4.setBackgroundResource(R.drawable.rec_category_btn)
+                btnKeyword1.setBackgroundResource(R.drawable.rec_keyword_btn)
+                btnKeyword2.setBackgroundResource(R.drawable.rec_keyword_btn)
+                btnKeyword3.setBackgroundResource(R.drawable.rec_keyword_btn_pressed)
+                btnKeyword4.setBackgroundResource(R.drawable.rec_keyword_btn)
             }
             btnKeyword4.id -> {
-                btnKeyword1.setBackgroundResource(R.drawable.rec_category_btn)
-                btnKeyword2.setBackgroundResource(R.drawable.rec_category_btn)
-                btnKeyword3.setBackgroundResource(R.drawable.rec_category_btn)
-                btnKeyword4.setBackgroundResource(R.drawable.rec_category_btn_pressed)
+                btnKeyword1.setBackgroundResource(R.drawable.rec_keyword_btn)
+                btnKeyword2.setBackgroundResource(R.drawable.rec_keyword_btn)
+                btnKeyword3.setBackgroundResource(R.drawable.rec_keyword_btn)
+                btnKeyword4.setBackgroundResource(R.drawable.rec_keyword_btn_pressed)
             }
             else -> {
-                btnKeyword1.setBackgroundResource(R.drawable.rec_category_btn)
-                btnKeyword2.setBackgroundResource(R.drawable.rec_category_btn)
-                btnKeyword3.setBackgroundResource(R.drawable.rec_category_btn)
-                btnKeyword4.setBackgroundResource(R.drawable.rec_category_btn)
+                btnKeyword1.setBackgroundResource(R.drawable.rec_keyword_btn)
+                btnKeyword2.setBackgroundResource(R.drawable.rec_keyword_btn)
+                btnKeyword3.setBackgroundResource(R.drawable.rec_keyword_btn)
+                btnKeyword4.setBackgroundResource(R.drawable.rec_keyword_btn)
             }
         }
     }
-
 
     /**
      * recyclerView에서 item을 선택했을 때 실행되는 함수입니다.
@@ -247,6 +252,9 @@ class SearchResultFragment : Fragment() {
         val bundle = Bundle().apply {
             putParcelable(BUNDLE_KEY_FOR_DETAIL_FRAGMENT, item)
         }
+
+        val detailFragment = VideoDetailFragment.newInstance(bundle)
+        (requireActivity() as MainActivity).showVideoDetailFragment(detailFragment)
     }
 
     override fun onDestroyView() {
