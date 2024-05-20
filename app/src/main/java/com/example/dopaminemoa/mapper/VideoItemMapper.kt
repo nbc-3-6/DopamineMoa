@@ -19,7 +19,6 @@ object VideoItemMapper {
                 channelTitle = it.snippet.channelTitle,
                 channelThumbnails = "", // 채널 썸네일 데이터는 향후 처리
                 category = "",
-                type = "".toInt(),
                 isLike = "".toBoolean()
             )
         }
@@ -36,7 +35,6 @@ object VideoItemMapper {
                 channelTitle = it.snippet.channelTitle,
                 channelThumbnails = "",
                 category = it.snippet.categoryId,
-                type = "".toInt(),
                 isLike = "".toBoolean()
             )
         }
