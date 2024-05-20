@@ -1,5 +1,7 @@
 package com.example.dopaminemoa.viewmodel
 
+import android.content.Context
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,7 +12,6 @@ import com.example.dopaminemoa.mapper.VideoItemModel
 import com.example.dopaminemoa.repository.VideoRepository
 import com.example.dopaminemoa.repository.VideoRepositoryImpl
 import kotlinx.coroutines.launch
-
 
 class VideoViewModel(private val videoRepository: VideoRepository) : ViewModel() {
 
@@ -63,20 +64,11 @@ class VideoViewModel(private val videoRepository: VideoRepository) : ViewModel()
  *         VideoViewModelFactory.newInstance()
  *     }
  */
-@Suppress("UNCHECKED_CAST")
-class VideoViewModelFactory : ViewModelProvider.Factory {
-    companion object {
-        private val repository = VideoRepositoryImpl()
-
-        fun newInstance(): ViewModelProvider.Factory {
-            return object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    if (modelClass.isAssignableFrom(VideoViewModel::class.java)) {
-                        return VideoViewModel(repository) as T
-                    }
-                    throw IllegalArgumentException("Unknown viewmodel class")
-                }
-            }
+class VideoViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(VideoViewModel::class.java)) {
+            return VideoViewModel(VideoRepositoryImpl(context)) as T
         }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

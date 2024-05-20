@@ -18,7 +18,8 @@ object VideoItemMapper {
                 videoDescription = it.snippet.description,
                 channelTitle = it.snippet.channelTitle,
                 channelThumbnails = "", // 채널 썸네일 데이터는 향후 처리
-                category = ""
+                category = "",
+                isLiked = false,
             )
         }
     }
@@ -33,7 +34,8 @@ object VideoItemMapper {
                 videoDescription = it.snippet.description,
                 channelTitle = it.snippet.channelTitle,
                 channelThumbnails = "",
-                category = it.snippet.categoryId
+                category = it.snippet.categoryId,
+                isLiked = false,
             )
         }
     }

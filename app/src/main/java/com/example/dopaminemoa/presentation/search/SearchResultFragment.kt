@@ -13,6 +13,8 @@ import com.example.dopaminemoa.R
 import com.example.dopaminemoa.repository.Resource
 import com.example.dopaminemoa.databinding.FragmentSearchResultBinding
 import com.example.dopaminemoa.mapper.VideoItemModel
+import com.example.dopaminemoa.presentation.main.MainActivity
+import com.example.dopaminemoa.presentation.videodetail.VideoDetailFragment
 import com.example.dopaminemoa.viewmodel.VideoViewModel
 import com.example.dopaminemoa.viewmodel.VideoViewModelFactory
 
@@ -22,8 +24,8 @@ class SearchResultFragment : Fragment() {
     private var _binding: FragmentSearchResultBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: VideoViewModel by viewModels({ requireActivity() }) {
-        VideoViewModelFactory.newInstance()
+    private val viewModel: VideoViewModel by viewModels {
+        VideoViewModelFactory(requireContext())
     }
 
     private val adapter = SearchAdapter()
@@ -38,6 +40,10 @@ class SearchResultFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        arguments?.getString(BUNDLE_KEY_FOR_RESULT_FRAGMENT)?.let { searchText ->
+            viewModel.searchVideoByText(searchText)
+        }
 
         getText()
         backBtnPressed()
@@ -247,6 +253,10 @@ class SearchResultFragment : Fragment() {
         val bundle = Bundle().apply {
             putParcelable(BUNDLE_KEY_FOR_DETAIL_FRAGMENT, item)
         }
+
+        // com.example.dopaminemoa.presentation.videodetail.VideoDetailFragment 인스턴스를 생성하고 Bundle을 전달
+        val detailFragment = VideoDetailFragment.newInstance(bundle)
+        (requireActivity() as MainActivity).showVideoDetailFragment(detailFragment)
     }
 
     override fun onDestroyView() {

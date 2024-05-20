@@ -7,6 +7,6 @@ class Const {
 
         // sharedPreference
         const val PREFERENCE_NAME = "pref"
-        const val Liked_ITEMS = "liked_items"
+        const val LIKED_ITEMS = "liked_items"
     }
 }
