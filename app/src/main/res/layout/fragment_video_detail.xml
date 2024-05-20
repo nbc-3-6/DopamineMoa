@@ -88,7 +88,6 @@
                 android:layout_marginBottom="4dp"
                 android:clickable="true"
                 android:src="@drawable/ic_like"
-                app:tint="@color/white"
                 app:layout_constraintBottom_toTopOf="@id/tv_like"
                 app:layout_constraintStart_toStartOf="@id/tv_like"
                 app:layout_constraintEnd_toEndOf="parent" />
