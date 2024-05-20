@@ -12,6 +12,7 @@ import com.example.dopaminemoa.databinding.FragmentVideoDetailBinding
 import com.example.dopaminemoa.mapper.model.VideoItemModel
 import com.example.dopaminemoa.network.RepositoryClient
 import com.example.dopaminemoa.presentation.search.SearchResultFragment.Companion.BUNDLE_KEY_FOR_DETAIL_FRAGMENT
+import com.example.dopaminemoa.presentation.shorts.ShortsFragment
 import com.example.dopaminemoa.repository.VideoRepositoryImpl
 import com.google.android.material.snackbar.Snackbar
 
@@ -36,6 +37,8 @@ class VideoDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val item = arguments?.getParcelable<VideoItemModel>(BUNDLE_KEY_FOR_DETAIL_FRAGMENT)
+            ?: arguments?.getParcelable<VideoItemModel>(ShortsFragment.BUNDLE_KEY_FOR_DETAIL_FRAGMENT_FROM_SHORTS)
+
         val isLikedInPrefs = viewModel.isVideoLikedInPrefs(item?.videoId)
 
         // 초기 바인딩 시 isLikedInPrefs 값에 따라 ivLike 이미지 설정
@@ -85,6 +88,8 @@ class VideoDetailFragment : Fragment() {
     }
 
     companion object {
+        const val BUNDLE_KEY_FOR_DETAIL_FRAGMENT = "BUNDLE_KEY_FOR_DETAIL_FRAGMENT"
+
         fun newInstance(bundle: Bundle): VideoDetailFragment {
             return VideoDetailFragment().apply {
                 arguments = bundle

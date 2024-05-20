@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         // TabLayout x ViewPager2
         vpMain.adapter = viewPagerAdapter
         vpMain.offscreenPageLimit = viewPagerAdapter.itemCount
+        vpMain.isUserInputEnabled = false
 
         TabLayoutMediator(tlMain, vpMain) { tab, position ->
             tab.setText(viewPagerAdapter.getTitle(position))

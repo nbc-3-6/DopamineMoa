@@ -212,34 +212,34 @@ class SearchResultFragment : Fragment() {
     private fun setKeywordButtonColor(id: Int) = with(binding) {
         when (id) {
             btnKeyword1.id -> {
-                btnKeyword1.setBackgroundResource(R.drawable.rec_category_btn_pressed)
-                btnKeyword2.setBackgroundResource(R.drawable.rec_category_btn)
-                btnKeyword3.setBackgroundResource(R.drawable.rec_category_btn)
-                btnKeyword4.setBackgroundResource(R.drawable.rec_category_btn)
+                btnKeyword1.setBackgroundResource(R.drawable.rec_keyword_btn_pressed)
+                btnKeyword2.setBackgroundResource(R.drawable.rec_keyword_btn)
+                btnKeyword3.setBackgroundResource(R.drawable.rec_keyword_btn)
+                btnKeyword4.setBackgroundResource(R.drawable.rec_keyword_btn)
             }
             btnKeyword2.id -> {
-                btnKeyword1.setBackgroundResource(R.drawable.rec_category_btn)
-                btnKeyword2.setBackgroundResource(R.drawable.rec_category_btn_pressed)
-                btnKeyword3.setBackgroundResource(R.drawable.rec_category_btn)
-                btnKeyword4.setBackgroundResource(R.drawable.rec_category_btn)
+                btnKeyword1.setBackgroundResource(R.drawable.rec_keyword_btn)
+                btnKeyword2.setBackgroundResource(R.drawable.rec_keyword_btn_pressed)
+                btnKeyword3.setBackgroundResource(R.drawable.rec_keyword_btn)
+                btnKeyword4.setBackgroundResource(R.drawable.rec_keyword_btn)
             }
             btnKeyword3.id -> {
-                btnKeyword1.setBackgroundResource(R.drawable.rec_category_btn)
-                btnKeyword2.setBackgroundResource(R.drawable.rec_category_btn)
-                btnKeyword3.setBackgroundResource(R.drawable.rec_category_btn_pressed)
-                btnKeyword4.setBackgroundResource(R.drawable.rec_category_btn)
+                btnKeyword1.setBackgroundResource(R.drawable.rec_keyword_btn)
+                btnKeyword2.setBackgroundResource(R.drawable.rec_keyword_btn)
+                btnKeyword3.setBackgroundResource(R.drawable.rec_keyword_btn_pressed)
+                btnKeyword4.setBackgroundResource(R.drawable.rec_keyword_btn)
             }
             btnKeyword4.id -> {
-                btnKeyword1.setBackgroundResource(R.drawable.rec_category_btn)
-                btnKeyword2.setBackgroundResource(R.drawable.rec_category_btn)
-                btnKeyword3.setBackgroundResource(R.drawable.rec_category_btn)
-                btnKeyword4.setBackgroundResource(R.drawable.rec_category_btn_pressed)
+                btnKeyword1.setBackgroundResource(R.drawable.rec_keyword_btn)
+                btnKeyword2.setBackgroundResource(R.drawable.rec_keyword_btn)
+                btnKeyword3.setBackgroundResource(R.drawable.rec_keyword_btn)
+                btnKeyword4.setBackgroundResource(R.drawable.rec_keyword_btn_pressed)
             }
             else -> {
-                btnKeyword1.setBackgroundResource(R.drawable.rec_category_btn)
-                btnKeyword2.setBackgroundResource(R.drawable.rec_category_btn)
-                btnKeyword3.setBackgroundResource(R.drawable.rec_category_btn)
-                btnKeyword4.setBackgroundResource(R.drawable.rec_category_btn)
+                btnKeyword1.setBackgroundResource(R.drawable.rec_keyword_btn)
+                btnKeyword2.setBackgroundResource(R.drawable.rec_keyword_btn)
+                btnKeyword3.setBackgroundResource(R.drawable.rec_keyword_btn)
+                btnKeyword4.setBackgroundResource(R.drawable.rec_keyword_btn)
             }
         }
     }
@@ -253,7 +253,6 @@ class SearchResultFragment : Fragment() {
             putParcelable(BUNDLE_KEY_FOR_DETAIL_FRAGMENT, item)
         }
 
-        // com.example.dopaminemoa.presentation.videodetail.VideoDetailFragment 인스턴스를 생성하고 Bundle을 전달
         val detailFragment = VideoDetailFragment.newInstance(bundle)
         (requireActivity() as MainActivity).showVideoDetailFragment(detailFragment)
     }
