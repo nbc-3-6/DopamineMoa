@@ -44,14 +44,12 @@ class MyVideoAdapter(private val mContext: Context) :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         Glide.with(mContext)
-            .load(items[position].videoId)
+            .load(items[position].videoThumbnail)
             .into((holder as ItemViewHolder).iv_thum_image)
 
-        // 항목 타입 설정 (이미지 or 비디오)
-        var type = "[Image] "
-        if (items[position].type == Constants.SEARCH_TYPE_VIDEO) type = "[Video] "
 
-        holder.tv_title.text = type + items[position].videoTitle
+
+        holder.tv_title.text = items[position].videoTitle
 
         // 항목 클릭 이벤트
         holder.cl_thumb_item.setOnClickListener {
