@@ -16,7 +16,6 @@ class VideoCategoriesAdapter(private var videoItems: List<PopularVideoItemModel>
         fun bind(item: PopularVideoItemModel) {
             binding.apply {
                 tvTitle.text = item.videoTitle
-                ivThumbnail.scaleType = ImageView.ScaleType.CENTER
                 Glide.with(itemView)
                     .load(item.videoThumbnail)
                     .into(ivThumbnail)

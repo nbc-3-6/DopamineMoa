@@ -28,7 +28,7 @@ interface RemoteDataSource {
         @Query("chart") chart: String = "mostPopular",
         @Query("key") key: String = API_KEY,
         @Query("regionCode") regionCode: String = "KR",
-        @Query("maxResults") maxResults: Int = 50,
+//        @Query("maxResults") maxResults: Int = 50,
     ): VideoListResponse
 
     //CategoryVideos

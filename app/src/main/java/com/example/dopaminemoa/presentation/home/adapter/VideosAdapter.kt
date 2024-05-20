@@ -17,7 +17,6 @@ class VideosAdapter(private var videoItems: List<PopularVideoItemModel>) :
         fun bind(item: PopularVideoItemModel) {
             binding.apply {
                 tvTitle.text = item.videoTitle
-                ivThumbnail.scaleType = ImageView.ScaleType.FIT_XY
                 Glide.with(itemView)
                     .load(item.videoThumbnail) // 썸네일 이미지 URL
                     .into(ivThumbnail)
