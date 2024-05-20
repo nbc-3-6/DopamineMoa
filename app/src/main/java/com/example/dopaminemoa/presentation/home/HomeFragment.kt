@@ -1,5 +1,6 @@
 package com.example.dopaminemoa.presentation.home
 
+import android.app.AlertDialog
 import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
@@ -44,6 +45,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
+        initErrorViewModel()
         initMostPopularRecyclerView()
         initVideoCategoryRecyclerView()
         initChannelsRecyclerView()
@@ -78,6 +80,30 @@ class HomeFragment : Fragment() {
 
         viewModel.searchPopularVideo()
         viewModel.takeVideoCategories()
+    }
+
+    private fun initErrorViewModel(){
+        //dialog
+        viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            errorMessage?.let {
+                showErrorDialog(it)
+            }
+        }
+        //MostPopular
+        viewModel.mostPopularErrorState.observe(viewLifecycleOwner) {
+            toggleRecyclerViewAndErrorView(binding.rvMostPopular, binding.ivMostPopularError, it)
+        }
+
+        //Category
+        viewModel.categoryErrorState.observe(viewLifecycleOwner) {
+            toggleRecyclerViewAndErrorView(binding.rvCategory, binding.ivCategoryError, it)
+            toggleRecyclerViewAndErrorView(binding.rvChannels, binding.ivChannelError, it)
+        }
+    }
+    private fun toggleRecyclerViewAndErrorView(recyclerView: RecyclerView, errorView: View, state: Boolean) {
+        recyclerView.visibility = if (state) View.GONE else View.VISIBLE
+
+        errorView.visibility = if (state) View.VISIBLE else View.GONE
     }
 
     private fun initMostPopularRecyclerView() {
@@ -119,7 +145,7 @@ class HomeFragment : Fragment() {
                 viewModel.updateSelectedCategory(selectedCategory)
             }
             override fun onNothingSelected(p0: AdapterView<*>?) {
-                TODO("Not yet implemented")
+                //No action needed
             }
         }
     }
@@ -132,6 +158,19 @@ class HomeFragment : Fragment() {
                 outRect.right = rightSpace
             }
         })
+    }
+    private fun showErrorDialog(message: String) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("API Error 발생")
+            .setMessage(message)
+            .setPositiveButton("앱 종료") { dialog, _ ->
+                dialog.dismiss()
+                requireActivity().finish()
+            }
+            .setNegativeButton("취소") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 
     override fun onDestroyView() {

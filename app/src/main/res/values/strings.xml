@@ -22,6 +22,8 @@
 
     <!--home-->
     <string name="home_tv_channel">관련 채널</string>
+    <string name="home_tv_collecting_most_popular_videos">지금 인기있는 동영상 모아보기</string>
+    <string name="home_tv_collect_videos_in_categories">카테고리로 동영상 모아보기</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 <!--    <string name="hello_blank_fragment">Hello blank fragment</string>-->

@@ -44,41 +44,73 @@ class VideoViewModel(private val videoRepository: VideoRepository) : ViewModel()
     private val _searchResults: MutableLiveData<Resource<List<VideoItemModel>>> = MutableLiveData()
     val searchResults: LiveData<Resource<List<VideoItemModel>>> get() = _searchResults
 
+    //error전달
+    private val _errorMessage = MutableLiveData<String>()
+    val errorMessage: LiveData<String> get() = _errorMessage
+
+    //error 확인
+    private val _mostPopularErrorState = MutableLiveData<Boolean>()
+    val mostPopularErrorState: LiveData<Boolean> get() = _mostPopularErrorState
+
+    private val _categoryErrorState = MutableLiveData<Boolean>()
+    val categoryErrorState: LiveData<Boolean> get() = _categoryErrorState
+
     /**
      * repository에 인기 비디오 검색 결과를 요청합니다.
      */
     fun searchPopularVideo() = viewModelScope.launch {
-        _popularResults.value = videoRepository.searchPopularVideo()
+        try {
+            _popularResults.value = videoRepository.searchPopularVideo()
+            _mostPopularErrorState.value = false
+        } catch (e: VideoRepositoryImpl.ApiException) {
+            _errorMessage.postValue(e.message)
+            _mostPopularErrorState.value = true
+        }
     }
 
     /**
      * repository에 키워드를 사용한 비디오 검색 결과를 요청합니다.
      */
     fun searchVideoByCategory(category: String) = viewModelScope.launch {
-        val videos = videoRepository.searchVideoByCategory(category)
-        _videoListByCategory.value = videos
-
-        // channelId 저장
-        _channelIds.value = videos.map { it.channelId }
+        try {
+            val videos = videoRepository.searchVideoByCategory(category)
+            _videoListByCategory.value = videos
+            _channelIds.value = videos.map { it.channelId } // channelId 저장
+            _categoryErrorState.value = false
+        } catch (e: VideoRepositoryImpl.ApiException) {
+            _errorMessage.postValue(e.message)
+            _categoryErrorState.value = true
+        }
     }
 
     //spinner 카테고리 목록
     fun takeVideoCategories() = viewModelScope.launch {
-//        _categoryVideoResults.value = videoRepository.takeVideoCategories()
-        val allCategories = videoRepository.takeVideoCategories()
-        val assignableCategories = allCategories.filter { it.assignable }
-        _categoryVideoResults.value = assignableCategories
+        try {
+            val allCategories = videoRepository.takeVideoCategories()
+            val assignableCategories = allCategories.filter { it.assignable }
+            _categoryVideoResults.value = assignableCategories
+        } catch (e: VideoRepositoryImpl.ApiException) {
+            _errorMessage.postValue(e.message)
+        }
     }
 
     fun updateSelectedCategory(category: String) {
-        _selectedCategory.value = category
+        try {
+            _selectedCategory.value = category
+        } catch (e: VideoRepositoryImpl.ApiException) {
+            _errorMessage.postValue(e.message)
+        }
     }
 
     /**
      * repository에 키워드를 사용한 채널 검색 결과를 요청합니다.
      */
     fun searchChannelByCategory(channel: List<String>) = viewModelScope.launch {
-        _categoryChannelResults.value = videoRepository.searchChannelByCategory(channel.joinToString(","))
+        try {
+            _categoryChannelResults.value = videoRepository.searchChannelByCategory(channel.joinToString(","))
+        } catch (e: VideoRepositoryImpl.ApiException) {
+            _errorMessage.postValue(e.message)
+        }
     }
 
     /**
