@@ -30,7 +30,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val viewModel: VideoViewModel by viewModels {
-        VideoViewModelFactory(RepositoryClient.youtubeService, requireContext())
+        VideoViewModelFactory.newInstance(RepositoryClient.youtubeService, requireContext())
     }
     //adapter
     private lateinit var videosAdapter: VideosAdapter
