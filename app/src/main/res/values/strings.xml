@@ -22,6 +22,12 @@
     <string name="search_tv_zzzzz">#ㅋㅋㅋㅋㅋ</string>
     <string name="search_tv_legend">#레전드</string>
 
+    <!--short-->
+    <string name="short_tv_movie">영화</string>
+    <string name="short_tv_game">게임</string>
+    <string name="short_tv_news">뉴스</string>
+    <string name="short_tv_trip">여행</string>
+    <string name="short_tv_cook">요리</string>
 
     <!--home-->
     <string name="home_tv_channel">관련 채널</string>

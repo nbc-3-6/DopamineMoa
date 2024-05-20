@@ -44,6 +44,9 @@ class VideoViewModel(private val videoRepository: VideoRepository) : ViewModel()
     private val _searchResults: MutableLiveData<Resource<List<VideoItemModel>>> = MutableLiveData()
     val searchResults: LiveData<Resource<List<VideoItemModel>>> get() = _searchResults
 
+    private val _searchResultsForShorts: MutableLiveData<Resource<List<VideoItemModel>>> = MutableLiveData()
+    val searchResultsForShorts: LiveData<Resource<List<VideoItemModel>>> get() = _searchResultsForShorts
+
     //error전달
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> get() = _errorMessage
@@ -119,16 +122,12 @@ class VideoViewModel(private val videoRepository: VideoRepository) : ViewModel()
     fun searchVideoByText(text: String) = viewModelScope.launch {
         _searchResults.value = videoRepository.searchVideoByText(text)
     }
+
+    fun searchVideoByTextForShorts(text: String) = viewModelScope.launch {
+        _searchResultsForShorts.value = videoRepository.searchVideoByText(text)
+    }
 }
 
-
-/**
- * 하나의 viewmodel을 사용할 수 있도록 싱글톤으로 작성해놨습니다.
- * 필요한 fragment에서 아래와 같이 선언 후 사용하면 됩니다.
- * private val viewmodel : VideoViewModel by viewModels({ requireActivity() }) {
- *         VideoViewModelFactory.newInstance()
- *     }
- */
 @Suppress("UNCHECKED_CAST")
 class VideoViewModelFactory(
     private val remoteDataSource: RemoteDataSource,
