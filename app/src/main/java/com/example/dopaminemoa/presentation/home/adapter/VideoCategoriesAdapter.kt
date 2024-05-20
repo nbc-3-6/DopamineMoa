@@ -2,6 +2,7 @@ package com.example.dopaminemoa.presentation.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.dopaminemoa.databinding.ItemVideoListBinding
@@ -15,6 +16,7 @@ class VideoCategoriesAdapter(private var videoItems: List<PopularVideoItemModel>
         fun bind(item: PopularVideoItemModel) {
             binding.apply {
                 tvTitle.text = item.videoTitle
+                ivThumbnail.scaleType = ImageView.ScaleType.CENTER
                 Glide.with(itemView)
                     .load(item.videoThumbnail)
                     .into(ivThumbnail)
