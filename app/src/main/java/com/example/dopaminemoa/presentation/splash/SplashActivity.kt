@@ -1,4 +1,4 @@
-package com.example.dopaminemoa.presentation
+package com.example.dopaminemoa.presentation.splash
 
 import android.content.Intent
 import android.os.Bundle
