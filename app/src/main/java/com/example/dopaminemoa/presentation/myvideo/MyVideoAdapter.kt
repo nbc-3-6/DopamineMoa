@@ -10,9 +10,8 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.dopaminemoa.Constants
 import com.example.dopaminemoa.databinding.MyvideoItemBinding
-import com.example.dopaminemoa.mapper.VideoItemModel
+import com.example.dopaminemoa.mapper.model.VideoItemModel
 import com.example.dopaminemoa.utils.Utils.addPrefItem
 import com.example.dopaminemoa.utils.Utils.deletePrefItem
 import de.hdodenhof.circleimageview.CircleImageView
@@ -80,12 +79,12 @@ class MyVideoAdapter(private val mContext: Context) :
             val position = adapterPosition.takeIf { it != RecyclerView.NO_POSITION } ?: return
             val item = items[position]
 
-            if (!item.isLike) {
+            if (!item.isLiked) {
                 addPrefItem(mContext, item)
-                item.isLike = true
+                item.isLiked = true
             } else {
                 deletePrefItem(mContext, item.videoId)
-                item.isLike = false
+                item.isLiked = false
             }
 
             notifyItemChanged(position)

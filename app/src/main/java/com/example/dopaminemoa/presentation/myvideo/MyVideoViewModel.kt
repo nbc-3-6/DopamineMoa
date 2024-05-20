@@ -5,8 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.dopaminemoa.data.remote.RemoteDataSource
-import com.example.dopaminemoa.mapper.VideoItemModel
+import com.example.dopaminemoa.mapper.model.VideoItemModel
 import com.example.dopaminemoa.utils.Utils
 
 class MyVideoViewModel : ViewModel() {
@@ -21,6 +20,7 @@ class MyVideoViewModel : ViewModel() {
     fun getLikedItems(context: Context) {
         // Utils 클래스를 이용해 저장된 좋아요를 가져와서 _likedItems에 저장
         _likedItems.value = Utils.getPrefLikeItems(context)
+        Log.d("_liked", _likedItems.value.toString())
     }
     // 특정 아이템을 삭제하는 함수
     fun deleteItem(context: Context, item: VideoItemModel, position: Int) {

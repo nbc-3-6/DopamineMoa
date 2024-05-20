@@ -1,5 +1,6 @@
 package com.example.dopaminemoa.presentation.myvideo
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -10,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.dopaminemoa.databinding.FragmentMyVideoBinding
-import com.example.dopaminemoa.mapper.VideoItemModel
+import com.example.dopaminemoa.mapper.model.VideoItemModel
 
 class MyVideoFragment : Fragment() {
 
@@ -34,6 +35,7 @@ class MyVideoFragment : Fragment() {
         mContext = context
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,6 +51,7 @@ class MyVideoFragment : Fragment() {
 
         // 좋아요된 아이템 로딩
         viewModel.getLikedItems(mContext)
+        Log.d("viewModel", viewModel.getLikedItems(mContext).toString())
 
         // 좋아요 리스트 관찰하여 UI 업데이트
         viewModel.likedItems.observe(viewLifecycleOwner) { likes ->

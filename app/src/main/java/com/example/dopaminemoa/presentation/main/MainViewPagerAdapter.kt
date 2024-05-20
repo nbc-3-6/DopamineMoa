@@ -3,7 +3,6 @@ package com.example.dopaminemoa.presentation.main
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.dopaminemoa.presentation.myvideo.MyVideoFragment
 import com.example.dopaminemoa.R
 import com.example.dopaminemoa.presentation.home.HomeFragment
 import com.example.dopaminemoa.presentation.myvideo.MyVideoFragment
