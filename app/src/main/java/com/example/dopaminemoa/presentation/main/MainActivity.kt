@@ -3,7 +3,6 @@ package com.example.dopaminemoa.presentation.main
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.example.dopaminemoa.R
 import com.example.dopaminemoa.databinding.ActivityMainBinding
@@ -53,7 +52,7 @@ class MainActivity : AppCompatActivity() {
                 // 재선택 시
             }
         })
-        tlMain.getTabAt(1)?.select() // Home을 default로 설정
+        tlMain.getTabAt(1)?.select() // 홈을 default로 설정
     }
 
     fun showVideoDetailFragment(detailFragment: Fragment) {
