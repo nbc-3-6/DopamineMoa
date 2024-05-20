@@ -128,14 +128,6 @@ class VideoViewModel(private val videoRepository: VideoRepository) : ViewModel()
     }
 }
 
-
-/**
- * 하나의 viewmodel을 사용할 수 있도록 싱글톤으로 작성해놨습니다.
- * 필요한 fragment에서 아래와 같이 선언 후 사용하면 됩니다.
- * private val viewmodel : VideoViewModel by viewModels({ requireActivity() }) {
- *         VideoViewModelFactory.newInstance()
- *     }
- */
 @Suppress("UNCHECKED_CAST")
 class VideoViewModelFactory : ViewModelProvider.Factory {
     companion object {
