@@ -1,7 +1,6 @@
 package com.example.dopaminemoa.presentation.myvideo
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,84 +10,48 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.dopaminemoa.databinding.MyvideoItemBinding
+import com.example.dopaminemoa.databinding.SearchItemBinding
 import com.example.dopaminemoa.mapper.model.VideoItemModel
-import com.example.dopaminemoa.utils.Utils.addPrefItem
-import com.example.dopaminemoa.utils.Utils.deletePrefItem
+import com.example.dopaminemoa.presentation.search.SearchAdapter
 import de.hdodenhof.circleimageview.CircleImageView
 
-class MyVideoAdapter(private val mContext: Context) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MyVideoAdapter : RecyclerView.Adapter<MyVideoAdapter.MyVideoViewHolder>() {
 
-    // 표시될 항목들
-    var items = ArrayList<VideoItemModel>()
+    var itemClick: SearchAdapter.ItemClick? = null
+    private val items: MutableList<VideoItemModel> = mutableListOf()
 
-    // 항목 클릭 리스너 인터페이스
-    interface OnItemClickListener {
-        fun onItemClick(item: VideoItemModel, position: Int)
+    fun updateList(newItems: List<VideoItemModel>) {
+        items.clear()
+        items.addAll(newItems)
+        notifyDataSetChanged()
     }
 
-    private var clickListener: OnItemClickListener? = null
-
-    // 클릭 리스너 설정
-    fun setOnItemClickListener(listener: OnItemClickListener) {
-        this.clickListener = listener
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyVideoViewHolder {
+        val binding = MyvideoItemBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return MyVideoViewHolder(binding)
     }
 
-    override fun getItemCount() = items.size
+    override fun getItemCount(): Int = items.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        val binding = MyvideoItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ItemViewHolder(binding)
-    }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        Glide.with(mContext)
-            .load(items[position].videoThumbnail)
-            .into((holder as ItemViewHolder).iv_thum_image)
-
-
-
-        holder.tv_title.text = items[position].videoTitle
-
-        // 항목 클릭 이벤트
-        holder.cl_thumb_item.setOnClickListener {
-            Log.d("MyVideoAdapter", "#dopamine itemView onItemClick=${position}")
-            clickListener?.onItemClick(items[position], position)
+    override fun onBindViewHolder(holder: MyVideoViewHolder, position: Int) {
+        holder.bind(items[position])
+        holder.itemView.setOnClickListener {
+            itemClick?.onClick(it, items[position])
         }
-
     }
 
-    // 항목에 데이터 바인딩
-    inner class ItemViewHolder(binding: MyvideoItemBinding) : RecyclerView.ViewHolder(binding.root),
-        View.OnClickListener {
 
-        var iv_thum_image: ImageView = binding.ivThumbnail
-        var tv_title: TextView = binding.tvTitle
-        var iv_channel: CircleImageView = binding.ivChannel
-        var cl_thumb_item: ConstraintLayout = binding.clThumbItem
-
-        init {
-            iv_thum_image.setOnClickListener(this)
-            cl_thumb_item.setOnClickListener(this)
+    class MyVideoViewHolder(private val binding: MyvideoItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: VideoItemModel) = with(binding) {
+            tvTitle.text = item.videoTitle
+            Glide.with(itemView).load(item.videoThumbnail).into(ivThumbnail)
         }
-
-        /**
-         * 각 항목 클릭 시 발생하는 이벤트를 처리하는 메서드입니다.
-         */
-        override fun onClick(view: View) {
-            val position = adapterPosition.takeIf { it != RecyclerView.NO_POSITION } ?: return
-            val item = items[position]
-
-            if (!item.isLiked) {
-                addPrefItem(mContext, item)
-                item.isLiked = true
-            } else {
-                deletePrefItem(mContext, item.videoId)
-                item.isLiked = false
-            }
-
-            notifyItemChanged(position)
-        }
-
+    }
+    interface ItemClick {
+        fun onClick(view: View, item: VideoItemModel)
     }
 }

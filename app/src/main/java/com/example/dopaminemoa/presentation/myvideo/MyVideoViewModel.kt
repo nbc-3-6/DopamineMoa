@@ -1,39 +1,69 @@
 package com.example.dopaminemoa.presentation.myvideo
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.example.dopaminemoa.mapper.model.VideoItemModel
-import com.example.dopaminemoa.utils.Utils
+import com.example.dopaminemoa.repository.VideoRepository
+import kotlinx.coroutines.launch
 
-class MyVideoViewModel : ViewModel() {
+class MyVideoViewModel(
+    private val videoRepository: VideoRepository,
+    context: Context
+) : ViewModel() {
+
 
     // 좋아요 아이템들에 대한 MutableLiveData 선언
-    private val _likedItems = MutableLiveData<List<VideoItemModel>>()
+    private val _likedItems = MutableLiveData<VideoItemModel>()
 
     // 외부에서 관찰할 수 있도록 LiveData로 제공
-    val likedItems: LiveData<List<VideoItemModel>> get() = _likedItems
+    val likedItems: LiveData<VideoItemModel> get() = _likedItems
 
     // 저장된 좋아요 아이템들을 가져오는 함수
-    fun getLikedItems(context: Context) {
-        // Utils 클래스를 이용해 저장된 좋아요를 가져와서 _likedItems에 저장
-        _likedItems.value = Utils.getPrefLikeItems(context)
-        Log.d("_liked", _likedItems.value.toString())
-    }
-    // 특정 아이템을 삭제하는 함수
-    fun deleteItem(context: Context, item: VideoItemModel, position: Int) {
-        // Utils 클래스를 이용해 아이템 삭제
-        Utils.deletePrefItem(context, item.videoId)
-        Log.d("VideoItemModel", "dopaminemoa deleteItem position=${position}, id = ${item.videoId}")
-
-        // 삭제된 아이템 정보를 반영하여 LiveData 업데이트
-        _likedItems.value?.let { currentItems ->
-            val updatedItems = currentItems.toMutableList()
-            updatedItems.remove(item)
-            _likedItems.value = updatedItems
+    private fun getLikedItems(videoItemModel: VideoItemModel) {
+        viewModelScope.launch {
+            videoRepository.saveVideoItem(videoItemModel.copy(isLiked = true))
         }
     }
 
+    private fun deleteVideoItem(videoItemModel: VideoItemModel) {
+        viewModelScope.launch {
+            videoRepository.removeVideoItem(videoItemModel.copy(isLiked = false))
+        }
+    }
+
+    fun updatelikedItem(videoItemModel: VideoItemModel) {
+        viewModelScope.launch {
+            if (videoItemModel.isLiked) {
+                getLikedItems(videoItemModel)
+            } else {
+                deleteVideoItem(videoItemModel)
+            }
+        }
+    }
+
+    fun isVideoLikedInPrefs(videoId: String?): Boolean {
+        return videoRepository.isVideoLikedInPrefs(videoId)
+    }
+
+    fun clearPreferences() {
+        videoRepository.clearPrefs()
+    }
+
+}
+
+class MyVideoViewModelFactory(
+    private val videoRepository: VideoRepository,
+    private val context: Context
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(MyVideoViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return MyVideoViewModel(videoRepository, context) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
 }
