@@ -51,7 +51,7 @@
         app:layout_constraintTop_toTopOf="@+id/fl_search" />
 
     <HorizontalScrollView
-        android:id="@+id/hcv_category"
+        android:id="@+id/hcv_keyword"
         android:layout_width="match_parent"
         android:layout_height="32dp"
         android:layout_marginStart="8dp"
@@ -73,7 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/rec_category_btn"
+                android:background="@drawable/rec_keyword_btn"
                 android:text="@string/search_tv_meme"
                 android:textSize="16sp" />
 
@@ -82,7 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/rec_category_btn"
+                android:background="@drawable/rec_keyword_btn"
                 android:text="@string/search_tv_comedy"
                 android:textSize="16sp" />
 
@@ -91,7 +91,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/rec_category_btn"
+                android:background="@drawable/rec_keyword_btn"
                 android:paddingStart="5dp"
                 android:paddingEnd="5dp"
                 android:text="@string/search_tv_zzzzz"
@@ -102,7 +102,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/rec_category_btn"
+                android:background="@drawable/rec_keyword_btn"
                 android:text="@string/search_tv_legend"
                 android:textSize="16sp" />
         </LinearLayout>
