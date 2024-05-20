@@ -2,15 +2,15 @@ package com.example.dopaminemoa.presentation.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.dopaminemoa.databinding.ItemVideoListBinding
 import com.example.dopaminemoa.mapper.model.PopularVideoItemModel
 
-
-class VideosAdapter(private var videoItems: List<PopularVideoItemModel>) :
-    RecyclerView.Adapter<VideosAdapter.MostPopularViewHolder>() {
+class VideosAdapter(
+    private var videoItems: List<PopularVideoItemModel>,
+    private val itemClickListener: (PopularVideoItemModel) -> Unit
+) : RecyclerView.Adapter<VideosAdapter.MostPopularViewHolder>() {
 
     inner class MostPopularViewHolder(private val binding: ItemVideoListBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -20,6 +20,10 @@ class VideosAdapter(private var videoItems: List<PopularVideoItemModel>) :
                 Glide.with(itemView)
                     .load(item.videoThumbnail) // 썸네일 이미지 URL
                     .into(ivThumbnail)
+
+                root.setOnClickListener {
+                    itemClickListener(item)
+                }
             }
         }
     }

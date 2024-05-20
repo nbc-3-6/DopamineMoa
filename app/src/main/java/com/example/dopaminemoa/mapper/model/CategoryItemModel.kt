@@ -9,4 +9,5 @@ data class CategoryItemModel(
     val title: String,
     val channelId: String,
     val assignable: Boolean,
+    var isLiked: Boolean,
 ) : Parcelable
