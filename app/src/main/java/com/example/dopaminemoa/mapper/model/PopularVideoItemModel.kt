@@ -14,4 +14,5 @@ data class PopularVideoItemModel(
     val channelThumbnails: String,
     val category: String,
     val channelId: String,
+    var isLiked: Boolean,
 ) : Parcelable

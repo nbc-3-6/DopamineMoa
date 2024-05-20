@@ -65,6 +65,9 @@ dependencies {
     //circle image view
     implementation("de.hdodenhof:circleimageview:3.1.0")
 
+    // coil
+    implementation("io.coil-kt:coil:2.4.0")
+
     //room, glide - for url image
     val room_version = "2.6.1"
     implementation("androidx.room:room-runtime:$room_version")

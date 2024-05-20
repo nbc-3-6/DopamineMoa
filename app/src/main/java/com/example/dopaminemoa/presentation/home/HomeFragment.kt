@@ -14,17 +14,23 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dopaminemoa.databinding.FragmentHomeBinding
+import com.example.dopaminemoa.mapper.VideoItemMapper.toVideoItemModel
+import com.example.dopaminemoa.mapper.model.PopularVideoItemModel
+import com.example.dopaminemoa.network.RepositoryClient
 import com.example.dopaminemoa.presentation.home.adapter.ChannelsAdapter
 import com.example.dopaminemoa.presentation.home.adapter.VideosAdapter
 import com.example.dopaminemoa.presentation.home.adapter.VideoCategoriesAdapter
+import com.example.dopaminemoa.presentation.main.MainActivity
+import com.example.dopaminemoa.presentation.search.SearchResultFragment.Companion.BUNDLE_KEY_FOR_DETAIL_FRAGMENT
+import com.example.dopaminemoa.presentation.videodetail.VideoDetailFragment
 import com.example.dopaminemoa.viewmodel.VideoViewModel
 import com.example.dopaminemoa.viewmodel.VideoViewModelFactory
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: VideoViewModel by viewModels({ requireActivity() }) {
-        VideoViewModelFactory.newInstance()
+    private val viewModel: VideoViewModel by viewModels {
+        VideoViewModelFactory.newInstance(RepositoryClient.youtubeService, requireContext())
     }
     //adapter
     private lateinit var videosAdapter: VideosAdapter
@@ -107,7 +113,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun initMostPopularRecyclerView() {
-        videosAdapter = VideosAdapter(emptyList())
+        videosAdapter = VideosAdapter(emptyList()) { videoItem ->
+            selectItem(videoItem)
+        }
         binding.rvMostPopular.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.rvMostPopular.adapter = videosAdapter
@@ -116,11 +124,23 @@ class HomeFragment : Fragment() {
     }
 
     private fun initVideoCategoryRecyclerView() {
-        categoryAdapter = VideoCategoriesAdapter(emptyList())
+        categoryAdapter = VideoCategoriesAdapter(emptyList()) { videoItem ->
+            selectItem(videoItem)
+        }
         binding.rvCategory.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.rvCategory.adapter = categoryAdapter
+
         setGapRecyclerViewItem(binding.rvCategory)
+    }
+
+    private fun selectItem(videoItem: PopularVideoItemModel) {
+        val videoItemModel = videoItem.toVideoItemModel() // PopularVideoItemModel을 VideoItemModel로 변환
+        val bundle = Bundle().apply {
+            putParcelable(BUNDLE_KEY_FOR_DETAIL_FRAGMENT, videoItemModel) // VideoItemModel을 전달
+        }
+        val detailFragment = VideoDetailFragment.newInstance(bundle)
+        (requireActivity() as MainActivity).showVideoDetailFragment(detailFragment)
     }
 
     private fun initChannelsRecyclerView(){
