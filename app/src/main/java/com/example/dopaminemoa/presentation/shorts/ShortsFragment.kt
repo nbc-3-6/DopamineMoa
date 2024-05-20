@@ -15,15 +15,14 @@ import com.example.dopaminemoa.network.RepositoryClient
 import com.example.dopaminemoa.presentation.main.MainActivity
 import com.example.dopaminemoa.presentation.videodetail.VideoDetailFragment
 import com.example.dopaminemoa.repository.Resource
-import com.example.dopaminemoa.viewmodel.VideoViewModel
-import com.example.dopaminemoa.viewmodel.VideoViewModelFactory
+
 
 class ShortsFragment : Fragment() {
     private var _binding: FragmentShortsBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: VideoViewModel by viewModels {
-        VideoViewModelFactory(RepositoryClient.youtubeService, requireContext())
+    private val viewModel: ShortsViewModel by viewModels {
+        ShortsViewModelFactory(RepositoryClient.youtubeService, requireContext())
     }
 
     private val adapter = ShortsAdapter()
