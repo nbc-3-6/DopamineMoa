@@ -8,6 +8,9 @@
     <string name="main_tab_shorts_title">Shorts</string>
     <string name="main_tab_myvideos_title">My Videos</string>
 
+    <!--videodetail-->
+    <string name="videodetail_snack_save">좋아요 리스트에 추가되었습니다.</string>
+    <string name="videodetail_snack_delete">좋아요 리스트에서 삭제되었습니다.</string>
 
     <!--search-->
     <string name="search_et_hint">검색어를 입력해주세요</string>
@@ -18,6 +21,18 @@
     <string name="search_tv_comedy">#코미디</string>
     <string name="search_tv_zzzzz">#ㅋㅋㅋㅋㅋ</string>
     <string name="search_tv_legend">#레전드</string>
+
+    <!--short-->
+    <string name="short_tv_movie">영화</string>
+    <string name="short_tv_game">게임</string>
+    <string name="short_tv_news">뉴스</string>
+    <string name="short_tv_trip">여행</string>
+    <string name="short_tv_cook">요리</string>
+
+    <!--home-->
+    <string name="home_tv_channel">관련 채널</string>
+    <string name="home_tv_collecting_most_popular_videos">지금 인기있는 동영상 모아보기</string>
+    <string name="home_tv_collect_videos_in_categories">카테고리로 동영상 모아보기</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
