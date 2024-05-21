@@ -21,6 +21,7 @@
     <string name="search_tv_comedy">#코미디</string>
     <string name="search_tv_zzzzz">#ㅋㅋㅋㅋㅋ</string>
     <string name="search_tv_legend">#레전드</string>
+    <string name="search_error">알 수 없는 문제가 발생했습니다.</string>
 
     <!--short-->
     <string name="short_tv_movie">영화</string>

@@ -1,4 +1,4 @@
-package com.example.dopaminemoa.presentation.search
+package com.example.dopaminemoa.presentation.searchshorts
 
 import android.view.LayoutInflater
 import android.view.View
@@ -42,9 +42,6 @@ class SearchAdapter : RecyclerView.Adapter<SearchAdapter.SearchViewHolder>() {
             tvTitle.text = item.videoTitle
             tvChannel.text = item.channelTitle
             Glide.with(itemView).load(item.videoThumbnail).into(ivItem)
-
-            tvViews.text
-            ivChannel
         }
     }
 
