@@ -23,14 +23,12 @@ import com.example.dopaminemoa.presentation.home.adapter.VideoCategoriesAdapter
 import com.example.dopaminemoa.presentation.main.MainActivity
 import com.example.dopaminemoa.presentation.search.SearchResultFragment.Companion.BUNDLE_KEY_FOR_DETAIL_FRAGMENT
 import com.example.dopaminemoa.presentation.videodetail.VideoDetailFragment
-import com.example.dopaminemoa.viewmodel.VideoViewModel
-import com.example.dopaminemoa.viewmodel.VideoViewModelFactory
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: VideoViewModel by viewModels {
-        VideoViewModelFactory.newInstance(RepositoryClient.youtubeService, requireContext())
+    private val viewModel: HomeViewModel by viewModels {
+        HomeViewModelFactory.newInstance(RepositoryClient.youtubeService, requireContext())
     }
     //adapter
     private lateinit var videosAdapter: VideosAdapter
