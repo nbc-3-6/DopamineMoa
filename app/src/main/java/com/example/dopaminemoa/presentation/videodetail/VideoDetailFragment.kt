@@ -65,7 +65,7 @@ class VideoDetailFragment : Fragment() {
                 requireActivity().supportFragmentManager.popBackStack()
             }
 
-            ivLike.setOnClickListener {
+            llLike.setOnClickListener {
                 item?.let {
                     it.isLiked = !it.isLiked  // 좋아요 상태 토글
                     viewModel.updateSaveItem(it)  // ViewModel에서 업데이트
@@ -73,7 +73,7 @@ class VideoDetailFragment : Fragment() {
                 }
             }
 
-            ivShare.setOnClickListener {
+            llShare.setOnClickListener {
                 val shareIntent = Intent(Intent.ACTION_SEND).apply {
                     type = "text/plain"
                     putExtra(Intent.EXTRA_TEXT, SHARE_URL + item?.videoId)
