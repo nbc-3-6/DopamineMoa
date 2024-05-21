@@ -2,6 +2,7 @@ package com.example.dopaminemoa.mapper
 
 import com.example.dopaminemoa.data.eachResponse.ChannelItem
 import com.example.dopaminemoa.data.eachResponse.SearchItems
+import com.example.dopaminemoa.data.eachResponse.SearchListResponse
 import com.example.dopaminemoa.data.eachResponse.VideoCategoryItems
 import com.example.dopaminemoa.data.eachResponse.VideoItems
 import com.example.dopaminemoa.mapper.model.ChannelItemModel
@@ -14,19 +15,24 @@ import com.example.dopaminemoa.mapper.model.VideoItemModel
  */
 
 object VideoItemMapper {
-    fun fromSearchItems(items: List<SearchItems>): List<VideoItemModel> {
-        return items.map {
+    fun fromSearchItems(responses: SearchListResponse): Pair<List<VideoItemModel>, String> {
+        val videoItems = mutableListOf<VideoItemModel>()
+        var nextPageToken = ""
+
+        nextPageToken = responses.nextPageToken
+        videoItems.addAll(responses.items.map { item ->
             VideoItemModel(
-                videoId = it.id.videoId,
-                videoTitle = it.snippet.title,
-                videoThumbnail = it.snippet.thumbnails.high.url,
-                videoDescription = it.snippet.description,
-                channelTitle = it.snippet.channelTitle,
+                videoId = item.id.videoId,
+                videoTitle = item.snippet.title,
+                videoThumbnail = item.snippet.thumbnails.high.url,
+                videoDescription = item.snippet.description,
+                channelTitle = item.snippet.channelTitle,
                 category = "",
                 channelId = "",
-                isLiked = false, // 기본값 추가
+                isLiked = false // 기본값 추가
             )
-        }
+        })
+        return Pair(videoItems, nextPageToken)
     }
 
     fun fromPopularItems(searchItems: List<VideoItems>): List<PopularVideoItemModel> {
@@ -53,7 +59,7 @@ object VideoItemMapper {
             channelTitle = this.channelTitle,
             category = this.category,
             channelId = this.channelId,
-            isLiked = this.isLiked
+            isLiked = this.isLiked,
         )
     }
 

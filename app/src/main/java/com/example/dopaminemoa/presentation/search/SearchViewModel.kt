@@ -17,17 +17,24 @@ import kotlinx.coroutines.launch
 class SearchViewModel(private val videoRepository: VideoRepository) : ViewModel() {
     private val _searchResults: MutableLiveData<List<VideoItemModel>> = MutableLiveData()
     val searchResults: LiveData<List<VideoItemModel>> get() = _searchResults
+    private val _nextPageToken: MutableLiveData<String> = MutableLiveData()
+    val nextPageToken: LiveData<String> get() = _nextPageToken
+
     private val _searchResultErrorState = MutableLiveData<Boolean>()
     val searchResultErrorState : LiveData<Boolean> get() = _searchResultErrorState
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage : LiveData<String> get() = _errorMessage
+
 
     /**
      * repository에 검색어를 사용한 검색 결과를 요청합니다.
      */
     fun searchVideoByText(text: String) = viewModelScope.launch {
         try {
-            _searchResults.value = videoRepository.searchVideoByText(text)
+            val (nextPageToken, videoItems) = videoRepository.searchVideoByText(text)
+            _searchResults.value = videoItems
+
+            _nextPageToken.value = nextPageToken
             _searchResultErrorState.value = false
         } catch (e: VideoRepositoryImpl.ApiException) {
             setErrorMessage(e.message)

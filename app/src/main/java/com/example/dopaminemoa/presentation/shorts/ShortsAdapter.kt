@@ -20,10 +20,13 @@ class ShortsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var itemClick: ItemClick? = null
     private val items: MutableList<VideoItemModel> = mutableListOf()
 
-    fun updateList(newItems: List<VideoItemModel>) {
-        items.clear()
-        items.addAll(newItems)
-        notifyDataSetChanged()
+    fun addItems(newItems: List<VideoItemModel>) {
+        val insertPosition = items.size
+        val filteredNewItems = newItems.filter { newItem ->
+            !items.any { it.videoId == newItem.videoId}
+        }
+        items.addAll(filteredNewItems)
+        notifyItemRangeInserted(insertPosition, filteredNewItems.size)
     }
 
     fun showLoadingView() {

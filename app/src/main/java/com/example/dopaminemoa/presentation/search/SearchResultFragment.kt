@@ -79,13 +79,13 @@ class SearchResultFragment : Fragment() {
      * 통신에 에러 발생 시, 에러 타입을 구분하여 화면에 토스트를 출력합니다.
      */
     private fun observeData() = with(binding) {
-        viewModel.searchResults.observe(viewLifecycleOwner) { resource ->
+        viewModel.searchResults.observe(viewLifecycleOwner) { items ->
 
             if (tvNone.visibility == View.VISIBLE) {
                 tvNone.visibility = View.GONE
             }
 
-            adapter.updateList(resource ?: emptyList())
+            adapter.updateList(items ?: emptyList())
         }
 
         viewModel.searchResultErrorState.observe(viewLifecycleOwner) { errorState ->

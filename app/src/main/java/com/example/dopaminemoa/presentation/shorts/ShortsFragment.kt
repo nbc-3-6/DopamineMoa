@@ -26,7 +26,8 @@ class ShortsFragment : Fragment() {
     }
     private val adapter = ShortsAdapter()
     private var isLoading = false
-    private var page = 1
+    private lateinit var searchText: String
+    private lateinit var nextToken: String
 
 
     override fun onCreateView(
@@ -81,26 +82,36 @@ class ShortsFragment : Fragment() {
         when (view.id) {
             btnCategory1.id -> {
                 val text = btnCategory1.text.toString() + " #shorts"
+                searchText = text
+
                 viewModel.searchVideoByTextForShorts(text)
                 setCategoryButtonColor(btnCategory1.id)
             }
             btnCategory2.id -> {
                 val text = btnCategory2.text.toString() + " #shorts"
+                searchText = text
+
                 viewModel.searchVideoByTextForShorts(text)
                 setCategoryButtonColor(btnCategory2.id)
             }
             btnCategory3.id -> {
                 val text = btnCategory3.text.toString() + " #shorts"
+                searchText = text
+
                 viewModel.searchVideoByTextForShorts(text)
                 setCategoryButtonColor(btnCategory3.id)
             }
             btnCategory4.id -> {
                 val text = btnCategory4.text.toString() + " #shorts"
+                searchText = text
+
                 viewModel.searchVideoByTextForShorts(text)
                 setCategoryButtonColor(btnCategory4.id)
             }
             btnCategory5.id -> {
                 val text = btnCategory5.text.toString() + " #shorts"
+                searchText = text
+
                 viewModel.searchVideoByTextForShorts(text)
                 setCategoryButtonColor(btnCategory5.id)
             }
@@ -165,8 +176,11 @@ class ShortsFragment : Fragment() {
      * 통신에 에러 발생 시, 에러 타입을 구분하여 화면에 토스트를 출력합니다.
      */
     private fun observeData() {
-        viewModel.searchResultsForShorts.observe(viewLifecycleOwner) { resource ->
-            adapter.updateList(resource ?: emptyList())
+        viewModel.searchResultsForShorts.observe(viewLifecycleOwner) { items ->
+            isLoading = false
+            adapter.deleteLoading()
+
+            items?.let { adapter.addItems(it) }
         }
 
         viewModel.searchResultErrorState.observe(viewLifecycleOwner) { errorState ->
@@ -174,6 +188,10 @@ class ShortsFragment : Fragment() {
                 val errorMessage = viewModel.errorMessage.value ?: "알 수 없는 문제가 생겼습니다."
                 Toast.makeText(requireActivity(), errorMessage, Toast.LENGTH_SHORT).show()
             }
+        }
+
+        viewModel.nextPageToken.observe(viewLifecycleOwner) { token ->
+            nextToken = token
         }
     }
 
@@ -196,7 +214,8 @@ class ShortsFragment : Fragment() {
                 if (isLoading.not() && lastVisibleItemPosition == totalItemCount - 1) {
                     isLoading = true
                     adapter.showLoadingView()
-                    loadMoreData()
+
+                    viewModel.searchMoreVideoByTextForShorts(searchText, nextToken)
                 }
             }
         })
@@ -206,14 +225,6 @@ class ShortsFragment : Fragment() {
                 selectItem(item)
             }
         }
-    }
-
-    /**
-     * 데이터를 추가적으로 요청하는 함수입니다.
-     * 무한 스크롤에 사용됩니다.
-     */
-    private fun loadMoreData() {
-//        viewModel.searchVideoByTextForShorts()
     }
 
     /**

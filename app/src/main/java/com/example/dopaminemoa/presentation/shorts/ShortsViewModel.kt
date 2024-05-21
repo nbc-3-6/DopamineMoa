@@ -16,6 +16,9 @@ import kotlinx.coroutines.launch
 class ShortsViewModel (private val videoRepository: VideoRepository) : ViewModel() {
     private val _searchResultsForShorts: MutableLiveData<List<VideoItemModel>> = MutableLiveData()
     val searchResultsForShorts: LiveData<List<VideoItemModel>> get() = _searchResultsForShorts
+    private val _nextPageToken: MutableLiveData<String> = MutableLiveData()
+    val nextPageToken: LiveData<String> get() = _nextPageToken
+
     private val _searchResultErrorState = MutableLiveData<Boolean>()
     val searchResultErrorState : LiveData<Boolean> get() = _searchResultErrorState
     private val _errorMessage = MutableLiveData<String>()
@@ -25,9 +28,11 @@ class ShortsViewModel (private val videoRepository: VideoRepository) : ViewModel
      * repository에 검색어를 사용한 검색 결과를 요청합니다.
      */
     fun searchVideoByTextForShorts(text: String) = viewModelScope.launch {
-//        _searchResultsForShorts.value = videoRepository.searchVideoByText(text)
         try {
-            _searchResultsForShorts.value = videoRepository.searchVideoByText(text)
+            val (nextPageToken, videoItems) = videoRepository.searchVideoByText(text)
+            _searchResultsForShorts.value = videoItems
+
+            _nextPageToken.value = nextPageToken
             _searchResultErrorState.value = false
         } catch (e: VideoRepositoryImpl.ApiException) {
             setErrorMessage(e.message)
@@ -39,10 +44,19 @@ class ShortsViewModel (private val videoRepository: VideoRepository) : ViewModel
      * repository에 현재 사용중인 검색어에 대한 추가 데이터를 요청합니다.
      */
     fun searchMoreVideoByTextForShorts(text: String, token: String) = viewModelScope.launch {
-//        _searchResultsForShorts.value = videoRepository.searchMoreVideoByText(text, token)
-//        val addItems = videoRepository.searchMoreVideoByText(text, token).data
-        val currentList = _searchResultsForShorts.value
-//        val updateList = currentList?.plus(addItems)
+        try {
+            val (nextPageToken, videoItems) = videoRepository.searchMoreVideoByText(text, token)
+            val addItems = videoItems
+            val currentList = _searchResultsForShorts.value ?: emptyList()
+            val updateList = currentList + addItems
+            _searchResultsForShorts.setValue(updateList)
+
+            _nextPageToken.value = nextPageToken
+            _searchResultErrorState.value = false
+        } catch (e: VideoRepositoryImpl.ApiException) {
+            setErrorMessage(e.message)
+            _searchResultErrorState.value = true
+        }
     }
 
     fun setErrorMessage(message: String?) {

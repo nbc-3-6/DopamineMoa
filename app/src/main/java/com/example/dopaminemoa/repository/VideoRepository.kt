@@ -9,7 +9,6 @@ import android.content.SharedPreferences
 import com.example.dopaminemoa.Const
 import com.example.dopaminemoa.mapper.VideoItemMapper
 import com.example.dopaminemoa.mapper.model.VideoItemModel
-import com.example.dopaminemoa.network.RepositoryClient
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import retrofit2.HttpException
@@ -19,8 +18,8 @@ interface VideoRepository {
     suspend fun searchVideoByCategory(categoryId: String): List<PopularVideoItemModel>
     suspend fun takeVideoCategories(): List<CategoryItemModel>
     suspend fun searchChannelByCategory(channelId: String): List<ChannelItemModel>
-    suspend fun searchVideoByText(text: String): List<VideoItemModel>
-    suspend fun searchMoreVideoByText(text: String, token: String): List<VideoItemModel>
+    suspend fun searchVideoByText(text: String): Pair<String, List<VideoItemModel>>
+    suspend fun searchMoreVideoByText(text: String, token: String): Pair<String, List<VideoItemModel>>
     suspend fun saveVideoItem(videoItemModel: VideoItemModel)
     suspend fun removeVideoItem(videoItemModel: VideoItemModel)
     suspend fun getStorageItems(): List<VideoItemModel>
@@ -88,10 +87,11 @@ class VideoRepositoryImpl(
      * try-catch로 통신 결과를 처리합니다.
      * 통신 에러 발생 시 해당하는 에러 exception을 Resource.Error에 전달합니다.
      */
-    override suspend fun searchVideoByText(text: String): List<VideoItemModel> {
+    override suspend fun searchVideoByText(text: String): Pair<String, List<VideoItemModel>> {
         return try {
             val videoListResponse = remoteDataSource.getSearchList(query = text)
-            VideoItemMapper.fromSearchItems(videoListResponse.items)
+            val (videoItems, nextPageToken) = VideoItemMapper.fromSearchItems(videoListResponse)
+            Pair(nextPageToken, videoItems)
         } catch (e: HttpException) {
             throw ApiException(handleApiError(e))
         }
@@ -102,10 +102,11 @@ class VideoRepositoryImpl(
      * 토큰을 이용하여 다음 페이지의 값들을 요청합니다.
      * try-catch로 통신 결과를 처리는 searchVideoByText 함수와 동일합니다.
      */
-    override suspend fun searchMoreVideoByText(text: String, token: String): List<VideoItemModel> {
+    override suspend fun searchMoreVideoByText(text: String, token: String): Pair<String, List<VideoItemModel>> {
         return try {
             val videoListResponse = remoteDataSource.getSearchMoreList(query = text, pageToken = token)
-            VideoItemMapper.fromSearchItems(videoListResponse.items)
+            val (videoItems, nextPageToken) = VideoItemMapper.fromSearchItems(videoListResponse)
+            Pair(nextPageToken, videoItems)
         } catch (e: HttpException) {
             throw ApiException(handleApiError(e))
         }
