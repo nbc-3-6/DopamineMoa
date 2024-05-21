@@ -5,16 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.dopaminemoa.R
 import com.example.dopaminemoa.databinding.FragmentSearchResultBinding
 import com.example.dopaminemoa.mapper.model.VideoItemModel
 import com.example.dopaminemoa.presentation.main.MainActivity
-import com.example.dopaminemoa.presentation.searchshorts.SearchShortsAdapter
+import com.example.dopaminemoa.presentation.searchshorts.SearchAdapter
 import com.example.dopaminemoa.presentation.videodetail.VideoDetailFragment
 
 class SearchResultFragment : Fragment() {
@@ -24,7 +22,7 @@ class SearchResultFragment : Fragment() {
 
     private val viewModel : SearchViewModel by activityViewModels()
 
-    private val adapter = SearchShortsAdapter()
+    private val adapter = SearchAdapter()
     private var isLoading = false
     private lateinit var searchText: String
     private lateinit var nextToken: String
@@ -79,13 +77,12 @@ class SearchResultFragment : Fragment() {
      */
     private fun observeData() = with(binding) {
         viewModel.searchResults.observe(viewLifecycleOwner) { items ->
-            rvSearch.visibility = View.GONE
-            tvNone.visibility = View.VISIBLE
+            rvSearch.visibility = View.VISIBLE
+            tvNone.visibility = View.GONE
 
             isLoading = false
-            adapter.deleteLoading()
 
-            items?.let { adapter.addItems(it) }
+            adapter.updateList(items)
         }
 
         viewModel.searchResultErrorState.observe(viewLifecycleOwner) { errorState ->
@@ -109,25 +106,9 @@ class SearchResultFragment : Fragment() {
     private fun makeRecyclerView() = with(binding) {
         rvSearch.adapter = adapter
         val layoutManager = GridLayoutManager(requireActivity(), 2)
-        adapter.setupSpanSizeLookup(layoutManager)
         rvSearch.layoutManager = layoutManager
 
-        rvSearch.addOnScrollListener(object: RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-
-                val totalItemCount = layoutManager.itemCount
-                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-
-                if (isLoading.not() && lastVisibleItemPosition == totalItemCount - 1) {
-                    isLoading = true
-                    adapter.showLoadingView()
-                    viewModel.searchMoreVideoByText(searchText, nextToken)
-                }
-            }
-        })
-
-        adapter.itemClick = object : SearchShortsAdapter.ItemClick {
+        adapter.itemClick = object : SearchAdapter.ItemClick {
             override fun onClick(view: View, item: VideoItemModel) {
                 selectItem(item)
             }

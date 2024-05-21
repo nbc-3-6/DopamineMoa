@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -14,7 +13,6 @@ import com.example.dopaminemoa.databinding.FragmentShortsBinding
 import com.example.dopaminemoa.mapper.model.VideoItemModel
 import com.example.dopaminemoa.network.RepositoryClient
 import com.example.dopaminemoa.presentation.main.MainActivity
-import com.example.dopaminemoa.presentation.searchshorts.SearchShortsAdapter
 import com.example.dopaminemoa.presentation.videodetail.VideoDetailFragment
 
 
@@ -24,7 +22,7 @@ class ShortsFragment : Fragment() {
     private val viewModel: ShortsViewModel by viewModels {
         ShortsViewModelFactory(RepositoryClient.youtubeService, requireContext())
     }
-    private val adapter = SearchShortsAdapter()
+    private val adapter = ShortsAdapter()
     private var isLoading = false
     private lateinit var searchText: String
     private lateinit var nextToken: String
@@ -83,6 +81,7 @@ class ShortsFragment : Fragment() {
                 val text = btnCategory1.text.toString() + " #shorts"
                 searchText = text
 
+                adapter.clearItems()
                 viewModel.searchVideoByTextForShorts(text)
                 setCategoryButtonColor(btnCategory1.id)
             }
@@ -90,6 +89,7 @@ class ShortsFragment : Fragment() {
                 val text = btnCategory2.text.toString() + " #shorts"
                 searchText = text
 
+                adapter.clearItems()
                 viewModel.searchVideoByTextForShorts(text)
                 setCategoryButtonColor(btnCategory2.id)
             }
@@ -97,6 +97,7 @@ class ShortsFragment : Fragment() {
                 val text = btnCategory3.text.toString() + " #shorts"
                 searchText = text
 
+                adapter.clearItems()
                 viewModel.searchVideoByTextForShorts(text)
                 setCategoryButtonColor(btnCategory3.id)
             }
@@ -104,6 +105,7 @@ class ShortsFragment : Fragment() {
                 val text = btnCategory4.text.toString() + " #shorts"
                 searchText = text
 
+                adapter.clearItems()
                 viewModel.searchVideoByTextForShorts(text)
                 setCategoryButtonColor(btnCategory4.id)
             }
@@ -111,6 +113,7 @@ class ShortsFragment : Fragment() {
                 val text = btnCategory5.text.toString() + " #shorts"
                 searchText = text
 
+                adapter.clearItems()
                 viewModel.searchVideoByTextForShorts(text)
                 setCategoryButtonColor(btnCategory5.id)
             }
@@ -176,8 +179,8 @@ class ShortsFragment : Fragment() {
      */
     private fun observeData() = with(binding) {
         viewModel.searchResultsForShorts.observe(viewLifecycleOwner) { items ->
-            rvShorts.visibility = View.GONE
-            tvError.visibility = View.VISIBLE
+            rvShorts.visibility = View.VISIBLE
+            tvError.visibility = View.GONE
 
             isLoading = false
             adapter.deleteLoading()
@@ -208,6 +211,7 @@ class ShortsFragment : Fragment() {
         val layoutManager = GridLayoutManager(requireActivity(), 2)
         adapter.setupSpanSizeLookup(layoutManager)
         rvShorts.layoutManager = layoutManager
+        rvShorts.setHasFixedSize(true)
 
         rvShorts.addOnScrollListener(object: RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -224,7 +228,7 @@ class ShortsFragment : Fragment() {
             }
         })
 
-        adapter.itemClick = object : SearchShortsAdapter.ItemClick {
+        adapter.itemClick = object : ShortsAdapter.ItemClick {
             override fun onClick(view: View, item: VideoItemModel) {
                 selectItem(item)
             }

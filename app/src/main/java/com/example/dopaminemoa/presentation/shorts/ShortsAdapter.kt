@@ -1,4 +1,4 @@
-package com.example.dopaminemoa.presentation.searchshorts
+package com.example.dopaminemoa.presentation.shorts
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +11,7 @@ import com.example.dopaminemoa.databinding.ItemLoadingBinding
 import com.example.dopaminemoa.databinding.ShortsItemBinding
 import com.example.dopaminemoa.mapper.model.VideoItemModel
 
-class SearchShortsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ShortsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         private const val VIEW_TYPE_ITEM = 0
@@ -21,6 +21,11 @@ class SearchShortsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var itemClick: ItemClick? = null
     private val items: MutableList<VideoItemModel> = mutableListOf()
+
+    fun clearItems() {
+        items.clear()
+        notifyDataSetChanged()
+    }
 
     fun addItems(newItems: List<VideoItemModel>) {
         val insertPosition = items.size
