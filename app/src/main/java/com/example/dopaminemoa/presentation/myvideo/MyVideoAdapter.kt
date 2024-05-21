@@ -1,29 +1,24 @@
 package com.example.dopaminemoa.presentation.myvideo
 
-import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.dopaminemoa.databinding.MyvideoItemBinding
-import com.example.dopaminemoa.databinding.SearchItemBinding
 import com.example.dopaminemoa.mapper.model.VideoItemModel
-import com.example.dopaminemoa.presentation.search.SearchAdapter
-import de.hdodenhof.circleimageview.CircleImageView
 
 class MyVideoAdapter : RecyclerView.Adapter<MyVideoAdapter.MyVideoViewHolder>() {
 
-    var itemClick: SearchAdapter.ItemClick? = null
+    var itemClick: ItemClick? = null
     private val items: MutableList<VideoItemModel> = mutableListOf()
 
     fun updateList(newItems: List<VideoItemModel>) {
         items.clear()
         items.addAll(newItems)
         notifyDataSetChanged()
+        Log.d("updateList", items.toString())
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyVideoViewHolder {
@@ -48,6 +43,7 @@ class MyVideoAdapter : RecyclerView.Adapter<MyVideoAdapter.MyVideoViewHolder>() 
     class MyVideoViewHolder(private val binding: MyvideoItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: VideoItemModel) = with(binding) {
             tvTitle.text = item.videoTitle
+            tvChannelName.text = item.channelTitle
             Glide.with(itemView).load(item.videoThumbnail).into(ivThumbnail)
         }
     }
