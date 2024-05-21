@@ -62,6 +62,7 @@ class MyVideoFragment : Fragment() {
 
         with(binding) {
             item?.let {
+                viewModel.updateSaveItem(it)
             }
             btnBack.setOnClickListener {
                 requireActivity().supportFragmentManager.popBackStack()
