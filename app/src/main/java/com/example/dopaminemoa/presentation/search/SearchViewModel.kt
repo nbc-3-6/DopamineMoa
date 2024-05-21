@@ -1,7 +1,6 @@
 package com.example.dopaminemoa.presentation.search
 
 import android.content.Context
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.dopaminemoa.data.remote.RemoteDataSource
 import com.example.dopaminemoa.mapper.model.VideoItemModel
-import com.example.dopaminemoa.repository.Resource
 import com.example.dopaminemoa.repository.VideoRepository
 import com.example.dopaminemoa.repository.VideoRepositoryImpl
 import kotlinx.coroutines.launch
