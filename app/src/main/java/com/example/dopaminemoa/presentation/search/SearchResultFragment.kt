@@ -8,14 +8,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.dopaminemoa.R
-import com.example.dopaminemoa.repository.Resource
 import com.example.dopaminemoa.databinding.FragmentSearchResultBinding
 import com.example.dopaminemoa.mapper.model.VideoItemModel
-import com.example.dopaminemoa.network.RepositoryClient
 import com.example.dopaminemoa.presentation.main.MainActivity
+import com.example.dopaminemoa.presentation.shorts.SearchShortsAdapter
 import com.example.dopaminemoa.presentation.videodetail.VideoDetailFragment
 
 class SearchResultFragment : Fragment() {
@@ -25,7 +24,10 @@ class SearchResultFragment : Fragment() {
 
     private val viewModel : SearchViewModel by activityViewModels()
 
-    private val adapter = SearchAdapter()
+    private val adapter = SearchShortsAdapter()
+    private var isLoading = false
+    private lateinit var searchText: String
+    private lateinit var nextToken: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,11 +53,8 @@ class SearchResultFragment : Fragment() {
      */
     private fun getText() = with(binding) {
         val text = arguments?.getString(BUNDLE_KEY_FOR_RESULT_FRAGMENT) ?: ""
+        searchText = text
         etSearch.setText(text)
-        requestDate(text)
-    }
-
-    private fun requestDate(text: String) {
         viewModel.searchVideoByText(text)
     }
 
@@ -80,12 +79,14 @@ class SearchResultFragment : Fragment() {
      */
     private fun observeData() = with(binding) {
         viewModel.searchResults.observe(viewLifecycleOwner) { items ->
-
             if (tvNone.visibility == View.VISIBLE) {
                 tvNone.visibility = View.GONE
             }
 
-            adapter.updateList(items ?: emptyList())
+            isLoading = false
+            adapter.deleteLoading()
+
+            items?.let { adapter.addItems(it) }
         }
 
         viewModel.searchResultErrorState.observe(viewLifecycleOwner) { errorState ->
@@ -94,16 +95,38 @@ class SearchResultFragment : Fragment() {
                 Toast.makeText(requireActivity(), errorMessage, Toast.LENGTH_SHORT).show()
             }
         }
+
+        viewModel.nextPageToken.observe(viewLifecycleOwner) { token ->
+            nextToken = token
+        }
     }
 
     /**
      * recyclerView의 adapter와 click 리스너를 정의하는 함수입니다.
+     * 스크롤 상태를 파악하여 데이터를 추가적으로 로딩합니다.
      */
     private fun makeRecyclerView() = with(binding) {
         rvSearch.adapter = adapter
-        rvSearch.layoutManager = GridLayoutManager(requireActivity(), 2)
+        val layoutManager = GridLayoutManager(requireActivity(), 2)
+        adapter.setupSpanSizeLookup(layoutManager)
+        rvSearch.layoutManager = layoutManager
 
-        adapter.itemClick = object : SearchAdapter.ItemClick {
+        rvSearch.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val totalItemCount = layoutManager.itemCount
+                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+
+                if (isLoading.not() && lastVisibleItemPosition == totalItemCount - 1) {
+                    isLoading = true
+                    adapter.showLoadingView()
+                    viewModel.searchMoreVideoByText(searchText, nextToken)
+                }
+            }
+        })
+
+        adapter.itemClick = object : SearchShortsAdapter.ItemClick {
             override fun onClick(view: View, item: VideoItemModel) {
                 selectItem(item)
             }

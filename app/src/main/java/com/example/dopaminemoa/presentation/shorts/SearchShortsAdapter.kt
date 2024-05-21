@@ -11,7 +11,7 @@ import com.example.dopaminemoa.databinding.ItemLoadingBinding
 import com.example.dopaminemoa.databinding.ShortsItemBinding
 import com.example.dopaminemoa.mapper.model.VideoItemModel
 
-class ShortsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SearchShortsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         private const val VIEW_TYPE_ITEM = 0

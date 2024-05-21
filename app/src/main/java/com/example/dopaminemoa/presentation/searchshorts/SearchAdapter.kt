@@ -1,4 +1,4 @@
-package com.example.dopaminemoa.presentation.search
+package com.example.dopaminemoa.presentation.searchshorts
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +8,9 @@ import com.bumptech.glide.Glide
 import com.example.dopaminemoa.databinding.SearchItemBinding
 import com.example.dopaminemoa.mapper.model.VideoItemModel
 
+/**
+ * legacy adapter
+ */
 class SearchAdapter : RecyclerView.Adapter<SearchAdapter.SearchViewHolder>() {
 
     var itemClick: ItemClick? = null

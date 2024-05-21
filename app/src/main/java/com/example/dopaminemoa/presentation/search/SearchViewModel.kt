@@ -42,6 +42,25 @@ class SearchViewModel(private val videoRepository: VideoRepository) : ViewModel(
         }
     }
 
+    /**
+     * repository에 현재 사용중인 검색어에 대한 추가 데이터를 요청합니다.
+     */
+    fun searchMoreVideoByText(text: String, token: String) = viewModelScope.launch {
+        try {
+            val (nextPageToken, videoItems) = videoRepository.searchMoreVideoByText(text, token)
+            val addItems = videoItems
+            val currentList = _searchResults.value ?: emptyList()
+            val updateList = currentList + addItems
+            _searchResults.setValue(updateList)
+
+            _nextPageToken.value = nextPageToken
+            _searchResultErrorState.value = false
+        } catch (e: VideoRepositoryImpl.ApiException) {
+            setErrorMessage(e.message)
+            _searchResultErrorState.value = true
+        }
+    }
+
     fun setErrorMessage(message: String?) {
         when {
             message?.contains("400") == true -> {

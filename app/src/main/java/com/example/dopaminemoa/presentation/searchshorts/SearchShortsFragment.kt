@@ -1,4 +1,4 @@
-package com.example.dopaminemoa.presentation.shorts
+package com.example.dopaminemoa.presentation.searchshorts
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,21 +14,22 @@ import com.example.dopaminemoa.databinding.FragmentShortsBinding
 import com.example.dopaminemoa.mapper.model.VideoItemModel
 import com.example.dopaminemoa.network.RepositoryClient
 import com.example.dopaminemoa.presentation.main.MainActivity
+import com.example.dopaminemoa.presentation.shorts.SearchShortsAdapter
+import com.example.dopaminemoa.presentation.shorts.ShortsViewModel
+import com.example.dopaminemoa.presentation.shorts.ShortsViewModelFactory
 import com.example.dopaminemoa.presentation.videodetail.VideoDetailFragment
-import com.example.dopaminemoa.repository.Resource
 
 
-class ShortsFragment : Fragment() {
+class SearchShortsFragment : Fragment() {
     private var _binding: FragmentShortsBinding? = null
     private val binding get() = _binding!!
     private val viewModel: ShortsViewModel by viewModels {
         ShortsViewModelFactory(RepositoryClient.youtubeService, requireContext())
     }
-    private val adapter = ShortsAdapter()
+    private val adapter = SearchShortsAdapter()
     private var isLoading = false
     private lateinit var searchText: String
     private lateinit var nextToken: String
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -220,7 +221,7 @@ class ShortsFragment : Fragment() {
             }
         })
 
-        adapter.itemClick = object : ShortsAdapter.ItemClick {
+        adapter.itemClick = object : SearchShortsAdapter.ItemClick {
             override fun onClick(view: View, item: VideoItemModel) {
                 selectItem(item)
             }
@@ -248,6 +249,6 @@ class ShortsFragment : Fragment() {
     companion object {
         const val BUNDLE_KEY_FOR_DETAIL_FRAGMENT_FROM_SHORTS = "BUNDLE_KEY_FOR_DETAIL_FRAGMENT_FROM_SHORTS"
 
-        fun newInstance() = ShortsFragment()
+        fun newInstance() = SearchShortsFragment()
     }
 }
