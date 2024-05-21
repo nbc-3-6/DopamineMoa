@@ -18,7 +18,6 @@ class MyVideoAdapter : RecyclerView.Adapter<MyVideoAdapter.MyVideoViewHolder>() 
         items.clear()
         items.addAll(newItems)
         notifyDataSetChanged()
-        Log.d("updateList", items.toString())
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyVideoViewHolder {

@@ -1,6 +1,7 @@
 package com.example.dopaminemoa.presentation.myvideo
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,36 +37,48 @@ class MyVideoFragment : Fragment() {
     ): View {
 //        adapter = MyVideoAdapter()
         _binding = FragmentMyVideoBinding.inflate(inflater, container, false)
-        binding.rvMyVideo.layoutManager = GridLayoutManager(requireActivity(), 2)
+        binding.rvMyVideo.layoutManager = GridLayoutManager(requireActivity(), 2, GridLayoutManager.VERTICAL, false)
         binding.rvMyVideo.adapter = adapter
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val item =
-            arguments?.getParcelable<VideoItemModel>(BUNDLE_KEY_FOR_MYVIDEO_FRAGMENT)
 
-        viewModel.getLikedItems() // 라이브 데이터 준비
+        backButton()
+        arguments?.getParcelable<VideoItemModel>(BUNDLE_KEY_FOR_MYVIDEO_FRAGMENT)
+        setUpView()
+        itemClick()
+    }
+
+    fun backButton() {
+        // 지워야하나 고민인 백버튼
+        binding.btnBack.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+            Log.d("6 - btnBack", requireActivity().supportFragmentManager.popBackStack().toString())
+        }
+    }
+
+    fun setUpView() {
+        // 1, 2번은 거의 동시에 실행됨
+        viewModel.getLikedItems() // 1. livedata 준비
+        Log.d("1-getLikedItems()", viewModel.getLikedItems().toString())
+        val items = viewModel.likedItems.value
+        if (items != null) {
+            adapter.updateList(items) // 2. 변화가 있을때 변경해줄 준비
+            Log.d("4 - adapter.updateList(items)", adapter.updateList(items).toString())
+        }
+    }
+
+    fun itemClick() {
+        // 4번도 있었는데 2번 코드랑 같고, 아이템 클릭처리해서 디테일가는건데 뭐하러 view의 변화를 update로 해결해야하나 싶어서
+        // 주석해봤더니 괜찮아서 지웠음
         viewModel.likedItems.observe(viewLifecycleOwner) {
             adapter.itemClick = object : MyVideoAdapter.ItemClick {
                 override fun onClick(view: View, item: VideoItemModel) {
-                    clickItem(item)
-                    adapter.updateList(it)
+                    clickItem(item) // 3. 클릭했을 때, 디테일로 가기
+                    Log.d("2 - clickItem(item)", clickItem(item).toString())
                 }
-            }
-        }
-        val items = viewModel.likedItems.value
-        if (items != null) {
-            adapter.updateList(items)
-        }
-
-        with(binding) {
-            item?.let {
-                viewModel.updateSaveItem(it)
-            }
-            btnBack.setOnClickListener {
-                requireActivity().supportFragmentManager.popBackStack()
             }
         }
     }
