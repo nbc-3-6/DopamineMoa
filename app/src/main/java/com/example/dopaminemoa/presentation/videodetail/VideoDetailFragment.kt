@@ -1,5 +1,6 @@
 package com.example.dopaminemoa.presentation.videodetail
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import coil.load
+import com.example.dopaminemoa.Const.Companion.SHARE_URL
 import com.example.dopaminemoa.R
 import com.example.dopaminemoa.databinding.FragmentVideoDetailBinding
 import com.example.dopaminemoa.mapper.model.VideoItemModel
@@ -55,7 +57,6 @@ class VideoDetailFragment : Fragment() {
 
         with(binding) {
             ivThumbnail.load(item?.videoThumbnail)
-            ivChannelThumbnail.load(item?.channelThumbnails)
             tvChannelTitle.text = item?.channelTitle
             tvTitle.text = item?.videoTitle
             tvDescription.text = item?.videoDescription
