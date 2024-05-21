@@ -11,8 +11,10 @@ import coil.load
 import com.example.dopaminemoa.databinding.FragmentMyVideoBinding
 import com.example.dopaminemoa.mapper.model.VideoItemModel
 import com.example.dopaminemoa.network.RepositoryClient
+import com.example.dopaminemoa.presentation.main.MainActivity
 import com.example.dopaminemoa.presentation.shorts.ShortsFragment
 import com.example.dopaminemoa.presentation.videodetail.VideoDetailFragment
+import com.example.dopaminemoa.presentation.videodetail.VideoDetailFragment.Companion.BUNDLE_KEY_FOR_DETAIL_FRAGMENT
 import com.example.dopaminemoa.repository.VideoRepositoryImpl
 
 class MyVideoFragment : Fragment() {
@@ -20,47 +22,46 @@ class MyVideoFragment : Fragment() {
     private var _binding: FragmentMyVideoBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var adapter: MyVideoAdapter
+    private var adapter =  MyVideoAdapter()
 
     private val viewModel: MyVideoViewModel by viewModels {
-        MyVideoViewModelFactory(
-            VideoRepositoryImpl(RepositoryClient.youtubeService, requireContext()),
-            requireContext().applicationContext
+        MyVideoViewModel.MyVideoViewModelFactory(
+            VideoRepositoryImpl(RepositoryClient.youtubeService, requireContext())
         )
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        adapter = MyVideoAdapter()
-        _binding = FragmentMyVideoBinding.inflate(inflater, container, false).apply {
-            rvMyVideo.layoutManager = GridLayoutManager(requireActivity(), 2)
-            rvMyVideo.adapter = adapter
-        }
-
+//        adapter = MyVideoAdapter()
+        _binding = FragmentMyVideoBinding.inflate(inflater, container, false)
+        binding.rvMyVideo.layoutManager = GridLayoutManager(requireActivity(), 2)
+        binding.rvMyVideo.adapter = adapter
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewModel.likedItems.observe(viewLifecycleOwner) { videoItems ->
-            // 데이터가 변경될 때마다 RecyclerView에 새로운 데이터를 설정합니다.
-            binding.rvMyVideo.adapter = MyVideoAdapter()
-        }
-
         val item =
             arguments?.getParcelable<VideoItemModel>(BUNDLE_KEY_FOR_MYVIDEO_FRAGMENT)
 
-
-
+        viewModel.getLikedItems() // 라이브 데이터 준비
+        viewModel.likedItems.observe(viewLifecycleOwner) {
+            adapter.itemClick = object : MyVideoAdapter.ItemClick {
+                override fun onClick(view: View, item: VideoItemModel) {
+                    clickItem(item)
+                    adapter.updateList(it)
+                }
+            }
+        }
+        val items = viewModel.likedItems.value
+        if (items != null) {
+            adapter.updateList(items)
+        }
 
         with(binding) {
             item?.let {
-//                tvTitle.text = item?.videoTitle
             }
             btnBack.setOnClickListener {
                 requireActivity().supportFragmentManager.popBackStack()
@@ -68,7 +69,14 @@ class MyVideoFragment : Fragment() {
         }
     }
 
-    // 프래그먼트 뷰 종료 시 호출
+    private fun clickItem(item: VideoItemModel) {
+        val bundle = Bundle().apply {
+            putParcelable(BUNDLE_KEY_FOR_DETAIL_FRAGMENT, item)
+        }
+        val detailFragment = VideoDetailFragment.newInstance(bundle)
+        (requireActivity() as MainActivity).showVideoDetailFragment(detailFragment)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null  // 바인딩 리소스 해제
@@ -76,16 +84,6 @@ class MyVideoFragment : Fragment() {
 
     companion object {
         const val BUNDLE_KEY_FOR_MYVIDEO_FRAGMENT = "BUNDLE_KEY_FOR_MYVIDEO_FRAGMENT"
-
-//        fun newInstance(bundle: Bundle): MyVideoFragment {
-//            return MyVideoFragment().apply {
-//                arguments = bundle
-//            }
-//        }
-
-        fun newInstance(): MyVideoFragment {
-            return MyVideoFragment()
-
-        }
+        fun newInstance() = MyVideoFragment()
     }
 }
