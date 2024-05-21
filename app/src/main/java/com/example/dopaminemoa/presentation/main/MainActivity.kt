@@ -59,6 +59,12 @@ class MainActivity : AppCompatActivity() {
 
     fun showVideoDetailFragment(detailFragment: Fragment) {
         supportFragmentManager.commit {
+            setCustomAnimations(
+                R.anim.zoom_in,
+                R.anim.zoom_out,
+                R.anim.zoom_in,
+                R.anim.zoom_out
+            )
             replace(R.id.fl_video_detail, detailFragment)
             addToBackStack(null)
         }
