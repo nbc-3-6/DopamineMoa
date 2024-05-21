@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import coil.load
@@ -11,19 +12,26 @@ import com.example.dopaminemoa.R
 import com.example.dopaminemoa.databinding.FragmentVideoDetailBinding
 import com.example.dopaminemoa.mapper.model.VideoItemModel
 import com.example.dopaminemoa.network.RepositoryClient
-import com.example.dopaminemoa.presentation.search.SearchResultFragment.Companion.BUNDLE_KEY_FOR_DETAIL_FRAGMENT
 import com.example.dopaminemoa.presentation.shorts.ShortsFragment
 import com.example.dopaminemoa.repository.VideoRepositoryImpl
 import com.google.android.material.snackbar.Snackbar
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+
 
 class VideoDetailFragment : Fragment() {
     private var _binding: FragmentVideoDetailBinding? = null
     private val binding get() = _binding!!
     private val viewModel: VideoDetailViewModel by viewModels {
-        VideoDetailViewModelFactory(VideoRepositoryImpl(RepositoryClient.youtubeService, requireContext()),
+        VideoDetailViewModelFactory(
+            VideoRepositoryImpl(RepositoryClient.youtubeService, requireContext()),
             requireContext().applicationContext
         )
     }
+
+    private lateinit var youTubePlayerView: YouTubePlayerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,8 +61,17 @@ class VideoDetailFragment : Fragment() {
             }
         }
 
+        youTubePlayerView = binding.youtubePlayerLibrary
+        lifecycle.addObserver(youTubePlayerView)
+//        youTubePlayerView.setCustomPlayerUi() //?
+
         with(binding) {
-            ivThumbnail.load(item?.videoThumbnail)
+//            ivThumbnail.load(item?.videoThumbnail)
+            youtubePlayerLibrary.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+                override fun onReady(youTubePlayer: YouTubePlayer) {
+                    item?.videoId?.let { youTubePlayer.loadVideo(it, 0f) }
+                }
+            })
             ivChannelThumbnail.load(item?.channelThumbnails)
             tvChannelTitle.text = item?.channelTitle
             tvTitle.text = item?.videoTitle
@@ -72,7 +89,9 @@ class VideoDetailFragment : Fragment() {
                 }
             }
         }
+
     }
+
 
     private fun updateLikeButton(item: VideoItemModel?, isLikedInPrefs: Boolean) {
         binding.ivLike.setImageResource(
@@ -85,6 +104,7 @@ class VideoDetailFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        youTubePlayerView.release()
     }
 
     companion object {

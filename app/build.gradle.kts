@@ -74,4 +74,8 @@ dependencies {
     annotationProcessor("androidx.room:room-common:$room_version")
     implementation("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.14.2")
+
+    //videoPlayer
+    implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
+    implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:custom-ui:12.1.0")
 }
