@@ -20,10 +20,8 @@ object VideoItemMapper {
                 videoId = it.id.videoId,
                 videoTitle = it.snippet.title,
                 videoThumbnail = it.snippet.thumbnails.high.url,
-                videoViews = "", // 조회수 데이터는 향후 처리
                 videoDescription = it.snippet.description,
                 channelTitle = it.snippet.channelTitle,
-                channelThumbnails = "", // 채널 썸네일 데이터는 향후 처리
                 category = "",
                 channelId = "",
                 isLiked = false, // 기본값 추가
@@ -37,10 +35,8 @@ object VideoItemMapper {
                 videoId = it.videoId,
                 videoTitle = it.snippet.videoTitle,
                 videoThumbnail = it.snippet.thumbnails.high.url,
-                videoViews = "",
                 videoDescription = it.snippet.description,
                 channelTitle = it.snippet.channelTitle,
-                channelThumbnails = "",
                 category = it.snippet.category, //카테고리 int값
                 channelId = it.snippet.channelId, //채널명
                 isLiked = false, // 기본값 추가
@@ -53,10 +49,8 @@ object VideoItemMapper {
             videoId = this.videoId,
             videoTitle = this.videoTitle,
             videoThumbnail = this.videoThumbnail,
-            videoViews = this.videoViews,
             videoDescription = this.videoDescription,
             channelTitle = this.channelTitle,
-            channelThumbnails = this.channelThumbnails,
             category = this.category,
             channelId = this.channelId,
             isLiked = this.isLiked
@@ -85,18 +79,4 @@ object VideoItemMapper {
             )
         }
     }
-
-//    fun updateVideoViews(videoItems: List<VideoItemModel>, videoListResponse: VideoListResponse) : List<VideoItemModel> {
-//        return videoItems.map { videoItem ->
-//            val video = videoListResponse.items.find { it.id == videoItem.videoId }
-//            videoItem.copy(videoViews = video?.statistics?.viewCount ?: "")
-//        }
-//    }
-//
-//    fun updateChannelThumbnails(videoItems: List<VideoItemModel>, channelListResponse: ChannelListResponse) : List<VideoItemModel> {
-//        return videoItems.map { videoItem ->
-//            val channel = channelListResponse.items.find { it.id == videoItem.videoId }
-//            videoItem.copy(channelThumbnails = channel?.snippet?.thumbnails.toString())
-//        }
-//    }
 }

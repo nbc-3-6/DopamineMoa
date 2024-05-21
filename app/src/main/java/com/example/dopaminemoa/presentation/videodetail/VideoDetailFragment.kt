@@ -55,7 +55,6 @@ class VideoDetailFragment : Fragment() {
 
         with(binding) {
             ivThumbnail.load(item?.videoThumbnail)
-            ivChannelThumbnail.load(item?.channelThumbnails)
             tvChannelTitle.text = item?.channelTitle
             tvTitle.text = item?.videoTitle
             tvDescription.text = item?.videoDescription
