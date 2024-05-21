@@ -1,4 +1,4 @@
-package com.example.dopaminemoa.viewmodel
+package com.example.dopaminemoa.presentation.home
 
 import android.content.Context
 import androidx.lifecycle.LiveData
@@ -7,17 +7,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.dopaminemoa.data.remote.RemoteDataSource
-import com.example.dopaminemoa.mapper.model.PopularVideoItemModel
 import com.example.dopaminemoa.mapper.model.CategoryItemModel
 import com.example.dopaminemoa.mapper.model.ChannelItemModel
-import com.example.dopaminemoa.mapper.model.VideoItemModel
-import com.example.dopaminemoa.repository.Resource
+import com.example.dopaminemoa.mapper.model.PopularVideoItemModel
+import com.example.dopaminemoa.presentation.search.SearchViewModel
 import com.example.dopaminemoa.repository.VideoRepository
 import com.example.dopaminemoa.repository.VideoRepositoryImpl
 import kotlinx.coroutines.launch
 
-class VideoViewModel(private val videoRepository: VideoRepository) : ViewModel() {
-
+class HomeViewModel(private val videoRepository: VideoRepository) : ViewModel() {
     private val _popularResults: MutableLiveData<List<PopularVideoItemModel>> = MutableLiveData()
     val popularResults: LiveData<List<PopularVideoItemModel>> get() = _popularResults
 
@@ -40,12 +38,6 @@ class VideoViewModel(private val videoRepository: VideoRepository) : ViewModel()
     //카테고리 변동될때 같이 바뀌는 textView
     private val _selectedCategory = MutableLiveData<String>()
     val selectedCategory: LiveData<String> get() = _selectedCategory
-
-    private val _searchResults: MutableLiveData<Resource<List<VideoItemModel>>> = MutableLiveData()
-    val searchResults: LiveData<Resource<List<VideoItemModel>>> get() = _searchResults
-
-    private val _searchResultsForShorts: MutableLiveData<Resource<List<VideoItemModel>>> = MutableLiveData()
-    val searchResultsForShorts: LiveData<Resource<List<VideoItemModel>>> get() = _searchResultsForShorts
 
     //error전달
     private val _errorMessage = MutableLiveData<String>()
@@ -115,30 +107,19 @@ class VideoViewModel(private val videoRepository: VideoRepository) : ViewModel()
             _errorMessage.postValue(e.message)
         }
     }
-
-    /**
-     * repository에 검색어를 사용한 검색 결과를 요청합니다.
-     */
-    fun searchVideoByText(text: String) = viewModelScope.launch {
-        _searchResults.value = videoRepository.searchVideoByText(text)
-    }
-
-    fun searchVideoByTextForShorts(text: String) = viewModelScope.launch {
-        _searchResultsForShorts.value = videoRepository.searchVideoByText(text)
-    }
 }
 
 @Suppress("UNCHECKED_CAST")
-class VideoViewModelFactory(private val remoteDataSource: RemoteDataSource, private val context: Context) : ViewModelProvider.Factory {
+class HomeViewModelFactory(private val remoteDataSource: RemoteDataSource, private val context: Context) : ViewModelProvider.Factory {
     companion object {
-        fun newInstance(remoteDataSource: RemoteDataSource, context: Context): VideoViewModelFactory {
-            return VideoViewModelFactory(remoteDataSource, context)
+        fun newInstance(remoteDataSource: RemoteDataSource, context: Context): HomeViewModelFactory {
+            return HomeViewModelFactory(remoteDataSource, context)
         }
     }
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(VideoViewModel::class.java)) {
-            return VideoViewModel(VideoRepositoryImpl(remoteDataSource, context)) as T
+        if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
+            return HomeViewModel(VideoRepositoryImpl(remoteDataSource, context)) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

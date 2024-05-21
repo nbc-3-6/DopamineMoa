@@ -5,6 +5,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.viewpager2.widget.ViewPager2
 import com.example.dopaminemoa.R
 import com.example.dopaminemoa.databinding.ActivityMainBinding
 import com.google.android.material.tabs.TabLayout
@@ -31,6 +32,14 @@ class MainActivity : AppCompatActivity() {
         vpMain.adapter = viewPagerAdapter
         vpMain.offscreenPageLimit = viewPagerAdapter.itemCount
         vpMain.isUserInputEnabled = false
+        vpMain.currentItem = 1 // 초기 페이지를 홈 프래그먼트로 설정
+
+        vpMain.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                showToolbar(position == 1) // 홈 프래그먼트일 때만 툴바 보이기
+            }
+        })
 
         TabLayoutMediator(tlMain, vpMain) { tab, position ->
             tab.setText(viewPagerAdapter.getTitle(position))

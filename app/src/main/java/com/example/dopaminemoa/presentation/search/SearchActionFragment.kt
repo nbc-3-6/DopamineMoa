@@ -10,16 +10,14 @@ import com.example.dopaminemoa.databinding.FragmentSearchActionBinding
 import com.example.dopaminemoa.network.RepositoryClient
 import com.example.dopaminemoa.presentation.search.SearchResultFragment.Companion.BUNDLE_KEY_FOR_RESULT_FRAGMENT
 import com.example.dopaminemoa.presentation.util.UtilityKeyboard.hideKeyboard
-import com.example.dopaminemoa.viewmodel.VideoViewModel
-import com.example.dopaminemoa.viewmodel.VideoViewModelFactory
 
 class SearchActionFragment : Fragment() {
 
     private var _binding: FragmentSearchActionBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: VideoViewModel by viewModels {
-        VideoViewModelFactory.newInstance(RepositoryClient.youtubeService, requireContext())
+    private val viewModel: SearchViewModel by viewModels {
+        SearchViewModelFactory.newInstance(RepositoryClient.youtubeService, requireContext())
     }
 
     override fun onCreateView(
