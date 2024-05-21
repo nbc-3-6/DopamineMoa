@@ -39,7 +39,6 @@ class MyVideoAdapter : RecyclerView.Adapter<MyVideoAdapter.MyVideoViewHolder>() 
         }
     }
 
-
     class MyVideoViewHolder(private val binding: MyvideoItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: VideoItemModel) = with(binding) {
             tvTitle.text = item.videoTitle
@@ -47,6 +46,7 @@ class MyVideoAdapter : RecyclerView.Adapter<MyVideoAdapter.MyVideoViewHolder>() 
             Glide.with(itemView).load(item.videoThumbnail).into(ivThumbnail)
         }
     }
+
     interface ItemClick {
         fun onClick(view: View, item: VideoItemModel)
     }
