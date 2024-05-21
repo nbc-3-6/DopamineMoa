@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.dopaminemoa.R
 import com.example.dopaminemoa.databinding.FragmentShortsBinding
 import com.example.dopaminemoa.mapper.model.VideoItemModel
@@ -20,12 +21,13 @@ import com.example.dopaminemoa.repository.Resource
 class ShortsFragment : Fragment() {
     private var _binding: FragmentShortsBinding? = null
     private val binding get() = _binding!!
-
     private val viewModel: ShortsViewModel by viewModels {
         ShortsViewModelFactory(RepositoryClient.youtubeService, requireContext())
     }
-
     private val adapter = ShortsAdapter()
+    private var isLoading = false
+    private var page = 1
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -164,45 +166,54 @@ class ShortsFragment : Fragment() {
      */
     private fun observeData() {
         viewModel.searchResultsForShorts.observe(viewLifecycleOwner) { resource ->
-            when (resource) {
-                is Resource.Success -> {
-                    adapter.updateList(resource.data ?: emptyList())
-                }
+            adapter.updateList(resource ?: emptyList())
+        }
 
-                is Resource.Error -> {
-                    val exception = resource.exception
-
-                    when {
-                        exception?.message?.contains("400") == true -> {
-                            Toast.makeText(requireActivity(), "잘못된 요청입니다.", Toast.LENGTH_SHORT).show()
-                        }
-                        exception?.message?.contains("401") == true -> {
-                            Toast.makeText(requireActivity(), "요청이 승인되지 않았습니다.", Toast.LENGTH_SHORT).show()
-                        }
-                        exception?.message?.contains("403") == true -> {
-                            Toast.makeText(requireActivity(), "현재 기능을 일시적으로 사용할 수 없습니다.", Toast.LENGTH_SHORT).show()
-                        }
-                        exception?.message?.contains("404") == true -> {
-                            Toast.makeText(requireActivity(), "정보를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
-                        }
-                        else -> {
-                            Toast.makeText(requireActivity(), "알 수 없는 문제가 생겼습니다.", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
+        viewModel.searchResultErrorState.observe(viewLifecycleOwner) { errorState ->
+            if (errorState) {
+                val errorMessage = viewModel.errorMessage.value ?: "알 수 없는 문제가 생겼습니다."
+                Toast.makeText(requireActivity(), errorMessage, Toast.LENGTH_SHORT).show()
             }
         }
     }
 
+    /**
+     * recyclerView 그리는 역할을 하는 함수입니다.
+     * 스크롤 상태를 파악하여 데이터를 추가적으로 로딩합니다.
+     */
     private fun makeRecyclerView() = with(binding) {
         rvShorts.adapter = adapter
         rvShorts.layoutManager = GridLayoutManager(requireActivity(), 2)
+
+        rvShorts.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val layoutManager = rvShorts.layoutManager as GridLayoutManager
+                val totalItemCount = layoutManager.itemCount
+                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+
+                if (isLoading.not() && lastVisibleItemPosition == totalItemCount - 1) {
+                    isLoading = true
+                    adapter.showLoadingView()
+                    loadMoreData()
+                }
+            }
+        })
 
         adapter.itemClick = object : ShortsAdapter.ItemClick {
             override fun onClick(view: View, item: VideoItemModel) {
                 selectItem(item)
             }
         }
+    }
+
+    /**
+     * 데이터를 추가적으로 요청하는 함수입니다.
+     * 무한 스크롤에 사용됩니다.
+     */
+    private fun loadMoreData() {
+//        viewModel.searchVideoByTextForShorts()
     }
 
     /**

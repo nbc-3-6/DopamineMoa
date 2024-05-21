@@ -5,8 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import com.example.dopaminemoa.R
+import com.example.dopaminemoa.data.remote.RemoteDataSource
 import com.example.dopaminemoa.databinding.FragmentSearchBinding
+import com.example.dopaminemoa.network.RepositoryClient
 
 /**
  * 아래 2개의 하위 Fragment 간의 화면 전환을 관리하는 Fragment입니다.
@@ -18,10 +21,17 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var viewModel: SearchViewModel
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val remoteDataSource = RepositoryClient.youtubeService
+        val viewModelFactory = SearchViewModelFactory.newInstance(remoteDataSource, requireActivity())
+
+        viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(SearchViewModel::class.java)
+
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }

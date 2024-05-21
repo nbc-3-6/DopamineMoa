@@ -7,7 +7,6 @@ import com.example.dopaminemoa.mapper.model.CategoryItemModel
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.dopaminemoa.Const
-import com.example.dopaminemoa.Const.Companion.API_KEY
 import com.example.dopaminemoa.mapper.VideoItemMapper
 import com.example.dopaminemoa.mapper.model.VideoItemModel
 import com.example.dopaminemoa.network.RepositoryClient
@@ -20,7 +19,8 @@ interface VideoRepository {
     suspend fun searchVideoByCategory(categoryId: String): List<PopularVideoItemModel>
     suspend fun takeVideoCategories(): List<CategoryItemModel>
     suspend fun searchChannelByCategory(channelId: String): List<ChannelItemModel>
-    suspend fun searchVideoByText(text: String): Resource<List<VideoItemModel>>
+    suspend fun searchVideoByText(text: String): List<VideoItemModel>
+    suspend fun searchMoreVideoByText(text: String, token: String): List<VideoItemModel>
     suspend fun saveVideoItem(videoItemModel: VideoItemModel)
     suspend fun removeVideoItem(videoItemModel: VideoItemModel)
     suspend fun getStorageItems(): List<VideoItemModel>
@@ -88,16 +88,26 @@ class VideoRepositoryImpl(
      * try-catch로 통신 결과를 처리합니다.
      * 통신 에러 발생 시 해당하는 에러 exception을 Resource.Error에 전달합니다.
      */
-    override suspend fun searchVideoByText(text: String): Resource<List<VideoItemModel>> {
+    override suspend fun searchVideoByText(text: String): List<VideoItemModel> {
         return try {
-            val response = RepositoryClient.youtubeService.getSearchList("snippet", text, "video", API_KEY)
-            if (response.items.isNotEmpty()) {
-                Resource.Success(VideoItemMapper.fromSearchItems(response.items))
-            } else {
-                Resource.Error(NetworkException("No data found"))
-            }
-        } catch (e: Exception) {
-            Resource.Error(e)
+            val videoListResponse = remoteDataSource.getSearchList(query = text)
+            VideoItemMapper.fromSearchItems(videoListResponse.items)
+        } catch (e: HttpException) {
+            throw ApiException(handleApiError(e))
+        }
+    }
+
+    /**
+     * 입력된 검색어에 대한 검색 결과를 추가적으로 요청하는 함수입니다.
+     * 토큰을 이용하여 다음 페이지의 값들을 요청합니다.
+     * try-catch로 통신 결과를 처리는 searchVideoByText 함수와 동일합니다.
+     */
+    override suspend fun searchMoreVideoByText(text: String, token: String): List<VideoItemModel> {
+        return try {
+            val videoListResponse = remoteDataSource.getSearchMoreList(query = text, pageToken = token)
+            VideoItemMapper.fromSearchItems(videoListResponse.items)
+        } catch (e: HttpException) {
+            throw ApiException(handleApiError(e))
         }
     }
 

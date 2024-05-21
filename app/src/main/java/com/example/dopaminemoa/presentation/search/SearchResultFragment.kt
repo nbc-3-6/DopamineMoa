@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.addCallback
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.dopaminemoa.R
@@ -22,9 +23,7 @@ class SearchResultFragment : Fragment() {
     private var _binding: FragmentSearchResultBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: SearchViewModel by viewModels {
-        SearchViewModelFactory.newInstance(RepositoryClient.youtubeService, requireContext())
-    }
+    private val viewModel : SearchViewModel by activityViewModels()
 
     private val adapter = SearchAdapter()
 
@@ -38,10 +37,6 @@ class SearchResultFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        arguments?.getString(BUNDLE_KEY_FOR_RESULT_FRAGMENT)?.let { searchText ->
-            viewModel.searchVideoByText(searchText)
-        }
 
         getText()
         backBtnPressed()
@@ -57,6 +52,11 @@ class SearchResultFragment : Fragment() {
     private fun getText() = with(binding) {
         val text = arguments?.getString(BUNDLE_KEY_FOR_RESULT_FRAGMENT) ?: ""
         etSearch.setText(text)
+        requestDate(text)
+    }
+
+    private fun requestDate(text: String) {
+        viewModel.searchVideoByText(text)
     }
 
     /**
@@ -85,33 +85,13 @@ class SearchResultFragment : Fragment() {
                 tvNone.visibility = View.GONE
             }
 
-            when (resource) {
-                is Resource.Success -> {
-                    adapter.updateList(resource.data ?: emptyList())
-                }
+            adapter.updateList(resource ?: emptyList())
+        }
 
-                is Resource.Error -> {
-                    val exception = resource.exception
-
-                    when {
-                        exception?.message?.contains("400") == true -> {
-                            Toast.makeText(requireActivity(), "잘못된 요청입니다.", Toast.LENGTH_SHORT).show()
-                        }
-                        exception?.message?.contains("401") == true -> {
-                            Toast.makeText(requireActivity(), "요청이 승인되지 않았습니다.", Toast.LENGTH_SHORT).show()
-                        }
-                        exception?.message?.contains("403") == true -> {
-                            Toast.makeText(requireActivity(), "현재 기능을 일시적으로 사용할 수 없습니다.", Toast.LENGTH_SHORT).show()
-                        }
-                        exception?.message?.contains("404") == true -> {
-//                            Toast.makeText(requireActivity(), "정보를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show() //필요시 사용
-                            tvNone.visibility = View.VISIBLE
-                        }
-                        else -> {
-                            Toast.makeText(requireActivity(), "알 수 없는 문제가 생겼습니다.", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
+        viewModel.searchResultErrorState.observe(viewLifecycleOwner) { errorState ->
+            if (errorState) {
+                val errorMessage = viewModel.errorMessage.value ?: "알 수 없는 문제가 생겼습니다."
+                Toast.makeText(requireActivity(), errorMessage, Toast.LENGTH_SHORT).show()
             }
         }
     }

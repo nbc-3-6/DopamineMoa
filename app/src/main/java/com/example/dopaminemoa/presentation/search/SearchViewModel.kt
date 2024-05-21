@@ -1,6 +1,7 @@
 package com.example.dopaminemoa.presentation.search
 
 import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,14 +15,44 @@ import com.example.dopaminemoa.repository.VideoRepositoryImpl
 import kotlinx.coroutines.launch
 
 class SearchViewModel(private val videoRepository: VideoRepository) : ViewModel() {
-    private val _searchResults: MutableLiveData<Resource<List<VideoItemModel>>> = MutableLiveData()
-    val searchResults: LiveData<Resource<List<VideoItemModel>>> get() = _searchResults
+    private val _searchResults: MutableLiveData<List<VideoItemModel>> = MutableLiveData()
+    val searchResults: LiveData<List<VideoItemModel>> get() = _searchResults
+    private val _searchResultErrorState = MutableLiveData<Boolean>()
+    val searchResultErrorState : LiveData<Boolean> get() = _searchResultErrorState
+    private val _errorMessage = MutableLiveData<String>()
+    val errorMessage : LiveData<String> get() = _errorMessage
 
     /**
      * repository에 검색어를 사용한 검색 결과를 요청합니다.
      */
     fun searchVideoByText(text: String) = viewModelScope.launch {
-        _searchResults.value = videoRepository.searchVideoByText(text)
+        try {
+            _searchResults.value = videoRepository.searchVideoByText(text)
+            _searchResultErrorState.value = false
+        } catch (e: VideoRepositoryImpl.ApiException) {
+            setErrorMessage(e.message)
+            _searchResultErrorState.value = true
+        }
+    }
+
+    fun setErrorMessage(message: String?) {
+        when {
+            message?.contains("400") == true -> {
+                _errorMessage.postValue("400 : 잘못된 요청입니다.")
+            }
+            message?.contains("401") == true -> {
+                _errorMessage.postValue("401 : 요청이 승인되지 않았습니다.")
+            }
+            message?.contains("403") == true -> {
+                _errorMessage.postValue("403 : 현재 기능을 일시적으로 사용할 수 없습니다.")
+            }
+            message?.contains("404") == true -> {
+                _errorMessage.postValue("404 : 정보를 찾을 수 없습니다.")
+            }
+            else -> {
+                _errorMessage.postValue("알 수 없는 문제가 생겼습니다.")
+            }
+        }
     }
 }
 

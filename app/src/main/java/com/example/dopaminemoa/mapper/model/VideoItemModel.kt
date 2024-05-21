@@ -14,4 +14,8 @@ data class VideoItemModel(
     val category: String,
     val channelId: String,
     var isLiked: Boolean,
-) : Parcelable
+) : Parcelable {
+    companion object {
+        val EMPTY_ITEM = VideoItemModel("","","","","","","",false)
+    }
+}
