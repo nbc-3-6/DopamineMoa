@@ -21,7 +21,6 @@ class ShortsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var itemClick: ItemClick? = null
     private val items: MutableList<VideoItemModel> = mutableListOf()
-    private var isLoading = false
 
     fun addItems(newItems: List<VideoItemModel>) {
         val insertPosition = items.size
