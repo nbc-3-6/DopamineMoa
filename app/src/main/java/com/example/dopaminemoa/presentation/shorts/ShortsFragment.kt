@@ -201,20 +201,20 @@ class ShortsFragment : Fragment() {
      */
     private fun makeRecyclerView() = with(binding) {
         rvShorts.adapter = adapter
-        rvShorts.layoutManager = GridLayoutManager(requireActivity(), 2)
+        val layoutManager = GridLayoutManager(requireActivity(), 2)
+        adapter.setupSpanSizeLookup(layoutManager)
+        rvShorts.layoutManager = layoutManager
 
         rvShorts.addOnScrollListener(object: RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
-                val layoutManager = rvShorts.layoutManager as GridLayoutManager
                 val totalItemCount = layoutManager.itemCount
                 val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
 
                 if (isLoading.not() && lastVisibleItemPosition == totalItemCount - 1) {
                     isLoading = true
                     adapter.showLoadingView()
-
                     viewModel.searchMoreVideoByTextForShorts(searchText, nextToken)
                 }
             }

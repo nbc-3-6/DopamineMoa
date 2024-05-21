@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.dopaminemoa.databinding.ItemLoadingBinding
@@ -13,12 +14,14 @@ import com.example.dopaminemoa.mapper.model.VideoItemModel
 class ShortsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
-        private val VIEW_TYPE_ITEM = 0
-        private val VIEW_TYPE_LOADING = 1
+        private const val VIEW_TYPE_ITEM = 0
+        private const val VIEW_TYPE_LOADING = 1
+        private const val SPAN_COUNT = 2
     }
 
     var itemClick: ItemClick? = null
     private val items: MutableList<VideoItemModel> = mutableListOf()
+    private var isLoading = false
 
     fun addItems(newItems: List<VideoItemModel>) {
         val insertPosition = items.size
@@ -77,6 +80,18 @@ class ShortsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             }
         } else if (holder is LoadingViewHolder) {
             holder.progressBar.visibility = View.VISIBLE
+        }
+    }
+
+    fun setupSpanSizeLookup(gridLayoutManager: GridLayoutManager) {
+        gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return if (getItemViewType(position) == VIEW_TYPE_LOADING) {
+                    SPAN_COUNT
+                } else {
+                    1
+                }
+            }
         }
     }
 
