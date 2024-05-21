@@ -11,7 +11,7 @@ import com.example.dopaminemoa.R
 import com.example.dopaminemoa.databinding.FragmentVideoDetailBinding
 import com.example.dopaminemoa.mapper.model.VideoItemModel
 import com.example.dopaminemoa.network.RepositoryClient
-import com.example.dopaminemoa.presentation.searchshorts.SearchShortsFragment
+import com.example.dopaminemoa.presentation.shorts.ShortsFragment
 import com.example.dopaminemoa.repository.VideoRepositoryImpl
 import com.google.android.material.snackbar.Snackbar
 
@@ -36,7 +36,7 @@ class VideoDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val item = arguments?.getParcelable<VideoItemModel>(BUNDLE_KEY_FOR_DETAIL_FRAGMENT)
-            ?: arguments?.getParcelable<VideoItemModel>(SearchShortsFragment.BUNDLE_KEY_FOR_DETAIL_FRAGMENT_FROM_SHORTS)
+            ?: arguments?.getParcelable<VideoItemModel>(ShortsFragment.BUNDLE_KEY_FOR_DETAIL_FRAGMENT_FROM_SHORTS)
 
         val isLikedInPrefs = viewModel.isVideoLikedInPrefs(item?.videoId)
 

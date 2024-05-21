@@ -1,4 +1,4 @@
-package com.example.dopaminemoa.presentation.searchshorts
+package com.example.dopaminemoa.presentation.shorts
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,13 +14,11 @@ import com.example.dopaminemoa.databinding.FragmentShortsBinding
 import com.example.dopaminemoa.mapper.model.VideoItemModel
 import com.example.dopaminemoa.network.RepositoryClient
 import com.example.dopaminemoa.presentation.main.MainActivity
-import com.example.dopaminemoa.presentation.shorts.SearchShortsAdapter
-import com.example.dopaminemoa.presentation.shorts.ShortsViewModel
-import com.example.dopaminemoa.presentation.shorts.ShortsViewModelFactory
+import com.example.dopaminemoa.presentation.searchshorts.SearchShortsAdapter
 import com.example.dopaminemoa.presentation.videodetail.VideoDetailFragment
 
 
-class SearchShortsFragment : Fragment() {
+class ShortsFragment : Fragment() {
     private var _binding: FragmentShortsBinding? = null
     private val binding get() = _binding!!
     private val viewModel: ShortsViewModel by viewModels {
@@ -176,8 +174,11 @@ class SearchShortsFragment : Fragment() {
      * 변화 발생 시 recyclerView adapter에 데이터 변경에 대한 update를 요청합니다.
      * 통신에 에러 발생 시, 에러 타입을 구분하여 화면에 토스트를 출력합니다.
      */
-    private fun observeData() {
+    private fun observeData() = with(binding) {
         viewModel.searchResultsForShorts.observe(viewLifecycleOwner) { items ->
+            rvShorts.visibility = View.GONE
+            tvError.visibility = View.VISIBLE
+
             isLoading = false
             adapter.deleteLoading()
 
@@ -186,8 +187,10 @@ class SearchShortsFragment : Fragment() {
 
         viewModel.searchResultErrorState.observe(viewLifecycleOwner) { errorState ->
             if (errorState) {
-                val errorMessage = viewModel.errorMessage.value ?: "알 수 없는 문제가 생겼습니다."
-                Toast.makeText(requireActivity(), errorMessage, Toast.LENGTH_SHORT).show()
+                val errorMessage = viewModel.errorMessage.value ?: getString(R.string.search_error)
+                rvShorts.visibility = View.GONE
+                tvError.visibility = View.VISIBLE
+                tvError.text = errorMessage
             }
         }
 
@@ -249,6 +252,6 @@ class SearchShortsFragment : Fragment() {
     companion object {
         const val BUNDLE_KEY_FOR_DETAIL_FRAGMENT_FROM_SHORTS = "BUNDLE_KEY_FOR_DETAIL_FRAGMENT_FROM_SHORTS"
 
-        fun newInstance() = SearchShortsFragment()
+        fun newInstance() = ShortsFragment()
     }
 }

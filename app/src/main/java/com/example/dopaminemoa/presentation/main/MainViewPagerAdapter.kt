@@ -7,7 +7,7 @@ import com.example.dopaminemoa.R
 import com.example.dopaminemoa.presentation.home.HomeFragment
 import com.example.dopaminemoa.presentation.myvideo.MyVideoFragment
 import com.example.dopaminemoa.presentation.search.SearchFragment
-import com.example.dopaminemoa.presentation.searchshorts.SearchShortsFragment
+import com.example.dopaminemoa.presentation.shorts.ShortsFragment
 
 class MainViewPagerAdapter(
     fragmentActivity: FragmentActivity
@@ -16,7 +16,7 @@ class MainViewPagerAdapter(
     private val fragments = listOf(
         MainTabModel(SearchFragment.newInstance(), R.string.main_tab_search_title, R.drawable.ic_search),
         MainTabModel(HomeFragment.newInstance(), R.string.main_tab_home_title, R.drawable.ic_home),
-        MainTabModel(SearchShortsFragment.newInstance(), R.string.main_tab_shorts_title, R.drawable.ic_shorts),
+        MainTabModel(ShortsFragment.newInstance(), R.string.main_tab_shorts_title, R.drawable.ic_shorts),
         MainTabModel(MyVideoFragment.newInstance(), R.string.main_tab_myvideos_title, R.drawable.ic_my_videos),
     )
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.searchshorts.SearchShortsFragment">
+    tools:context=".presentation.shorts.ShortsFragment">
 
     <HorizontalScrollView
         android:id="@+id/hcv_category"
@@ -101,5 +101,18 @@
         app:layout_constraintTop_toBottomOf="@+id/hcv_category"
         app:spanCount="2"
         tools:listitem="@layout/shorts_item" />
+
+    <TextView
+        android:id="@+id/tv_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/search_error"
+        android:textColor="@color/textGray"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hcv_category" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

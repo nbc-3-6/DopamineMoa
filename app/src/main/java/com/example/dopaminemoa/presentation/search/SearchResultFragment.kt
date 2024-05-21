@@ -14,7 +14,7 @@ import com.example.dopaminemoa.R
 import com.example.dopaminemoa.databinding.FragmentSearchResultBinding
 import com.example.dopaminemoa.mapper.model.VideoItemModel
 import com.example.dopaminemoa.presentation.main.MainActivity
-import com.example.dopaminemoa.presentation.shorts.SearchShortsAdapter
+import com.example.dopaminemoa.presentation.searchshorts.SearchShortsAdapter
 import com.example.dopaminemoa.presentation.videodetail.VideoDetailFragment
 
 class SearchResultFragment : Fragment() {
@@ -79,9 +79,8 @@ class SearchResultFragment : Fragment() {
      */
     private fun observeData() = with(binding) {
         viewModel.searchResults.observe(viewLifecycleOwner) { items ->
-            if (tvNone.visibility == View.VISIBLE) {
-                tvNone.visibility = View.GONE
-            }
+            rvSearch.visibility = View.GONE
+            tvNone.visibility = View.VISIBLE
 
             isLoading = false
             adapter.deleteLoading()
@@ -91,8 +90,10 @@ class SearchResultFragment : Fragment() {
 
         viewModel.searchResultErrorState.observe(viewLifecycleOwner) { errorState ->
             if (errorState) {
-                val errorMessage = viewModel.errorMessage.value ?: "알 수 없는 문제가 생겼습니다."
-                Toast.makeText(requireActivity(), errorMessage, Toast.LENGTH_SHORT).show()
+                val errorMessage = viewModel.errorMessage.value ?: getString(R.string.search_error)
+                rvSearch.visibility = View.GONE
+                tvNone.visibility = View.VISIBLE
+                tvNone.text = errorMessage
             }
         }
 

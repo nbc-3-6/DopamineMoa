@@ -107,17 +107,6 @@ class SearchActionFragment : Fragment() {
         (parentFragment as? SearchFragment)?.showSearchResultFragment(bundle)
     }
 
-    private fun requestDate(text: String) {
-        viewModel.searchVideoByText(text)
-
-        viewModel.searchResultErrorState.observe(viewLifecycleOwner) { errorState ->
-            if (errorState) {
-                val errorMessage = viewModel.errorMessage.value
-                Toast.makeText(requireActivity(), errorMessage, Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

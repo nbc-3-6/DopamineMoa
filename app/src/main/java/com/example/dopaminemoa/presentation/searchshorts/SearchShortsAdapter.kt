@@ -1,4 +1,4 @@
-package com.example.dopaminemoa.presentation.shorts
+package com.example.dopaminemoa.presentation.searchshorts
 
 import android.view.LayoutInflater
 import android.view.View
