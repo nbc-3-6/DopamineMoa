@@ -11,7 +11,7 @@
         android:id="@+id/cl_my_video"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="71dp"
+
         android:background="#FFF7F5"
         app:layout_constraintTop_toTopOf="parent">
 
