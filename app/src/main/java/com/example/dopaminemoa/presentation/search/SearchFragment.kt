@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.example.dopaminemoa.R
-import com.example.dopaminemoa.data.remote.RemoteDataSource
 import com.example.dopaminemoa.databinding.FragmentSearchBinding
 import com.example.dopaminemoa.network.RepositoryClient
 
@@ -46,6 +45,11 @@ class SearchFragment : Fragment() {
      */
     private fun loadFragment(fragment: Fragment) {
         childFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.anim.slide_right_enter,
+                R.anim.slide_right_exit,
+                R.anim.slide_right_enter,
+                R.anim.slide_right_exit)
             .replace(R.id.cl_container, fragment)
             .setReorderingAllowed(true)
             .addToBackStack(null)
