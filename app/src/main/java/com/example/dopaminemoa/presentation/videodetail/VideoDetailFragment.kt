@@ -72,6 +72,14 @@ class VideoDetailFragment : Fragment() {
                     updateLikeButton(it, it.isLiked)  // UI 업데이트
                 }
             }
+
+            ivShare.setOnClickListener {
+                val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, SHARE_URL + item?.videoId)
+                }
+                startActivity(Intent.createChooser(shareIntent, "Share Video Link"))
+            }
         }
     }
 
