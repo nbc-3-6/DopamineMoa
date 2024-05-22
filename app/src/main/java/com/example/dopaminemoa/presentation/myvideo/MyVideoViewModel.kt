@@ -26,7 +26,6 @@ class MyVideoViewModel(
     fun getLikedItems() {
         viewModelScope.launch {
             _likedItems.value = videoRepository.getStorageItems()
-//            updateSaveItem()
         }
     }
 
