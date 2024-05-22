@@ -53,14 +53,17 @@ class MyVideoFragment : Fragment() {
     }
 
     fun setUpView() {
+        val items = viewModel.likedItems.value
+
+        viewModel.likedItems.observe(viewLifecycleOwner) { items ->
+            if (items != null) {
+                adapter.updateList(items) // 2. 변화가 있을때 변경해줄 준비
+                Log.d("1 - adapter.updateList(items)", adapter.updateList(items).toString())
+            }
+        }
         // 1, 2번은 거의 동시에 실행됨
         viewModel.getLikedItems() // 1. livedata 준비
-        Log.d("1-getLikedItems()", viewModel.getLikedItems().toString())
-        val items = viewModel.likedItems.value
-        if (items != null) {
-            adapter.updateList(items) // 2. 변화가 있을때 변경해줄 준비
-            Log.d("2 - adapter.updateList(items)", adapter.updateList(items).toString())
-        }
+        Log.d("2-getLikedItems()", viewModel.getLikedItems().toString())
     }
 
     fun itemClick() {
