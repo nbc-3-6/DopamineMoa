@@ -8,18 +8,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import coil.load
 import com.example.dopaminemoa.R
-import com.example.dopaminemoa.databinding.CustomPlayerUiBinding
 import com.example.dopaminemoa.databinding.FragmentVideoDetailBinding
 import com.example.dopaminemoa.mapper.model.VideoItemModel
 import com.example.dopaminemoa.network.RepositoryClient
-import com.example.dopaminemoa.presentation.CustomUiController
 import com.example.dopaminemoa.presentation.shorts.ShortsFragment
 import com.example.dopaminemoa.repository.VideoRepositoryImpl
 import com.google.android.material.snackbar.Snackbar
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerTracker
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
@@ -37,7 +33,6 @@ class VideoDetailFragment : Fragment() {
 
     private lateinit var youTubePlayerView: YouTubePlayerView
     private lateinit var playerTracker: YouTubePlayerTracker
-    private lateinit var customUiController: CustomUiController
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -69,7 +64,6 @@ class VideoDetailFragment : Fragment() {
 
         with(binding) {
 //            ivThumbnail.load(item?.videoThumbnail)
-//            item?.videoId?.let { setUpYoutubePlayer(it) }
             ivChannelThumbnail.load(item?.channelThumbnails)
             tvChannelTitle.text = item?.channelTitle
             tvTitle.text = item?.videoTitle
@@ -91,28 +85,22 @@ class VideoDetailFragment : Fragment() {
     }
 
     private fun setUpYoutubePlayer(videoId: String) {
-        youTubePlayerView = binding.youtubePlayerView
-        lifecycle.addObserver(youTubePlayerView)
-        youTubePlayerView.enableAutomaticInitialization = false // 초기화 수동
-        val customPlayerUi = youTubePlayerView.inflateCustomPlayerUi(R.layout.custom_player_ui)
 
+        youTubePlayerView = binding.youtubePlayerView
+        youTubePlayerView.enableAutomaticInitialization = false //초기화 수동
+        lifecycle.addObserver(youTubePlayerView)
 
         val listener = object : AbstractYouTubePlayerListener() {
             override fun onReady(youTubePlayer: YouTubePlayer) {
                 playerTracker = YouTubePlayerTracker()
                 youTubePlayer.addListener(playerTracker)
 
-                customUiController = CustomUiController(customPlayerUi, youTubePlayer)
-//                val customPlayerUiBinding = CustomPlayerUiBinding.inflate(layoutInflater)
-//                customUiController = CustomUiController(customPlayerUiBinding, youTubePlayer)
                 youTubePlayer.loadVideo(videoId, 0f)
-                youTubePlayer.setLoop(true)
             }
         }
-
-        val options = IFramePlayerOptions.Builder()
-            .controls(0) //컨트롤러 표시
-            .modestBranding(1)
+        val options = IFramePlayerOptions
+            .Builder()
+            .controls(0)
             .build()
         youTubePlayerView.initialize(listener, options)
     }
