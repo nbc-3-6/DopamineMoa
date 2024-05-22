@@ -1,14 +1,11 @@
 package com.example.dopaminemoa.presentation.myvideo
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.dopaminemoa.R
 import com.example.dopaminemoa.mapper.model.VideoItemModel
-import com.example.dopaminemoa.presentation.videodetail.SaveUiState
 import com.example.dopaminemoa.repository.VideoRepository
 import kotlinx.coroutines.launch
 

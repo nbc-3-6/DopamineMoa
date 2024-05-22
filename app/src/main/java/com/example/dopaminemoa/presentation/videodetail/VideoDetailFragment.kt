@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
-import coil.load
 import com.example.dopaminemoa.Const.Companion.SHARE_URL
 import com.example.dopaminemoa.R
 import com.example.dopaminemoa.databinding.FragmentVideoDetailBinding
@@ -16,16 +16,25 @@ import com.example.dopaminemoa.network.RepositoryClient
 import com.example.dopaminemoa.presentation.shorts.ShortsFragment
 import com.example.dopaminemoa.repository.VideoRepositoryImpl
 import com.google.android.material.snackbar.Snackbar
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerTracker
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+
 
 class VideoDetailFragment : Fragment() {
     private var _binding: FragmentVideoDetailBinding? = null
     private val binding get() = _binding!!
     private val viewModel: VideoDetailViewModel by viewModels {
-        VideoDetailViewModelFactory(VideoRepositoryImpl(RepositoryClient.youtubeService, requireContext()),
+        VideoDetailViewModelFactory(
+            VideoRepositoryImpl(RepositoryClient.youtubeService, requireContext()),
             requireContext().applicationContext
         )
     }
 
+    private lateinit var youTubePlayerView: YouTubePlayerView
+    private lateinit var playerTracker: YouTubePlayerTracker
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,12 +46,14 @@ class VideoDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initView()
+    }
+
+    private fun initView() {
         val item = arguments?.getParcelable<VideoItemModel>(BUNDLE_KEY_FOR_DETAIL_FRAGMENT)
             ?: arguments?.getParcelable<VideoItemModel>(ShortsFragment.BUNDLE_KEY_FOR_DETAIL_FRAGMENT_FROM_SHORTS)
-
         val isLikedInPrefs = viewModel.isVideoLikedInPrefs(item?.videoId)
 
-        // 초기 바인딩 시 isLikedInPrefs 값에 따라 ivLike 이미지 설정
         updateLikeButton(item, isLikedInPrefs)
 
         viewModel.saveResult.observe(viewLifecycleOwner) { state ->
@@ -50,12 +61,13 @@ class VideoDetailFragment : Fragment() {
                 is SaveUiState.Success -> {
                     Snackbar.make(binding.root, state.message, Snackbar.LENGTH_SHORT).show()
                 }
+
                 else -> {}
             }
         }
 
         with(binding) {
-            ivThumbnail.load(item?.videoThumbnail)
+//            ivThumbnail.load(item?.videoThumbnail)
             tvChannelTitle.text = item?.channelTitle
             tvTitle.text = item?.videoTitle
             tvDescription.text = item?.videoDescription
@@ -66,9 +78,9 @@ class VideoDetailFragment : Fragment() {
 
             llLike.setOnClickListener {
                 item?.let {
-                    it.isLiked = !it.isLiked  // 좋아요 상태 토글
-                    viewModel.updateSaveItem(it)  // ViewModel에서 업데이트
-                    updateLikeButton(it, it.isLiked)  // UI 업데이트
+                    it.isLiked = !it.isLiked
+                    viewModel.updateSaveItem(it)
+                    updateLikeButton(it, it.isLiked)
                 }
             }
 
@@ -80,7 +92,29 @@ class VideoDetailFragment : Fragment() {
                 startActivity(Intent.createChooser(shareIntent, "Share Video Link"))
             }
         }
+        item?.videoId?.let { setUpYoutubePlayer(it) }
     }
+
+    private fun setUpYoutubePlayer(videoId: String) {
+        youTubePlayerView = binding.youtubePlayerView
+        youTubePlayerView.enableAutomaticInitialization = false //초기화 수동
+        lifecycle.addObserver(youTubePlayerView)
+
+        val listener = object : AbstractYouTubePlayerListener() {
+            override fun onReady(youTubePlayer: YouTubePlayer) {
+                playerTracker = YouTubePlayerTracker()
+                youTubePlayer.addListener(playerTracker)
+
+                youTubePlayer.loadVideo(videoId, 0f)
+            }
+        }
+        val options = IFramePlayerOptions
+            .Builder()
+            .controls(0)
+            .build()
+        youTubePlayerView.initialize(listener, options)
+    }
+
 
     private fun updateLikeButton(item: VideoItemModel?, isLikedInPrefs: Boolean) {
         binding.ivLike.setImageResource(
@@ -93,6 +127,11 @@ class VideoDetailFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        youTubePlayerView.release()
+        // 변경된 좋아요 상태를 전달
+        setFragmentResult("video_detail_result", Bundle().apply {
+            putBoolean("is_liked_changed", true)
+        })
     }
 
     companion object {

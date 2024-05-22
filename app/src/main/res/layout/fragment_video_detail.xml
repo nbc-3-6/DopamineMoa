@@ -13,17 +13,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true"
-        android:focusable="true" >
+        android:focusable="true">
 
-        <ImageView
-            android:id="@+id/iv_thumbnail"
+        <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+            android:id="@+id/youtube_player_view"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:scaleType="centerCrop"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="match_parent"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@color/black"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_icons"
@@ -32,17 +38,17 @@
             android:layout_marginHorizontal="24dp"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="80dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/iv_back"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:src="@drawable/ic_back"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_channel_title"
@@ -50,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:text="username"
                 android:textColor="@color/white"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toTopOf="@+id/tv_title"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -62,7 +68,7 @@
                 android:gravity="left"
                 android:text="영상 제목"
                 android:textColor="@color/white"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -89,7 +95,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="좋아요"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:textColor="@color/white" />
 
             </LinearLayout>
@@ -118,7 +124,7 @@
                     android:layout_height="wrap_content"
                     android:text="공유"
                     android:textColor="@color/white"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -139,7 +145,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="영상 설명"
-                android:textSize="14dp"
+                android:textSize="14sp"
                 android:textColor="@color/white" />
 
         </ScrollView>

@@ -1,13 +1,10 @@
 package com.example.dopaminemoa.presentation.myvideo
 
-import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.dopaminemoa.databinding.MyvideoItemBinding
 import com.example.dopaminemoa.databinding.SearchItemBinding
 import com.example.dopaminemoa.mapper.model.VideoItemModel
 
@@ -16,7 +13,6 @@ class MyVideoAdapter : RecyclerView.Adapter<MyVideoAdapter.MyVideoViewHolder>() 
     var itemClick: ItemClick? = null
     private val items: MutableList<VideoItemModel> = mutableListOf()
 
-    @SuppressLint("NotifyDataSetChanged")
     fun updateList(newItems: List<VideoItemModel>) {
         items.clear()
         items.addAll(newItems.reversed())
@@ -34,7 +30,6 @@ class MyVideoAdapter : RecyclerView.Adapter<MyVideoAdapter.MyVideoViewHolder>() 
 
     override fun getItemCount(): Int = items.size
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun onBindViewHolder(holder: MyVideoViewHolder, position: Int) {
         holder.bind(items[position])
         holder.itemView.setOnClickListener {
@@ -43,7 +38,8 @@ class MyVideoAdapter : RecyclerView.Adapter<MyVideoAdapter.MyVideoViewHolder>() 
         }
     }
 
-    class MyVideoViewHolder(private val binding: SearchItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    class MyVideoViewHolder(private val binding: SearchItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(item: VideoItemModel) = with(binding) {
             tvTitle.text = item.videoTitle
             tvChannel.text = item.channelTitle
