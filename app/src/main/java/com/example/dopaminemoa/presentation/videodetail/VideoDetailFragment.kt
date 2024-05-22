@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import coil.load
 import com.example.dopaminemoa.Const.Companion.SHARE_URL
@@ -93,6 +94,11 @@ class VideoDetailFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+
+        // 변경된 좋아요 상태를 전달
+        setFragmentResult("video_detail_result", Bundle().apply {
+            putBoolean("is_liked_changed", true)
+        })
     }
 
     companion object {

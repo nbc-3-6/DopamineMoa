@@ -8,14 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import coil.load
 import com.example.dopaminemoa.databinding.FragmentMyVideoBinding
 import com.example.dopaminemoa.mapper.model.VideoItemModel
 import com.example.dopaminemoa.network.RepositoryClient
 import com.example.dopaminemoa.presentation.main.MainActivity
-import com.example.dopaminemoa.presentation.shorts.ShortsFragment
 import com.example.dopaminemoa.presentation.videodetail.VideoDetailFragment
 import com.example.dopaminemoa.presentation.videodetail.VideoDetailFragment.Companion.BUNDLE_KEY_FOR_DETAIL_FRAGMENT
 import com.example.dopaminemoa.repository.VideoRepositoryImpl
@@ -25,7 +24,7 @@ class MyVideoFragment : Fragment() {
     private var _binding: FragmentMyVideoBinding? = null
     private val binding get() = _binding!!
 
-    private var adapter =  MyVideoAdapter()
+    private var adapter = MyVideoAdapter()
 
     private val viewModel: MyVideoViewModel by viewModels {
         MyVideoViewModel.MyVideoViewModelFactory(
@@ -37,9 +36,9 @@ class MyVideoFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-//        adapter = MyVideoAdapter()
         _binding = FragmentMyVideoBinding.inflate(inflater, container, false)
-        binding.rvMyVideo.layoutManager = GridLayoutManager(requireActivity(), 2, GridLayoutManager.VERTICAL, false)
+        binding.rvMyVideo.layoutManager =
+            GridLayoutManager(requireActivity(), 2, GridLayoutManager.VERTICAL, false)
         binding.rvMyVideo.adapter = adapter
         return binding.root
     }
@@ -47,23 +46,21 @@ class MyVideoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setFragmentResult()
         arguments?.getParcelable<VideoItemModel>(BUNDLE_KEY_FOR_MYVIDEO_FRAGMENT)
         setUpView()
         itemClick()
     }
 
     fun setUpView() {
-        val items = viewModel.likedItems.value
-
         viewModel.likedItems.observe(viewLifecycleOwner) { items ->
+            val items = viewModel.likedItems.value
             if (items != null) {
-                adapter.updateList(items) // 2. 변화가 있을때 변경해줄 준비
-                Log.d("1 - adapter.updateList(items)", adapter.updateList(items).toString())
+                adapter.updateList(items) // 1. 변화가 있을때 변경해줄 준비
             }
         }
         // 1, 2번은 거의 동시에 실행됨
-        viewModel.getLikedItems() // 1. livedata 준비
-        Log.d("2-getLikedItems()", viewModel.getLikedItems().toString())
+        viewModel.getLikedItems() // 2. livedata 준비
     }
 
     fun itemClick() {
@@ -72,11 +69,9 @@ class MyVideoFragment : Fragment() {
         viewModel.likedItems.observe(viewLifecycleOwner) {
             adapter.itemClick = object : MyVideoAdapter.ItemClick {
                 override fun onClick(view: View, item: VideoItemModel) {
-                    item?.let {
+                    item.let {
                         clickItem(item) // 3. 클릭했을 때, 디테일로 가기
-                        Log.d("3 - clickItem(item)", clickItem(item).toString())
-                        viewModel.updateSaveItem(it)  // ViewModel에서 업데이트
-                        Log.d("4 - viewModel.updateSaveItem(it)", viewModel.updateSaveItem(it).toString())
+                        viewModel.updateSaveItem(it)  // 4. ViewModel에서 업데이트
                     }
                 }
             }
@@ -98,6 +93,16 @@ class MyVideoFragment : Fragment() {
         Handler(Looper.getMainLooper()).postDelayed({
             isItemClickEnabled = true
         }, 500) // 500ms 딜레이
+    }
+
+    fun setFragmentResult() {
+        // FragmentResultListener 추가
+        setFragmentResultListener("video_detail_result") { requestKey, bundle ->
+            val isLikedChanged = bundle.getBoolean("is_liked_changed")
+            if (isLikedChanged) {
+                viewModel.getLikedItems()
+            }
+        }
     }
 
     override fun onResume() {
