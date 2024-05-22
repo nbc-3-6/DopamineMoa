@@ -45,18 +45,9 @@ class MyVideoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        backButton()
         arguments?.getParcelable<VideoItemModel>(BUNDLE_KEY_FOR_MYVIDEO_FRAGMENT)
         setUpView()
         itemClick()
-    }
-
-    fun backButton() {
-        // 지워야하나 고민인 백버튼
-        binding.btnBack.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
-            Log.d("6 - btnBack", requireActivity().supportFragmentManager.popBackStack().toString())
-        }
     }
 
     fun setUpView() {
