@@ -97,6 +97,11 @@ class MyVideoFragment : Fragment() {
         }, 500) // 500ms 딜레이
     }
 
+    override fun onResume() {
+        super.onResume()
+        binding.rvMyVideo.scrollToPosition(0) // 스크롤 위치를 초기화
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null  // 바인딩 리소스 해제
