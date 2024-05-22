@@ -5,22 +5,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.example.dopaminemoa.databinding.FragmentSearchActionBinding
 import com.example.dopaminemoa.network.RepositoryClient
 import com.example.dopaminemoa.presentation.search.SearchResultFragment.Companion.BUNDLE_KEY_FOR_RESULT_FRAGMENT
 import com.example.dopaminemoa.presentation.util.UtilityKeyboard.hideKeyboard
-import com.example.dopaminemoa.viewmodel.VideoViewModel
-import com.example.dopaminemoa.viewmodel.VideoViewModelFactory
 
 class SearchActionFragment : Fragment() {
 
     private var _binding: FragmentSearchActionBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: VideoViewModel by viewModels {
-        VideoViewModelFactory.newInstance(RepositoryClient.youtubeService, requireContext())
-    }
+    private val viewModel : SearchViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -101,14 +100,9 @@ class SearchActionFragment : Fragment() {
      * 검색어를 bundle에 담아서 함께 전달합니다.
      */
     private fun goToResultFragment(text: String) {
-        viewModel.searchVideoByText(text)
-
         val bundle = Bundle().apply {
             putString(BUNDLE_KEY_FOR_RESULT_FRAGMENT, text)
         }
-
-        val fragmentResult = SearchResultFragment()
-        fragmentResult.arguments = bundle
 
         (parentFragment as? SearchFragment)?.showSearchResultFragment(bundle)
     }

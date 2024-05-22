@@ -17,7 +17,17 @@ interface RemoteDataSource {
         @Query("q") query: String,
         @Query("type") type: String = "video",
         @Query("key") key: String = API_KEY,
-//        @Query("maxResults") maxResults: Int = 10,
+        @Query("maxResults") maxResults: Int = 30,
+    ): SearchListResponse
+
+    @GET("search")
+    suspend fun getSearchMoreList(
+        @Query("part") part: String = "snippet",
+        @Query("q") query: String,
+        @Query("type") type: String = "video",
+        @Query("key") key: String = API_KEY,
+        @Query("maxResults") maxResults: Int = 20,
+        @Query("pageToken") pageToken: String,
     ): SearchListResponse
 
     //mostPopularVideos

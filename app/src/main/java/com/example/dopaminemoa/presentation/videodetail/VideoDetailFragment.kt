@@ -1,12 +1,15 @@
 package com.example.dopaminemoa.presentation.videodetail
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import coil.load
+import com.example.dopaminemoa.Const.Companion.SHARE_URL
 import com.example.dopaminemoa.R
 import com.example.dopaminemoa.databinding.FragmentVideoDetailBinding
 import com.example.dopaminemoa.mapper.model.VideoItemModel
@@ -64,7 +67,6 @@ class VideoDetailFragment : Fragment() {
 
         with(binding) {
 //            ivThumbnail.load(item?.videoThumbnail)
-            ivChannelThumbnail.load(item?.channelThumbnails)
             tvChannelTitle.text = item?.channelTitle
             tvTitle.text = item?.videoTitle
             tvDescription.text = item?.videoDescription
@@ -73,12 +75,20 @@ class VideoDetailFragment : Fragment() {
                 requireActivity().supportFragmentManager.popBackStack()
             }
 
-            ivLike.setOnClickListener {
+            llLike.setOnClickListener {
                 item?.let {
                     it.isLiked = !it.isLiked  // 좋아요 상태 토글
                     viewModel.updateSaveItem(it)  // ViewModel에서 업데이트
                     updateLikeButton(it, it.isLiked)  // UI 업데이트
                 }
+            }
+
+            llShare.setOnClickListener {
+                val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, SHARE_URL + item?.videoId)
+                }
+                startActivity(Intent.createChooser(shareIntent, "Share Video Link"))
             }
         }
         item?.videoId?.let { setUpYoutubePlayer(it) }
@@ -118,6 +128,10 @@ class VideoDetailFragment : Fragment() {
         super.onDestroyView()
         _binding = null
         youTubePlayerView.release()
+        // 변경된 좋아요 상태를 전달
+        setFragmentResult("video_detail_result", Bundle().apply {
+            putBoolean("is_liked_changed", true)
+        })
     }
 
     companion object {

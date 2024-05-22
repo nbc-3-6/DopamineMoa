@@ -5,30 +5,27 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.addCallback
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.dopaminemoa.R
-import com.example.dopaminemoa.repository.Resource
 import com.example.dopaminemoa.databinding.FragmentSearchResultBinding
 import com.example.dopaminemoa.mapper.model.VideoItemModel
-import com.example.dopaminemoa.network.RepositoryClient
 import com.example.dopaminemoa.presentation.main.MainActivity
+import com.example.dopaminemoa.presentation.searchshorts.SearchAdapter
 import com.example.dopaminemoa.presentation.videodetail.VideoDetailFragment
-import com.example.dopaminemoa.viewmodel.VideoViewModel
-import com.example.dopaminemoa.viewmodel.VideoViewModelFactory
 
 class SearchResultFragment : Fragment() {
 
     private var _binding: FragmentSearchResultBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: VideoViewModel by viewModels {
-        VideoViewModelFactory.newInstance(RepositoryClient.youtubeService, requireContext())
-    }
+    private val viewModel : SearchViewModel by activityViewModels()
 
     private val adapter = SearchAdapter()
+    private var isLoading = false
+    private lateinit var searchText: String
+    private lateinit var nextToken: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,10 +37,6 @@ class SearchResultFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        arguments?.getString(BUNDLE_KEY_FOR_RESULT_FRAGMENT)?.let { searchText ->
-            viewModel.searchVideoByText(searchText)
-        }
 
         getText()
         backBtnPressed()
@@ -58,7 +51,9 @@ class SearchResultFragment : Fragment() {
      */
     private fun getText() = with(binding) {
         val text = arguments?.getString(BUNDLE_KEY_FOR_RESULT_FRAGMENT) ?: ""
+        searchText = text
         etSearch.setText(text)
+        viewModel.searchVideoByText(text)
     }
 
     /**
@@ -81,49 +76,37 @@ class SearchResultFragment : Fragment() {
      * 통신에 에러 발생 시, 에러 타입을 구분하여 화면에 토스트를 출력합니다.
      */
     private fun observeData() = with(binding) {
-        viewModel.searchResults.observe(viewLifecycleOwner) { resource ->
+        viewModel.searchResults.observe(viewLifecycleOwner) { items ->
+            rvSearch.visibility = View.VISIBLE
+            tvNone.visibility = View.GONE
 
-            if (tvNone.visibility == View.VISIBLE) {
-                tvNone.visibility = View.GONE
+            isLoading = false
+
+            adapter.updateList(items)
+        }
+
+        viewModel.searchResultErrorState.observe(viewLifecycleOwner) { errorState ->
+            if (errorState) {
+                val errorMessage = viewModel.errorMessage.value ?: getString(R.string.search_error)
+                rvSearch.visibility = View.GONE
+                tvNone.visibility = View.VISIBLE
+                tvNone.text = errorMessage
             }
+        }
 
-            when (resource) {
-                is Resource.Success -> {
-                    adapter.updateList(resource.data ?: emptyList())
-                }
-
-                is Resource.Error -> {
-                    val exception = resource.exception
-
-                    when {
-                        exception?.message?.contains("400") == true -> {
-                            Toast.makeText(requireActivity(), "잘못된 요청입니다.", Toast.LENGTH_SHORT).show()
-                        }
-                        exception?.message?.contains("401") == true -> {
-                            Toast.makeText(requireActivity(), "요청이 승인되지 않았습니다.", Toast.LENGTH_SHORT).show()
-                        }
-                        exception?.message?.contains("403") == true -> {
-                            Toast.makeText(requireActivity(), "현재 기능을 일시적으로 사용할 수 없습니다.", Toast.LENGTH_SHORT).show()
-                        }
-                        exception?.message?.contains("404") == true -> {
-//                            Toast.makeText(requireActivity(), "정보를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show() //필요시 사용
-                            tvNone.visibility = View.VISIBLE
-                        }
-                        else -> {
-                            Toast.makeText(requireActivity(), "알 수 없는 문제가 생겼습니다.", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
-            }
+        viewModel.nextPageToken.observe(viewLifecycleOwner) { token ->
+            nextToken = token
         }
     }
 
     /**
      * recyclerView의 adapter와 click 리스너를 정의하는 함수입니다.
+     * 스크롤 상태를 파악하여 데이터를 추가적으로 로딩합니다.
      */
     private fun makeRecyclerView() = with(binding) {
         rvSearch.adapter = adapter
-        rvSearch.layoutManager = GridLayoutManager(requireActivity(), 2)
+        val layoutManager = GridLayoutManager(requireActivity(), 2)
+        rvSearch.layoutManager = layoutManager
 
         adapter.itemClick = object : SearchAdapter.ItemClick {
             override fun onClick(view: View, item: VideoItemModel) {
@@ -246,7 +229,6 @@ class SearchResultFragment : Fragment() {
 
     /**
      * recyclerView에서 item을 선택했을 때 실행되는 함수입니다.
-     * Detail fagment로 이동시 데이터를 bundle로 넘기고 fragment를 전환하거나 하는 식의 코드가 필요합니다.
      */
     private fun selectItem(item: VideoItemModel) {
         val bundle = Bundle().apply {

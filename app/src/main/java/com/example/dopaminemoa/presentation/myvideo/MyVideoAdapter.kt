@@ -1,4 +1,4 @@
-package com.example.dopaminemoa.presentation.searchshorts
+package com.example.dopaminemoa.presentation.myvideo
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,36 +8,38 @@ import com.bumptech.glide.Glide
 import com.example.dopaminemoa.databinding.SearchItemBinding
 import com.example.dopaminemoa.mapper.model.VideoItemModel
 
-class SearchAdapter : RecyclerView.Adapter<SearchAdapter.SearchViewHolder>() {
+class MyVideoAdapter : RecyclerView.Adapter<MyVideoAdapter.MyVideoViewHolder>() {
 
     var itemClick: ItemClick? = null
     private val items: MutableList<VideoItemModel> = mutableListOf()
 
     fun updateList(newItems: List<VideoItemModel>) {
         items.clear()
-        items.addAll(newItems)
+        items.addAll(newItems.reversed())
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyVideoViewHolder {
         val binding = SearchItemBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
-        return SearchViewHolder(binding)
+        return MyVideoViewHolder(binding)
     }
 
     override fun getItemCount(): Int = items.size
 
-    override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyVideoViewHolder, position: Int) {
         holder.bind(items[position])
         holder.itemView.setOnClickListener {
             itemClick?.onClick(it, items[position])
+            notifyDataSetChanged()
         }
     }
 
-    class SearchViewHolder(private val binding: SearchItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    class MyVideoViewHolder(private val binding: SearchItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(item: VideoItemModel) = with(binding) {
             tvTitle.text = item.videoTitle
             tvChannel.text = item.channelTitle

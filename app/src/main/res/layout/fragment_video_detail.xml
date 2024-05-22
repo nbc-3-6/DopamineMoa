@@ -50,29 +50,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/iv_channel_thumbnail"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:adjustViewBounds="true"
-                android:background="@drawable/shape_round"
-                android:clipToOutline="true"
-                android:scaleType="centerCrop"
-                app:layout_constraintBottom_toTopOf="@id/tv_title"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:background="@tools:sample/avatars" />
-
             <TextView
                 android:id="@+id/tv_channel_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
                 android:text="username"
                 android:textColor="@color/white"
-                android:textSize="16dp"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_channel_thumbnail"
-                app:layout_constraintStart_toEndOf="@+id/iv_channel_thumbnail"
-                app:layout_constraintTop_toTopOf="@+id/iv_channel_thumbnail" />
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/tv_title"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/tv_title"
@@ -82,55 +68,66 @@
                 android:gravity="left"
                 android:text="영상 제목"
                 android:textColor="@color/white"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <ImageView
-                android:id="@+id/iv_like"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginBottom="4dp"
-                android:clickable="true"
-                android:src="@drawable/ic_like"
-                app:layout_constraintBottom_toTopOf="@id/tv_like"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/tv_like" />
-
-            <TextView
-                android:id="@+id/tv_like"
+            <LinearLayout
+                android:id="@+id/ll_like"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
                 android:layout_marginBottom="20dp"
-                android:text="좋아요"
-                android:textColor="@color/white"
-                android:textSize="14dp"
-                app:layout_constraintBottom_toTopOf="@id/iv_share"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-            <ImageView
-                android:id="@+id/iv_share"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginBottom="4dp"
-                android:src="@drawable/ic_share"
-                app:layout_constraintBottom_toTopOf="@id/tv_share"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/tv_like"
-                app:tint="@color/white" />
+                app:layout_constraintBottom_toTopOf="@id/ll_share">
 
-            <TextView
-                android:id="@+id/tv_share"
+                <ImageView
+                    android:id="@+id/iv_like"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginBottom="4dp"
+                    android:src="@drawable/ic_like" />
+
+                <TextView
+                    android:id="@+id/tv_like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="좋아요"
+                    android:textSize="14sp"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_share"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="공유"
-                android:textColor="@color/white"
-                android:textSize="14dp"
-                android:textStyle="bold"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/tv_like" />
+                app:layout_constraintEnd_toEndOf="@+id/ll_like"
+                app:layout_constraintStart_toStartOf="@+id/ll_like">
+
+                <ImageView
+                    android:id="@+id/iv_share"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginBottom="4dp"
+                    android:src="@drawable/ic_share"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:id="@+id/tv_share"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="공유"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -138,17 +135,18 @@
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_marginHorizontal="24dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cl_icons">
+            android:paddingTop="8dp"
+            android:paddingBottom="10dp"
+            app:layout_constraintTop_toBottomOf="@id/cl_icons"
+            app:layout_constraintBottom_toBottomOf="parent" >
 
             <TextView
                 android:id="@+id/tv_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="영상 설명"
-                android:textColor="@color/white"
-                android:textSize="16dp" />
+                android:textSize="14sp"
+                android:textColor="@color/white" />
 
         </ScrollView>
 
