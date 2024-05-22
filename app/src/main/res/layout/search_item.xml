@@ -20,27 +20,28 @@
 
     <TextView
         android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
+        android:layout_width="170sp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:ellipsize="end"
+        android:gravity="left"
         android:maxWidth="170sp"
         android:maxLines="2"
-        android:text="영상제목영상제목영상제목영상제목영상제목영상제목영상제목영상제목영상제목제목"
+        android:text="영상제목"
         android:textSize="12sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/iv_item"
         app:layout_constraintTop_toBottomOf="@+id/iv_item" />
 
 
     <TextView
         android:id="@+id/tv_channel"
-        android:layout_width="140sp"
+        android:layout_width="170sp"
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="채널이름채널이름채널이름채널이름채널이름채널이름"
+        android:gravity="left"
+        android:text="채널이름"
         android:textColor="@color/textGray"
         android:textSize="10sp"
         app:layout_constraintStart_toStartOf="@+id/tv_title"
