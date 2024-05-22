@@ -1,6 +1,8 @@
 package com.example.dopaminemoa.presentation.myvideo
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -57,7 +59,7 @@ class MyVideoFragment : Fragment() {
         val items = viewModel.likedItems.value
         if (items != null) {
             adapter.updateList(items) // 2. 변화가 있을때 변경해줄 준비
-            Log.d("4 - adapter.updateList(items)", adapter.updateList(items).toString())
+            Log.d("2 - adapter.updateList(items)", adapter.updateList(items).toString())
         }
     }
 
@@ -67,19 +69,32 @@ class MyVideoFragment : Fragment() {
         viewModel.likedItems.observe(viewLifecycleOwner) {
             adapter.itemClick = object : MyVideoAdapter.ItemClick {
                 override fun onClick(view: View, item: VideoItemModel) {
-                    clickItem(item) // 3. 클릭했을 때, 디테일로 가기
-                    Log.d("2 - clickItem(item)", clickItem(item).toString())
+                    item?.let {
+                        clickItem(item) // 3. 클릭했을 때, 디테일로 가기
+                        Log.d("3 - clickItem(item)", clickItem(item).toString())
+                        viewModel.updateSaveItem(it)  // ViewModel에서 업데이트
+                        Log.d("4 - viewModel.updateSaveItem(it)", viewModel.updateSaveItem(it).toString())
+                    }
                 }
             }
         }
     }
 
+    private var isItemClickEnabled = true
+
     private fun clickItem(item: VideoItemModel) {
+        if (!isItemClickEnabled) return
+        isItemClickEnabled = false
+
         val bundle = Bundle().apply {
             putParcelable(BUNDLE_KEY_FOR_DETAIL_FRAGMENT, item)
         }
         val detailFragment = VideoDetailFragment.newInstance(bundle)
         (requireActivity() as MainActivity).showVideoDetailFragment(detailFragment)
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            isItemClickEnabled = true
+        }, 500) // 500ms 딜레이
     }
 
     override fun onDestroyView() {
