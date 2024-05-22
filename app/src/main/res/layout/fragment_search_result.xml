@@ -64,9 +64,9 @@
         android:id="@+id/hcv_keyword"
         android:layout_width="match_parent"
         android:layout_height="32dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="20dp"
         android:scrollbars="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -78,41 +78,51 @@
             android:layout_gravity="start"
             android:orientation="horizontal">
 
-            <androidx.appcompat.widget.AppCompatButton
+            <TextView
                 android:id="@+id/btn_keyword1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/rec_keyword_btn"
+                android:gravity="center"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
                 android:text="@string/search_tv_meme"
                 android:textSize="16sp" />
 
-            <androidx.appcompat.widget.AppCompatButton
+            <TextView
                 android:id="@+id/btn_keyword2"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/rec_keyword_btn"
+                android:gravity="center"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
                 android:text="@string/search_tv_comedy"
                 android:textSize="16sp" />
 
-            <androidx.appcompat.widget.AppCompatButton
+            <TextView
                 android:id="@+id/btn_keyword3"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/rec_keyword_btn"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
+                android:gravity="center"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
                 android:text="@string/search_tv_zzzzz"
                 android:textSize="16sp" />
 
-            <androidx.appcompat.widget.AppCompatButton
+            <TextView
                 android:id="@+id/btn_keyword4"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/rec_keyword_btn"
+                android:gravity="center"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
                 android:text="@string/search_tv_legend"
                 android:textSize="16sp" />
         </LinearLayout>
