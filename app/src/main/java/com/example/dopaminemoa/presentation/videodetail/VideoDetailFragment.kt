@@ -46,12 +46,14 @@ class VideoDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initView()
+    }
+
+    private fun initView() {
         val item = arguments?.getParcelable<VideoItemModel>(BUNDLE_KEY_FOR_DETAIL_FRAGMENT)
             ?: arguments?.getParcelable<VideoItemModel>(ShortsFragment.BUNDLE_KEY_FOR_DETAIL_FRAGMENT_FROM_SHORTS)
-
         val isLikedInPrefs = viewModel.isVideoLikedInPrefs(item?.videoId)
 
-        // 초기 바인딩 시 isLikedInPrefs 값에 따라 ivLike 이미지 설정
         updateLikeButton(item, isLikedInPrefs)
 
         viewModel.saveResult.observe(viewLifecycleOwner) { state ->
@@ -65,6 +67,7 @@ class VideoDetailFragment : Fragment() {
         }
 
         with(binding) {
+//            ivThumbnail.load(item?.videoThumbnail)
             tvChannelTitle.text = item?.channelTitle
             tvTitle.text = item?.videoTitle
             tvDescription.text = item?.videoDescription
@@ -75,9 +78,9 @@ class VideoDetailFragment : Fragment() {
 
             llLike.setOnClickListener {
                 item?.let {
-                    it.isLiked = !it.isLiked  // 좋아요 상태 토글
-                    viewModel.updateSaveItem(it)  // ViewModel에서 업데이트
-                    updateLikeButton(it, it.isLiked)  // UI 업데이트
+                    it.isLiked = !it.isLiked
+                    viewModel.updateSaveItem(it)
+                    updateLikeButton(it, it.isLiked)
                 }
             }
 
