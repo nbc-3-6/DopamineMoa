@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
-import coil.load
 import com.example.dopaminemoa.Const.Companion.SHARE_URL
 import com.example.dopaminemoa.R
 import com.example.dopaminemoa.databinding.FragmentVideoDetailBinding
@@ -66,7 +65,6 @@ class VideoDetailFragment : Fragment() {
         }
 
         with(binding) {
-//            ivThumbnail.load(item?.videoThumbnail)
             tvChannelTitle.text = item?.channelTitle
             tvTitle.text = item?.videoTitle
             tvDescription.text = item?.videoDescription
@@ -95,7 +93,6 @@ class VideoDetailFragment : Fragment() {
     }
 
     private fun setUpYoutubePlayer(videoId: String) {
-
         youTubePlayerView = binding.youtubePlayerView
         youTubePlayerView.enableAutomaticInitialization = false //초기화 수동
         lifecycle.addObserver(youTubePlayerView)
