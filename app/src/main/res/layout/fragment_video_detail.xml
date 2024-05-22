@@ -16,9 +16,19 @@
         android:focusable="true">
 
         <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-            android:id="@+id/youtube_player_video"
+            android:id="@+id/youtube_player_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@color/black"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
