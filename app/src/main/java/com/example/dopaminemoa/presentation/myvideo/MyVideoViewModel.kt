@@ -6,7 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.dopaminemoa.R
 import com.example.dopaminemoa.mapper.model.VideoItemModel
+import com.example.dopaminemoa.presentation.videodetail.SaveUiState
 import com.example.dopaminemoa.repository.VideoRepository
 import kotlinx.coroutines.launch
 
@@ -24,6 +26,28 @@ class MyVideoViewModel(
     fun getLikedItems() {
         viewModelScope.launch {
             _likedItems.value = videoRepository.getStorageItems()
+        }
+    }
+
+    private fun saveVideoItem(videoItemModel: VideoItemModel) {
+        viewModelScope.launch {
+            videoRepository.saveVideoItem(videoItemModel.copy(isLiked = true))
+        }
+    }
+
+    private fun removeVideoItem(videoItemModel: VideoItemModel) {
+        viewModelScope.launch {
+            videoRepository.removeVideoItem(videoItemModel.copy(isLiked = false))
+        }
+    }
+
+    fun updateSaveItem(videoItemModel: VideoItemModel) {
+        viewModelScope.launch {
+            if (videoItemModel.isLiked) {
+                saveVideoItem(videoItemModel)
+            } else {
+                removeVideoItem(videoItemModel)
+            }
         }
     }
 
