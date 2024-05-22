@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.view.isEmpty
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import coil.load
@@ -15,9 +16,12 @@ import com.example.dopaminemoa.network.RepositoryClient
 import com.example.dopaminemoa.presentation.shorts.ShortsFragment
 import com.example.dopaminemoa.repository.VideoRepositoryImpl
 import com.google.android.material.snackbar.Snackbar
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFramePlayerOptions
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerTracker
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 
 
@@ -32,7 +36,7 @@ class VideoDetailFragment : Fragment() {
     }
 
     private lateinit var youTubePlayerView: YouTubePlayerView
-
+    private lateinit var playerTracker: YouTubePlayerTracker
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -61,17 +65,9 @@ class VideoDetailFragment : Fragment() {
             }
         }
 
-        youTubePlayerView = binding.youtubePlayerLibrary
-        lifecycle.addObserver(youTubePlayerView)
-//        youTubePlayerView.setCustomPlayerUi() //?
-
         with(binding) {
 //            ivThumbnail.load(item?.videoThumbnail)
-            youtubePlayerLibrary.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
-                override fun onReady(youTubePlayer: YouTubePlayer) {
-                    item?.videoId?.let { youTubePlayer.loadVideo(it, 0f) }
-                }
-            })
+//            item?.videoId?.let { setUpYoutubePlayer(it) }
             ivChannelThumbnail.load(item?.channelThumbnails)
             tvChannelTitle.text = item?.channelTitle
             tvTitle.text = item?.videoTitle
@@ -89,7 +85,41 @@ class VideoDetailFragment : Fragment() {
                 }
             }
         }
+        item?.videoId?.let { setUpYoutubePlayer(it) }
+    }
 
+    private fun setUpYoutubePlayer(videoId: String){
+
+        youTubePlayerView = binding.youtubePlayerVideo
+        youTubePlayerView.enableAutomaticInitialization = false //초기화 수동
+        lifecycle.addObserver(youTubePlayerView)
+
+        val youTubePlayerListener = object : YouTubePlayerListener {
+            override fun onApiChange(youTubePlayer: YouTubePlayer) {}
+            override fun onCurrentSecond(youTubePlayer: YouTubePlayer, second: Float) {}
+            override fun onError(youTubePlayer: YouTubePlayer, error: PlayerConstants.PlayerError) {}
+            override fun onPlaybackQualityChange(youTubePlayer: YouTubePlayer, playbackQuality: PlayerConstants.PlaybackQuality) {}
+            override fun onPlaybackRateChange(youTubePlayer: YouTubePlayer, playbackRate: PlayerConstants.PlaybackRate) {}
+            override fun onReady(youTubePlayer: YouTubePlayer) {}
+            override fun onStateChange(youTubePlayer: YouTubePlayer, state: PlayerConstants.PlayerState) {}
+            override fun onVideoDuration(youTubePlayer: YouTubePlayer, duration: Float) {}
+            override fun onVideoId(youTubePlayer: YouTubePlayer, videoId: String) {}
+            override fun onVideoLoadedFraction(youTubePlayer: YouTubePlayer, loadedFraction: Float) {}
+        }
+        youTubePlayerView.removeYouTubePlayerListener(youTubePlayerListener)
+
+        val listener = object : AbstractYouTubePlayerListener() {
+            override fun onReady(youTubePlayer: YouTubePlayer) {
+                playerTracker = YouTubePlayerTracker()
+                youTubePlayer.addListener(playerTracker)
+
+//                CustomUiController(customPlayerUi, youTubePlayer)
+                youTubePlayer.loadVideo(videoId, 0f)
+            }
+        }
+
+        val options = IFramePlayerOptions.Builder().controls(0).build()
+        youTubePlayerView.initialize(listener, options)
     }
 
 
